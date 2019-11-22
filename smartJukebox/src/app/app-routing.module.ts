@@ -4,8 +4,6 @@ import { PlayersComponent } from './players/players.component';
 import { SearchComponent } from './search/search.component';
 import { YoutubeComponent } from './youtube/youtube.component';
 import { SpotifyComponent } from './spotify/spotify.component';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 const routes: Routes = [
@@ -17,11 +15,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    RouterModule.forRoot(routes)
-  ],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

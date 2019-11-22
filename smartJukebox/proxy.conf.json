@@ -1,0 +1,11 @@
+{
+  "/api/*": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "loglevel": "debug"
+  },
+  "/title/*": {
+    "target": "https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=",
+    "pathRewrite": {"^/title/" : ""}
+  }
+}
