@@ -232,10 +232,8 @@ definitions:
       email:
         type: string
         format: email
-      firstname:
-        type: string
-      lastname:
-        type: string    
+      username:
+        type: string   
 externalDocs:
   description: "GitHub de SmartJukebox"
   url: "https://github.com/gfloret/ProgWeb"
