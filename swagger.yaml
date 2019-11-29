@@ -104,7 +104,7 @@ paths:
     delete:
       tags:
       - "YouTube"
-      summary: "Supprime la collection uniqueSongModel"
+      summary: "Vide la collection uniqueSongModelYouTube"
       description: ""
       operationId: "deleteVideo"
       consumes:
@@ -159,7 +159,7 @@ paths:
     delete:
       tags:
       - "Spotify"
-      summary: "Supprime la collection uniqueSongModel"
+      summary: "Vide la collection uniqueSongModelSpotify"
       description: ""
       operationId: "deleteAudio"
       consumes:
