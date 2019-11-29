@@ -8,6 +8,9 @@ import { PlayersComponent } from './players/players.component';
 import { SearchComponent } from './search/search.component';
 import { YoutubeComponent } from './youtube/youtube.component';
 import { SpotifyComponent } from './spotify/spotify.component';
+import { AuthComponent } from './auth/auth.component';
+import { SignupComponent } from './signup/signup.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +19,9 @@ import { SpotifyComponent } from './spotify/spotify.component';
     SearchComponent,
     YoutubeComponent,
     SpotifyComponent,
+    AuthComponent,
+    SignupComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

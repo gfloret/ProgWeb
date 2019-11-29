@@ -4,6 +4,9 @@ import { PlayersComponent } from './players/players.component';
 import { SearchComponent } from './search/search.component';
 import { YoutubeComponent } from './youtube/youtube.component';
 import { SpotifyComponent } from './spotify/spotify.component';
+import { AuthComponent } from './auth/auth.component';
+import { SignupComponent } from './signup/signup.component';
+import { LoginComponent } from './login/login.component';
 
 
 const routes: Routes = [
@@ -11,7 +14,10 @@ const routes: Routes = [
   { path: 'players', component: PlayersComponent },
   { path: 'search', component: SearchComponent },
   { path: 'players/youtube', component: YoutubeComponent },
-  { path: 'players/spotify', component: SpotifyComponent }
+  { path: 'players/spotify', component: SpotifyComponent },
+  { path: 'auth', component: AuthComponent },
+  { path: 'auth/signup', component: SignupComponent },
+  { path: 'auth/login', component: LoginComponent }
 ];
 
 @NgModule({
