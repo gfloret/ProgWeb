@@ -12,7 +12,7 @@ schemes:
 - "https"
 - "http"
 paths:
-  /smartJukeboxBack/routes/auth-tokens:
+  /login:
     post:
       tags:
       - "General"
@@ -24,33 +24,30 @@ paths:
           required: true
           description: Login et mot de passe de l'utilisateur
           schema:
-            $ref: "#/definitions/Credentials"
+            $ref: "#/definitions/Login-Credentials"
       responses:
         200:
-          description: "Token créé"
-          schema:
-            $ref: "#/definitions/Auth-token"
+          description: "Utilisateur connecté"
         405:
           description: "Invalid input"
-  /smartJukeboxBack/routes/auth-tokens/{id}:
-      delete:
-        tags:
-        - "General"
-        summary: Deconnecte un utilisateur
-        description: Supprime le token de l'utilisateur
-        parameters:
-          - name: id
-            in: path
-            type : integer
-            format: "int64"
-            required: true
-            description: Identifiant du token à supprimer
-        responses:
-          404:
-            description: "Token not found"
-          405:
-            description: "Validation exception"
-  /smartJukeboxBack/routes/register:
+    delete:
+      tags:
+      - "General"
+      summary: Deconnecte un utilisateur
+      description: Supprime le token de l'utilisateur
+      parameters:
+        - name: id
+          in: query
+          type: integer
+          format: "int64"
+          required: true
+          description: Identifiant du token à supprimer
+      responses:
+        404:
+          description: "Id not found"
+        405:
+          description: "Validation exception"
+  /signup:
     post:
       tags:
       - "General"
@@ -68,7 +65,6 @@ paths:
           description: "Utilisateur créé"
         405:
           description: "Invalid input"
-  /smartJukeboxBack/routes/register/{id}:
     delete:
       tags:
       - "General"
@@ -76,7 +72,7 @@ paths:
       description: Supprime les informations de l'utilisateur
       parameters:
         - name: id
-          in: path
+          in: query
           type : integer
           format: "int64"
           required: true
@@ -86,7 +82,7 @@ paths:
           description: "User not found"
         405:
           description: "Validation exception"
-  /smartJukeboxBack/routes/uniqueSongYouTube:
+  /uniqueSongYouTube:
     get:
       tags:
       - "YouTube"
@@ -104,7 +100,7 @@ paths:
     delete:
       tags:
       - "YouTube"
-      summary: "Supprime la collection uniqueSongModel"
+      summary: "Vide la collection uniqueSongModelYouTube"
       description: ""
       operationId: "deleteVideo"
       consumes:
@@ -118,7 +114,6 @@ paths:
           description: "Video not found"
         405:
           description: "Validation exception"
-  /smartJukeboxBack/routes/uniqueSongYouTube/{id}:
     post:
       tags:
       - "YouTube"
@@ -133,7 +128,7 @@ paths:
       - "application/json"
       parameters:
       - name: "id"
-        in: "path"
+        in: "query"
         description: "ID of video that needs to be added to database"
         required: true
         type: "integer"
@@ -141,7 +136,7 @@ paths:
       responses:
         405:
           description: "Invalid input"
-  /smartJukeboxBack/routes/uniqueSongSpotify:
+  /uniqueSongSpotify:
     get:
       tags:
       - "Spotify"
@@ -159,7 +154,7 @@ paths:
     delete:
       tags:
       - "Spotify"
-      summary: "Supprime la collection uniqueSongModel"
+      summary: "Vide la collection uniqueSongModelSpotify"
       description: ""
       operationId: "deleteAudio"
       consumes:
@@ -173,7 +168,6 @@ paths:
           description: "Audio not found"
         405:
           description: "Validation exception"
-  /smartJukeboxBack/routes/uniqueSongSpotify/{id}:
     post:
       tags:
       - "Spotify"
@@ -188,7 +182,7 @@ paths:
       - "application/json"
       parameters:
       - name: "id"
-        in: "path"
+        in: "query"
         description: "ID of audio that needs to be added to database"
         required: true
         type: "integer"
@@ -197,7 +191,7 @@ paths:
         405:
           description: "Invalid input"
 definitions:
-  Credentials:
+  Signup-Credentials:
     type: object
     required: [login, password]
     properties:
@@ -206,7 +200,7 @@ definitions:
       password:
         type: string
 
-  Auth-token:
+  Login-Credentials:
     type: object
     required: [id, user]
     properties:
