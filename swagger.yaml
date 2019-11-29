@@ -12,7 +12,7 @@ schemes:
 - "https"
 - "http"
 paths:
-  /smartJukeboxBack/routes/auth-tokens:
+  /login:
     post:
       tags:
       - "General"
@@ -24,15 +24,13 @@ paths:
           required: true
           description: Login et mot de passe de l'utilisateur
           schema:
-            $ref: "#/definitions/Credentials"
+            $ref: "#/definitions/Login-Credentials"
       responses:
         200:
-          description: "Token créé"
-          schema:
-            $ref: "#/definitions/Auth-token"
+          description: "Utilisateur connecté"
         405:
           description: "Invalid input"
-  /smartJukeboxBack/routes/auth-tokens/{id}:
+  /login/{id}:
       delete:
         tags:
         - "General"
@@ -47,10 +45,10 @@ paths:
             description: Identifiant du token à supprimer
         responses:
           404:
-            description: "Token not found"
+            description: "Id not found"
           405:
             description: "Validation exception"
-  /smartJukeboxBack/routes/register:
+  /signup:
     post:
       tags:
       - "General"
@@ -68,7 +66,7 @@ paths:
           description: "Utilisateur créé"
         405:
           description: "Invalid input"
-  /smartJukeboxBack/routes/register/{id}:
+  /signup/{id}:
     delete:
       tags:
       - "General"
@@ -86,7 +84,7 @@ paths:
           description: "User not found"
         405:
           description: "Validation exception"
-  /smartJukeboxBack/routes/uniqueSongYouTube:
+  /uniqueSongYouTube:
     get:
       tags:
       - "YouTube"
@@ -118,7 +116,7 @@ paths:
           description: "Video not found"
         405:
           description: "Validation exception"
-  /smartJukeboxBack/routes/uniqueSongYouTube/{id}:
+  /uniqueSongYouTube/{id}:
     post:
       tags:
       - "YouTube"
@@ -141,7 +139,7 @@ paths:
       responses:
         405:
           description: "Invalid input"
-  /smartJukeboxBack/routes/uniqueSongSpotify:
+  /uniqueSongSpotify:
     get:
       tags:
       - "Spotify"
@@ -173,7 +171,7 @@ paths:
           description: "Audio not found"
         405:
           description: "Validation exception"
-  /smartJukeboxBack/routes/uniqueSongSpotify/{id}:
+  /uniqueSongSpotify/{id}:
     post:
       tags:
       - "Spotify"
@@ -197,7 +195,7 @@ paths:
         405:
           description: "Invalid input"
 definitions:
-  Credentials:
+  Signup-Credentials:
     type: object
     required: [login, password]
     properties:
@@ -206,7 +204,7 @@ definitions:
       password:
         type: string
 
-  Auth-token:
+  Login-Credentials:
     type: object
     required: [id, user]
     properties:
