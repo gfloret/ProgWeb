@@ -220,10 +220,8 @@ definitions:
           email:
             type: string
             format: email
-          firstname:
+          username:
             type: string
-          lastname:
-            type: string 
   User:
     type: object
     properties:
