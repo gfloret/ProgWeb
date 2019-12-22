@@ -1,4 +1,6 @@
-let mongoose = require('mongoose');
+var express = require('express');
+var router = express.Router();
+var mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -21,7 +23,7 @@ const UserSchema = new mongoose.Schema({
 let User = mongoose.model('User', UserSchema);
 module.exports = User;
 
-router.get('/', function(req, res, next){
+router.post('/signup', function(req, res, next){
     if(
         req.body.username &&
         req.body.email &&

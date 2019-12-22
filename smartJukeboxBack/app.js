@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var uniqueSongYoutube = require('./routes/uniqueSongYoutube');
+var signup = require('./routes/signup');
 
 var app = express();
 
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/api/v1/uniqueSongYoutube', uniqueSongYoutube);
+app.use('/api/v1/signup', signup);
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
