@@ -25,7 +25,7 @@ export class LoginComponent{
   onSubmit(loginData){
     console.warn('Login form has been submitted', loginData);
     console.log(loginData);
-    this.http.get('/api/v1/login', loginData.email).subscribe((data : any) => {});
+    this.http.get('/api/v1/login', loginData).subscribe((data : any) => {});
   }
   
 
