@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
 let User = mongoose.model('User', UserSchema);
 module.exports = User;
 
-router.post('/signup', function(req, res, next){
+router.post('/', function(req, res, next){
     if(
         req.body.username &&
         req.body.email &&
@@ -48,3 +48,5 @@ router.post('/signup', function(req, res, next){
         })
     }
 });
+
+module.exports = router;

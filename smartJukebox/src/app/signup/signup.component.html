@@ -2,20 +2,20 @@
     <div class="row">   
         <div class="col-md-6 main"> 
                       
-            <form action="/signup" method="post"> 
+            <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)"> 
                       
                 <h1> Signup form </h1> 
                               
-                <input class="box" type="text" name="username" id="username" placeholder="username" required/>
+                <input class="box" type="text" formControlName="username" name="username" id="username" placeholder="username" required/>
                               
-                <input class="box" type="email" name="email" id="email" placeholder="E-Mail" required/>
-                <input class="box" type="emailConf" name="emailConf" id="emailConf" placeholder="E-MailConf" required/>
+                <input class="box" type="email" formControlName="email" name="email" id="email" placeholder="E-Mail" required/>
+                <input class="box" type="emailConf" formControlName="emailConf" name="emailConf" id="emailConf" placeholder="E-MailConf" required/>
                               
-                <input class="box" type="password" name="password" id="password" placeholder="Password" required/>
-                <input class="box" type="passwordConf" name="passwordConf" id="passwordConf" placeholder="PasswordConf" required/>
+                <input class="box" type="password" formControlName="password" name="password" id="password" placeholder="Password" required/>
+                <input class="box" type="passwordConf" formControlName="passwordConf" name="passwordConf" id="passwordConf" placeholder="PasswordConf" required/>
 
 
-                <input type="submit" id="submitDetails" name="submitDetails" value="Submit"/> 
+                <input class="button" type="submit" id="submitDetails" name="submitDetails" value="Submit"/> 
                       
             </form> 
                       
