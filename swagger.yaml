@@ -28,7 +28,7 @@ paths:
       responses:
         200:
           description: "Utilisateur connecté"
-        405:
+        400:
           description: "Invalid input"
     delete:
       tags:
@@ -188,7 +188,7 @@ paths:
         type: "integer"
         format: "int64"
       responses:
-        405:
+        400:
           description: "Invalid input"
 definitions:
   Signup-Credentials:
@@ -202,30 +202,38 @@ definitions:
 
   Login-Credentials:
     type: object
-    required: [id, user]
+    required: user
     properties:
-      id:
-        type: integer
       user:
         type: object
         properties:
-          id:
-            type: integer
           email:
             type: string
             format: email
-          username:
+          password:
             type: string
+            format: password
   User:
     type: object
+    required: user
     properties:
-      id:
-        type: integer
-      email:
-        type: string
-        format: email
-      username:
-        type: string   
+      user:
+        type: object
+        properties:
+          username:
+            type: string
+          email:
+            type: string
+            format: email
+          emailConf:
+            type: string
+            format: email
+          password:
+            type: string
+            format: password
+          passwordConf:
+            type: string
+            format: password
 externalDocs:
   description: "GitHub de SmartJukebox"
   url: "https://github.com/gfloret/ProgWeb"
