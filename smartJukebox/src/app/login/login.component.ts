@@ -2,11 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import {HttpClient} from "@angular/common/http";
 
-
-function tryLogin(email, password){
-  return this.http.get('/api/v1/uniqueSongYoutube',);
-}
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,6 +9,7 @@ function tryLogin(email, password){
 })
 export class LoginComponent{
   loginForm;
+  loginRes;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient) {
     this.loginForm = this.formBuilder.group({
@@ -25,7 +21,7 @@ export class LoginComponent{
   onSubmit(loginData){
     console.warn('Login form has been submitted', loginData);
     console.log(loginData);
-    this.http.get('/api/v1/login', loginData).subscribe((data : any) => {});
+    this.http.get('/api/v1/login', loginData).subscribe(res => {this.loginRes = res;});
   }
   
 
