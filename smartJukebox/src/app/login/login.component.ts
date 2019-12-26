@@ -7,9 +7,8 @@ import {HttpClient} from "@angular/common/http";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent{
+export class LoginComponent implements OnInit{
   loginForm;
-  loginRes;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient) {
     this.loginForm = this.formBuilder.group({
@@ -21,8 +20,9 @@ export class LoginComponent{
   onSubmit(loginData){
     console.warn('Login form has been submitted', loginData);
     console.log(loginData);
-    this.http.get('/api/v1/login', loginData).subscribe(res => {this.loginRes = res;});
+    this.http.get('/api/v1/login',loginData).subscribe((data: any) => {});
   }
   
+  ngOnInit() {}
 
 }
