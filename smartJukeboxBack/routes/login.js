@@ -13,7 +13,7 @@ const LoginSchema = new mongoose.Schema({
         required: true
     }
 });
-let Login = mongoose.model('User', LoginSchema);
+let Login = mongoose.model('Login', LoginSchema);
 module.exports = Login;
 
 router.get('/', function(req, res){
@@ -23,7 +23,7 @@ router.get('/', function(req, res){
         if (!user) {
             return res.status(400).json(vm.ApiResponse(false, 400, "Incorrect email"));
         }
-        if (password != user.password) {
+        if (password !== user.password) {
             return res.status(400).json(vm.ApiResponse(false, 400, "Incorrect password"));
         }
         else{

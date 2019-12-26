@@ -15,7 +15,7 @@ import { format } from 'url';
 export class SignupComponent implements OnInit {
   signupForm;
 
-  constructor(private formBuilder: FormBuilder, private http:HttpClient) { 
+  constructor(private formBuilder: FormBuilder, private http:HttpClient) {
     this.signupForm = this.formBuilder.group({
       username: '',
       email: '',
@@ -28,7 +28,7 @@ export class SignupComponent implements OnInit {
   onSubmit(userData) {
     console.warn('Signup form has been submitted', userData);
     console.log(userData);
-    this.http.post('/api/v1/signup', userData.username).subscribe((data : any) => {});
+    this.http.post('/api/v1/signup', userData).subscribe((data : any) => {});
   }
 
   ngOnInit() {}

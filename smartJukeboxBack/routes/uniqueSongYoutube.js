@@ -61,8 +61,8 @@ router.post('/', function(req, res, next) {
                     archivesYoutube.save(function (err) {
                         if(err)
                             console.log(err);
-                        return res.status(201).json({id_video: id});
                         mongoose.connection.close();
+                        return res.status(201).json({id_video: id});
                     })
                 }
             });

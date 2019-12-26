@@ -24,6 +24,7 @@ let User = mongoose.model('User', UserSchema);
 module.exports = User;
 
 router.post('/', function(req, res, next){
+    console.log("début post");
     if(
         req.body.username &&
         req.body.email &&
@@ -37,15 +38,28 @@ router.post('/', function(req, res, next){
             username: req.body.username,
             email: req.body.email,
             password: req.body.password
-        }
-
-        User.create(userData, function (err, user) {
-            if (err) {
-                return next(err)
-            } else {
-                return res.redirect('/');
+        };
+        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+            if(err)
+                console.log(err);
+            else{
+                User.create(userData, function (err, user) {
+                    if (err) {
+                        console.log(err);
+                        res.statusMessage = err;
+                        mongoose.connection.close();
+                        return res.status(500).end();
+                    } else {
+                        console.log("user créé");
+                        mongoose.connection.close();
+                        return res.status(201).end();
+                    }
+                });
             }
-        })
+        });
+    }else {
+        res.statusMessage = "champs manquants";
+        return res.status(500).end();
     }
 });
 
