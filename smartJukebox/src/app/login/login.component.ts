@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder,FormGroup,FormControl,Validators } from '@angular/forms';
 import {HttpClient} from "@angular/common/http";
 
 @Component({
@@ -8,14 +8,11 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit{
-  loginForm;
+  loginForm: FormGroup;
+  emailCtrl: FormControl;
+  passwordCtrl: FormControl;
 
-  constructor(private formBuilder: FormBuilder, private http:HttpClient) {
-    this.loginForm = this.formBuilder.group({
-      email: '',
-      password: ''
-    });
-  }
+  constructor(private formBuilder: FormBuilder, private http:HttpClient) {}
 
   onSubmit(loginData){
     console.warn('Login form has been submitted', loginData);
@@ -23,6 +20,15 @@ export class LoginComponent implements OnInit{
     this.http.get('/api/v1/login?email='+loginData.email+'&password='+loginData.password).subscribe((data: any) => {});
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.emailCtrl = this.formBuilder.control('', Validators.required);
+    this.passwordCtrl = this.formBuilder.control('', Validators.required);
+
+    this.loginForm = this.formBuilder.group({
+      email: this.emailCtrl,
+      password: this.passwordCtrl
+    });
+
+  }
 
 }
