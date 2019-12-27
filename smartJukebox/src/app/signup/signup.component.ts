@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
-import { format } from 'url';
 
 
 @Component({
@@ -13,19 +11,63 @@ import { format } from 'url';
 
 
 export class SignupComponent implements OnInit {
-  signupForm;
+
+  signupForm: FormGroup;
+  passwordMinLength = 3;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient) {
     this.signupForm = this.formBuilder.group({
-      username: '',
-      email: '',
-      emailConf: '',
-      password: '',
-      passwordConf: ''
+      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      emailConf: ['', [Validators.required, Validators.email, this.isIdenticalToEmail('email')]],
+      password: ['', [Validators.required, Validators.minLength(this.passwordMinLength)]],
+      passwordConf: ['', [Validators.required, Validators.minLength(this.passwordMinLength), this.isIdenticalToPassword('password')]]
     });
    }
 
-  onSubmit(userData) {
+  isIdenticalToPassword (passwordToCompare: string) {
+    var password: FormControl;
+    var passwordConf: FormControl;
+    return function matchPreviousPassword (control: FormControl) {
+      if (!control.parent) { return null; } // If there is nothing to compare yet
+      if (!passwordConf) {
+        passwordConf = control;
+        password = control.parent.get(passwordToCompare) as FormControl;
+        password.valueChanges.subscribe(() => { // Each time the value of the passwordConf control is changed, we recalculate the validation state
+          passwordConf.updateValueAndValidity();
+        });
+      }
+      if (password.value !== passwordConf.value) {
+        return { matchPrevious: true };
+      }
+    }
+  }
+
+  isIdenticalToEmail (emailToCompare: string) {
+    var email: FormControl;
+    var emailConf: FormControl;
+    return function matchPreviousEmail (control: FormControl) {
+      if (!control.parent) { return null; }
+      if (!emailConf) {
+        emailConf = control;
+        email = control.parent.get(emailToCompare) as FormControl;
+        email.valueChanges.subscribe(() => {
+          emailConf.updateValueAndValidity();
+        });
+      }
+      if (email.value !== emailConf.value) {
+        return { matchPrevious: true };
+      }
+    }
+  }
+
+  get username() { return this.signupForm.get('username'); }
+  get email() { return this.signupForm.get('email'); }
+  get emailConf() { return this.signupForm.get('emailConf'); }
+  get password() { return this.signupForm.get('password'); }
+  get passwordConf() { return this.signupForm.get('passwordConf'); }
+
+  onSubmit(userData: any) {
     console.warn('Signup form has been submitted', userData);
     console.log(userData);
     this.http.post('/api/v1/signup', userData).subscribe((data : any) => {});
