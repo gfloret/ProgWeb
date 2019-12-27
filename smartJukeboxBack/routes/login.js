@@ -2,19 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-const LoginSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    password: {
-        type: String,
-        required: true
-    }
-});
-let Login = mongoose.model('Login', LoginSchema);
-module.exports = Login;
+let Login = require('./userModel.js');
 
 router.get('/', function(req, res, next) {
     console.log("Début connexion");
@@ -25,22 +13,23 @@ router.get('/', function(req, res, next) {
             return res.status(500).end();
         }
         else{
-            Login.findOne({email: req.query.email, password:req.query.password}, function(err, account){
+            Login.findOne({'email': req.query.email, 'password':req.query.password}, function(err, account){
                 if(err) {
                     console.log(err);
                     mongoose.connection.close();
                     return res.status(500).end();
                 }
                 else {
-                    if (account != null){
-                        console.log("Connexion réussie");
-                        mongoose.connection.close();
-                        return res.json({accountInfo: account.email});
-                    }
-                    else{
+                    if (!account){
                         console.log("Compte inexistant");
                         mongoose.connection.close();
                         return res.json({accountInfo: ""});
+                        
+                    }
+                    else{
+                        console.log("Connexion réussie");
+                        mongoose.connection.close();
+                        return res.json({accountInfo: account});
                     }
                 }
             });
