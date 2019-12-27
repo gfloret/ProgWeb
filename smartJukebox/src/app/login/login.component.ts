@@ -12,12 +12,20 @@ export class LoginComponent implements OnInit{
   emailCtrl: FormControl;
   passwordCtrl: FormControl;
 
+  userExist = true;
+
   constructor(private formBuilder: FormBuilder, private http:HttpClient) {}
 
   onSubmit(loginData){
     console.warn('Login form has been submitted', loginData);
     console.log(loginData);
-    this.http.get('/api/v1/login?email='+loginData.email+'&password='+loginData.password).subscribe((data: any) => {});
+    this.http.get('/api/v1/login?email='+loginData.email+'&password='+loginData.password).subscribe((data: any) => {
+      if(!data.accountInfo){
+        this.userExist = false;
+      }else{
+        this.userExist = true;
+      }
+    });
   }
 
   ngOnInit() {
