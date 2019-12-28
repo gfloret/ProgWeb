@@ -18,4 +18,11 @@ import {
 
 export class AppComponent {
   title = 'smartJukebox';
+  connected = false;
+
+  refresh(){
+    if (localStorage.getItem('userName') !== null) {
+      this.connected = true;
+    }
+  }
 }
