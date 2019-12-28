@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder,FormGroup,FormControl,Validators } from '@angular/forms';
 import {HttpClient} from "@angular/common/http";
 import {Router} from '@angular/router';
@@ -12,7 +12,6 @@ export class LoginComponent implements OnInit{
   loginForm: FormGroup;
   usernameCtrl: FormControl;
   passwordCtrl: FormControl;
-  @Output() connectEvent = new EventEmitter<string>();
 
   userExist = true;
 
@@ -27,13 +26,13 @@ export class LoginComponent implements OnInit{
       }else{
         this.userExist = true;
         localStorage.setItem('userName', data.accountInfo.username);
-        this.connectEvent.emit(null);
         this.router.navigate(['/players']);
       }
     });
   }
 
   ngOnInit() {
+    localStorage.clear();
     this.usernameCtrl = this.formBuilder.control('', Validators.required);
     this.passwordCtrl = this.formBuilder.control('', Validators.required);
 

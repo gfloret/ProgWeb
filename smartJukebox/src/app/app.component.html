@@ -17,8 +17,9 @@
     <div class="navbar-nav">
       <a class="nav-link" routerLink="/players" routerLinkActive="active">Lecture</a>
       <a class="nav-link" routerLink="/search" routerLinkActive="active">Recherche</a>
-      <a class="nav-link" routerLink="/auth/signup" routerLinkActive="active">Inscription</a>
-      <a *ngIf="!connected" class="nav-link" routerLink="/auth/login" routerLinkActive="active">Connexion</a>
+      <a *ngIf="!userName" class="nav-link" routerLink="/auth/signup" routerLinkActive="active">Inscription</a>
+      <a *ngIf="!userName" class="nav-link" routerLink="/auth/login" routerLinkActive="active">Connexion</a>
+      <a *ngIf="userName" class="nav-link" routerLink="/auth/login" routerLinkActive="active">Deconnexion</a>
     </div>
   </div>
 </nav>
