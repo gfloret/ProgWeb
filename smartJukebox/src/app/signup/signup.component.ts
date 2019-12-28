@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   passwordMinLength = 3;
 
-  constructor(private formBuilder: FormBuilder, private http:HttpClient) {
+  constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) {
     this.signupForm = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -68,9 +69,8 @@ export class SignupComponent implements OnInit {
   get passwordConf() { return this.signupForm.get('passwordConf'); }
 
   onSubmit(userData: any) {
-    console.warn('Signup form has been submitted', userData);
-    console.log(userData);
     this.http.post('/api/v1/signup', userData).subscribe((data : any) => {});
+    this.router.navigate(['/auth/login']);
   }
 
   ngOnInit() {}

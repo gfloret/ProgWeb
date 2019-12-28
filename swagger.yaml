@@ -61,9 +61,9 @@ paths:
           schema:
             $ref: "#/definitions/User"
       responses:
-        200:
-          description: "Utilisateur créé"
-        405:
+        201:
+          description: "Successfully created user"
+        500:
           description: "Invalid input"
     delete:
       tags:
