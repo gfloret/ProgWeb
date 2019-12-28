@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt');
 
 let Login = require('./userModel.js');
 
@@ -13,7 +14,7 @@ router.get('/', function(req, res, next) {
             return res.status(500).end();
         }
         else{
-            Login.findOne({'email': req.query.email, 'password':req.query.password}, function(err, account){
+            Login.findOne({'username': req.query.username}, function(err, account){
                 if(err) {
                     console.log(err);
                     mongoose.connection.close();
@@ -26,10 +27,15 @@ router.get('/', function(req, res, next) {
                         return res.json({accountInfo: ""});
                         
                     }
-                    else{
+                    else if(bcrypt.compareSync(req.query.password, account.password)) {
                         console.log("Connexion réussie");
                         mongoose.connection.close();
                         return res.json({accountInfo: account});
+                    }
+                    else{
+                        console.log("Mot de passe invalide");
+                        mongoose.connection.close();
+                        return res.json({accountInfo: ""});
                     }
                 }
             });

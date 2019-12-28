@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit{
   loginForm: FormGroup;
-  emailCtrl: FormControl;
+  usernameCtrl: FormControl;
   passwordCtrl: FormControl;
   @Output() connectEvent = new EventEmitter<string>();
 
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit{
   onSubmit(loginData){
     console.warn('Login form has been submitted', loginData);
     console.log(loginData);
-    this.http.get('/api/v1/login?email='+loginData.email+'&password='+loginData.password).subscribe((data: any) => {
+    this.http.get('/api/v1/login?username='+loginData.username+'&password='+loginData.password).subscribe((data: any) => {
       if(!data.accountInfo){
         this.userExist = false;
       }else{
@@ -34,11 +34,11 @@ export class LoginComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.emailCtrl = this.formBuilder.control('', Validators.required);
+    this.usernameCtrl = this.formBuilder.control('', Validators.required);
     this.passwordCtrl = this.formBuilder.control('', Validators.required);
 
     this.loginForm = this.formBuilder.group({
-      email: this.emailCtrl,
+      username: this.usernameCtrl,
       password: this.passwordCtrl
     });
 

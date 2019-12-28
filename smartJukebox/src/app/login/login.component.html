@@ -10,11 +10,11 @@
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                 </div>
-                <input class="form-control" type="email" formControlName="email" name="email" placeholder="E-Mail" required/>
+                <input class="form-control" type="username" formControlName="username" name="username" placeholder="Nom d'utilisateur" required/>
             </div>
-            <div *ngIf="emailCtrl.invalid && !emailCtrl.pristine" class="alert alert-danger mt-1 mb-2 rounded-0">
+            <div *ngIf="usernameCtrl.invalid && !usernameCtrl.pristine" class="alert alert-danger mt-1 mb-2 rounded-0">
                 <div> Ce champ est requis</div>                                    
             </div>
         </div>
@@ -32,7 +32,7 @@
         <div class="form-group">
         <button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary btn-block" id="submitDetails" name="submitDetails"> Se connecter  </button>
         <div *ngIf="!userExist" class="alert alert-danger mt-1 mb-2 rounded-0">
-            <div> L'e-mail et le mot de passe ne correspondent pas</div>                                    
+            <div> Le nom d'utilisateur et le mot de passe ne correspondent pas</div>                                    
         </div>
         </div>
         <p class="text-center"><a class="nav-link" routerLink="/auth/signup" routerLinkActive="active">S'inscrire</a></p>
