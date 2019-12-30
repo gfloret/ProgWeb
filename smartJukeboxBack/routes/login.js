@@ -14,7 +14,9 @@ router.get('/', function(req, res, next) {
             return res.status(500).end();
         }
         else{
-            Login.findOne({'username': req.query.username}, function(err, account){
+            Login.findOne({$or: [
+                {'username': req.query.username},
+                {'email': req.query.username}]}, function(err, account){
                 if(err) {
                     console.log(err);
                     mongoose.connection.close();
