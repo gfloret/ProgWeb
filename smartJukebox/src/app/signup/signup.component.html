@@ -7,6 +7,12 @@
         <hr>
         <p class="text-success text-center">Veuillez remplir tous les champs</p>
 
+        <div *ngIf="takenUsername || takenEmail || signupError" class="alert alert-danger">
+            <div *ngIf="takenUsername"> Ce nom d'utilisateur est déjà pris, veuillez en choisir un nouveau </div>
+            <div *ngIf="takenEmail"> Cette adresse email est déjà utilisée, veuillez en entrer une autre </div>
+            <div *ngIf="signupError"> Une erreur a eu lieu durant l'inscription, vérifiez vos informations puis réessayez </div>
+        </div>
+
         <form [formGroup]="signupForm" (ngSubmit)="onSubmit(signupForm.value)">
 
             <div class="form-group">

@@ -15,6 +15,9 @@ export class SignupComponent implements OnInit {
 
   signupForm: FormGroup;
   passwordMinLength = 3;
+  takenUsername = false;
+  takenEmail = false;
+  signupError = false;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) {
     this.signupForm = this.formBuilder.group({
@@ -69,8 +72,25 @@ export class SignupComponent implements OnInit {
   get passwordConf() { return this.signupForm.get('passwordConf'); }
 
   onSubmit(userData: any) {
-    this.http.post('/api/v1/signup', userData).subscribe((data : any) => {});
-    this.router.navigate(['/auth/login']);
+    this.http.post('/api/v1/signup', userData).subscribe((data : any) => {
+      this.takenUsername = false;
+      this.takenEmail = false;
+      this.signupError = false;
+      switch (data.signup){
+        case "error":
+          this.signupError = true;
+          break;
+        case "takenUsername":
+          this.takenUsername = true;
+          break;
+        case "takenEmail":
+          this.takenEmail = true;
+          break;
+        case "success":
+          this.router.navigate(['/auth/login']);
+          break;
+      }
+    });
   }
 
   ngOnInit() {}
