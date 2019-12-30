@@ -10,7 +10,7 @@ import { LoginComponent } from './login/login.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/players', pathMatch: 'full'},
+  { path: '', redirectTo: 'auth/login', pathMatch: 'full'},
   { path: 'players', component: PlayersComponent },
   { path: 'search', component: SearchComponent },
   { path: 'players/youtube', component: YoutubeComponent },

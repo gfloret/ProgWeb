@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder,FormGroup,FormControl,Validators } from '@angular/forms';
 import {HttpClient} from "@angular/common/http";
 import {Router} from '@angular/router';
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit{
 
   userExist = true;
 
-  constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router, private _sharedService: SharedService) {}
 
   onSubmit(loginData){
     console.warn('Login form has been submitted', loginData);
@@ -26,13 +27,17 @@ export class LoginComponent implements OnInit{
       }else{
         this.userExist = true;
         localStorage.setItem('userName', data.accountInfo.username);
+        this._sharedService.emitChange('login Complete');
         this.router.navigate(['/players']);
       }
     });
   }
+  
 
   ngOnInit() {
-    localStorage.clear();
+    if(!localStorage.getItem('userName') === null){
+      return this.router.navigate(['/players']);
+    }
     this.usernameCtrl = this.formBuilder.control('', Validators.required);
     this.passwordCtrl = this.formBuilder.control('', Validators.required);
 

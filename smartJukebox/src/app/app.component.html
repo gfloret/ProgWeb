@@ -9,17 +9,18 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" routerLink="/players" routerLinkActive="active">{{title}}</a>
+  <a *ngIf="userName" class="navbar-brand" routerLink="/players" routerLinkActive="active">{{title}}</a>
+  <a *ngIf="!userName" class="navbar-brand" routerLink="/auth/login" routerLinkActive="active">{{title}}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-link" routerLink="/players" routerLinkActive="active">Lecture</a>
-      <a class="nav-link" routerLink="/search" routerLinkActive="active">Recherche</a>
+      <a *ngIf="userName" class="nav-link" routerLink="/players" routerLinkActive="active">Lecture</a>
+      <a *ngIf="userName" class="nav-link" routerLink="/search" routerLinkActive="active">Recherche</a>
       <a *ngIf="!userName" class="nav-link" routerLink="/auth/signup" routerLinkActive="active">Inscription</a>
       <a *ngIf="!userName" class="nav-link" routerLink="/auth/login" routerLinkActive="active">Connexion</a>
-      <a *ngIf="userName" class="nav-link" routerLink="/auth/login" routerLinkActive="active">Deconnexion</a>
+      <a *ngIf="userName" class="nav-link" (click)="disconnect();">Deconnexion</a>
     </div>
   </div>
 </nav>
@@ -28,3 +29,4 @@
 
 <h1>{{title}}</h1>
 <router-outlet></router-outlet>
+
