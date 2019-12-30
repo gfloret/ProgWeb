@@ -16,7 +16,11 @@ export class LoginComponent implements OnInit{
 
   userExist = true;
 
-  constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router, private _sharedService: SharedService) {}
+  constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router, private _sharedService: SharedService) {
+    if(localStorage.getItem('userName') !== null){
+      router.navigate(['/players']);
+    }
+  }
 
   onSubmit(loginData){
     console.warn('Login form has been submitted', loginData);
@@ -35,9 +39,6 @@ export class LoginComponent implements OnInit{
   
 
   ngOnInit() {
-    if(!localStorage.getItem('userName') === null){
-      return this.router.navigate(['/players']);
-    }
     this.usernameCtrl = this.formBuilder.control('', Validators.required);
     this.passwordCtrl = this.formBuilder.control('', Validators.required);
 

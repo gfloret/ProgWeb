@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-players',
@@ -8,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
 
 export class PlayersComponent implements OnInit {
 
-  constructor() {}
+  constructor(private router: Router) {
+    if(localStorage.getItem('userName') === null){
+      router.navigate(['/auth/login']);
+    }
+  }
 
 
   ngOnInit() {}

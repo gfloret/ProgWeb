@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import { Router } from '@angular/router';
 
 let searchPlayer = null;
 let results = null;
@@ -28,7 +29,11 @@ export class SearchComponent implements OnInit {
   private firstSearch = true;
   private resultsDisplayed = false;
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private router: Router) {
+    if(localStorage.getItem('userName') === null){
+      router.navigate(['/auth/login']);
+    }
+   }
 
   ngOnInit() {
     console.log(this);
