@@ -31,7 +31,7 @@ export class SearchComponent implements OnInit {
 
   constructor(private http:HttpClient, private router: Router) {
     if(localStorage.getItem('userName') === null){
-      router.navigate(['/auth/login']);
+      router.navigate(['/auth']);
     }
    }
 

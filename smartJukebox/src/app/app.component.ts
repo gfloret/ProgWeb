@@ -36,7 +36,7 @@ export class AppComponent {
   disconnect(){
     console.log("deconnexion");
     localStorage.clear();
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/auth']);
     this.userName = null;
   }
 }

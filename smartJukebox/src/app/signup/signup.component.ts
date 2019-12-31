@@ -20,6 +20,9 @@ export class SignupComponent implements OnInit {
   signupError = false;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) {
+    if(localStorage.getItem('userName') !== null){
+      router.navigate(['/home']);
+    }
     this.signupForm = this.formBuilder.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],

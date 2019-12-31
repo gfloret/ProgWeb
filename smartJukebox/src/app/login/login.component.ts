@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit{
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router, private _sharedService: SharedService) {
     if(localStorage.getItem('userName') !== null){
-      router.navigate(['/players']);
+      router.navigate(['/home']);
     }
   }
 
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit{
         this.userExist = true;
         localStorage.setItem('userName', data.accountInfo.username);
         this._sharedService.emitChange('login Complete');
-        this.router.navigate(['/players']);
+        this.router.navigate(['/home']);
       }
     });
   }

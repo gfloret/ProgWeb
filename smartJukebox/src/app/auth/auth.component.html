@@ -1,1 +1,28 @@
-<p>auth works!</p>
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+      <h1 class="display-4 font-weight-normal"><em>smartJukebox</em></h1>
+      <p class="lead font-weight-normal"><em>smartJukebox</em> est un outil en ligne qui vous permet de rechercher des musiques Youtube ou Spotify et de constituer des playlists. Envoyez vos playlists depuis votre téléphone vers votre ordinateur, puis créez ou rejoingez des salons pour partager vos musiques avec d'autres utilisateurs ! </p>
+      <a class="btn btn-outline-info" routerLink="/auth/signup" routerLinkActive="active">Commencer !</a>
+    </div>
+    <div class="product-device box-shadow d-none d-md-block"></div>
+    <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+</div>
+  
+<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+  <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-4 px-md-5 text-center text-white overflow-hidden">
+    <div class="my-3 py-3">
+      <h2 class="display-5">Inscription</h2>
+      <p class="lead">Créez un compte pour commencer à utiliser l'application</p>
+      <a class="btn btn-outline-info" routerLink="/auth/signup" routerLinkActive="active">Inscription</a>
+    </div>
+  </div>
+  <div class="bg-info mr-md-3 pt-3 px-3 pt-md-4 px-md-5 text-center overflow-hidden">
+    <div class="my-3 p-3">
+      <h2 class="display-5">Connexion</h2>
+      <p class="lead">Vous possédez déjà un compte ?</p>
+      <a class="btn btn-outline-dark" routerLink="/auth/login" routerLinkActive="active">Connexion</a>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

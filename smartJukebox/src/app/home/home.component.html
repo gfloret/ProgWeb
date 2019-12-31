@@ -1,0 +1,39 @@
+<main role="main">
+
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">Bienvenue sur <em id="smartJukebox">smartJukebox</em> !</h1>
+        <p>Vous pouvez dès à présent commencer à utiliser l'application. Pour débuter, vous pourriez chercher une musique ?</p>
+        <p><a class="btn btn-primary btn-lg" routerLink="/search" routerLinkActive="active" role="button">Rechercher une musique &raquo;</a></p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h2>Recherche</h2>
+          <p align="justify">L'onglet recherche vous permet de trouver n'importe laquelle de vos musiques favorites tant qu'elle existe sur Youtube. Vous pourrez depuis cette page ajouter les musiques choisies à vos playlists, ou aux lecteurs.</p>
+        </div>
+        <div class="col-md-4">
+          <h2>Lecture</h2>
+          <p align="justify">L'onglet lecture vous permet tout simplement d'écouter la ou les musiques choisies, et de parcourir vos playlists.</p>
+        </div>
+        <div class="col-md-4">
+          <h2>Salons</h2>
+          <p align="justify">L'onglet salons répertorie tous les salons publics des utilisateurs, et vous permet de créer le votre. Invitez vos amis à rejoindre votre salon et partagez avec eux vos morceaux préférés !</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4"><p><a class="btn btn-secondary" routerLink="/search" routerLinkActive="active" role="button">Recherche &raquo;</a></p>
+        </div>
+        <div class="col-md-4"><p><a class="btn btn-secondary" routerLink="/players" routerLinkActive="active" role="button">Lecture &raquo;</a></p>
+        </div>
+        <div class="col-md-4"><p><a class="btn btn-secondary" routerLink="/channel" routerLinkActive="active" role="button">Salons &raquo;</a></p>
+        </div>
+      </div>
+    </div>
+
+</main>
+
+<router-outlet></router-outlet>

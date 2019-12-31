@@ -12,6 +12,8 @@ import { SpotifyComponent } from './spotify/spotify.component';
 import { AuthComponent } from './auth/auth.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
+import { ChannelComponent } from './channel/channel.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { LoginComponent } from './login/login.component';
     AuthComponent,
     SignupComponent,
     LoginComponent,
+    ChannelComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

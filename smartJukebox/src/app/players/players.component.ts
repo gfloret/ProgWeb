@@ -11,7 +11,7 @@ export class PlayersComponent implements OnInit {
 
   constructor(private router: Router) {
     if(localStorage.getItem('userName') === null){
-      router.navigate(['/auth/login']);
+      router.navigate(['/auth']);
     }
   }
 
