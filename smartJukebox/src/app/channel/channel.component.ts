@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-channel',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChannelComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { 
+    if(localStorage.getItem('userName') === null){
+      router.navigate(['/auth']);
+    }
+  }
 
   ngOnInit() {
   }
