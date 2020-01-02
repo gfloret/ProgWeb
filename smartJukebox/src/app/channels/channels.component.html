@@ -1,12 +1,11 @@
 <div class="card border-0">    
     <div class="d-flex justify-content-center">
-        <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light">Créer un nouveau salon</a>
+        <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleCreationForm()">Créer un nouveau salon</a>
         <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light">Accéder à mes salons</a>
     </div>
 </div>
 
-<!--*ngIf="creatingNewChannel"-->
-<div >
+<div *ngIf="creatingNewChannel" [@formAnimation]>
     <article class="card-body">
         <h4 class="card-title text-center mb-4 mt-1">Création d'un salon</h4>
 
@@ -40,7 +39,7 @@
             <div class="form-group">
                 <div class="input-group">
                     <div class="custom-control custom-switch">
-                        <input class="custom-control-input" type="checkbox" formControlName="visibility" id="visibility" name="visibility">
+                        <input class="custom-control-input" type="checkbox" formControlName="visibility" id="visibility" name="visibility" [checked]="isPublic" (change)="isPublic = $event.target.checked" ng-value="isPublic">
                         <label class="custom-control-label" for="visibility" name="visibility"> Public ? </label>
                     </div>
                 </div>

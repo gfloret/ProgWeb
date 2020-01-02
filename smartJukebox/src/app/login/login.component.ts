@@ -23,8 +23,6 @@ export class LoginComponent implements OnInit{
   }
 
   onSubmit(loginData){
-    console.warn('Login form has been submitted', loginData);
-    console.log(loginData);
     this.http.get('/api/v1/login?username='+loginData.username+'&password='+loginData.password).subscribe((data: any) => {
       if(!data.accountInfo){
         this.userExist = false;
