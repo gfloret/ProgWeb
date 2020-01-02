@@ -1,13 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from './shared.service';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition
-} from '@angular/animations';
+import { slideInAnimation } from './route-animations';
 
 @Component({
   selector: 'app-root',
@@ -15,11 +9,9 @@ import {
   styleUrls: ['./app.component.css'],
   providers: [SharedService],
   animations: [
-    
+    slideInAnimation
   ]
 })
-
-
 
 export class AppComponent {
   constructor(private router: Router, private _sharedService: SharedService) {
