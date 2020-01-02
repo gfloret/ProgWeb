@@ -6,7 +6,7 @@ var bcrypt = require('bcrypt');
 let Login = require('./userModel.js');
 
 router.get('/', function(req, res, next) {
-    console.log("Début connexion");
+    
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if(err){
             console.log(err);
@@ -24,18 +24,18 @@ router.get('/', function(req, res, next) {
                 }
                 else {
                     if (!account){
-                        console.log("Compte inexistant");
+                        console.log("Account not found");
                         mongoose.connection.close();
                         return res.json({accountInfo: ""});
                         
                     }
                     else if(bcrypt.compareSync(req.query.password, account.password)) {
-                        console.log("Connexion réussie");
+                        console.log("Connection successful");
                         mongoose.connection.close();
                         return res.json({accountInfo: account});
                     }
                     else{
-                        console.log("Mot de passe invalide");
+                        console.log("Incorrect password");
                         mongoose.connection.close();
                         return res.json({accountInfo: ""});
                     }

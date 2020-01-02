@@ -24,7 +24,6 @@ export class AppComponent {
   title = 'smartJukebox';
   userName = localStorage.getItem('userName');
 
-
   disconnect(){
     console.log("deconnexion");
     localStorage.clear();
