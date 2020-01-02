@@ -7,7 +7,7 @@ import { SpotifyComponent } from './spotify/spotify.component';
 import { AuthComponent } from './auth/auth.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
-import { ChannelComponent } from './channel/channel.component';
+import { ChannelsComponent } from './channels/channels.component';
 import { HomeComponent } from './home/home.component';
 
 
@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent , data: {animation:'Search'} },
   { path: 'players/youtube', component: YoutubeComponent , data: {animation:'Youtube'} },
   { path: 'players/spotify', component: SpotifyComponent , data: {animation:'Spotify'} },
-  { path: 'channel', component: ChannelComponent , data: {animation:'Channel'}},
+  { path: 'channels', component: ChannelsComponent , data: {animation:'Channels'}},
   { path: 'home', component: HomeComponent , data: {animation:'Home'} }
 ];
 

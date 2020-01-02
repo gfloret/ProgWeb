@@ -13,7 +13,7 @@ import { SpotifyComponent } from './spotify/spotify.component';
 import { AuthComponent } from './auth/auth.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
-import { ChannelComponent } from './channel/channel.component';
+import { ChannelsComponent } from './channels/channels.component';
 import { HomeComponent } from './home/home.component';
 
 @NgModule({
@@ -26,7 +26,7 @@ import { HomeComponent } from './home/home.component';
     AuthComponent,
     SignupComponent,
     LoginComponent,
-    ChannelComponent,
+    ChannelsComponent,
     HomeComponent,
   ],
   imports: [

@@ -1,0 +1,114 @@
+<div class="card border-0">    
+    <div class="d-flex justify-content-center">
+        <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light">Créer un nouveau salon</a>
+        <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light">Accéder à mes salons</a>
+    </div>
+</div>
+
+<!--*ngIf="creatingNewChannel"-->
+<div >
+    <article class="card-body">
+        <h4 class="card-title text-center mb-4 mt-1">Création d'un salon</h4>
+
+        <div *ngIf="takenName" class="alert alert-danger">
+            Ce nom de salon est déjà utilisé. Veuillez en choisir un nouveau.
+        </div>
+
+        <form [formGroup]="newChannelForm" (ngSubmit)="onSubmit(newChannelForm.value)">
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-bars"></i></span>
+                    </div>
+                    <input class="form-control" type="text" formControlName="name" name="name" id="name" placeholder="Nom du salon" required/>
+                </div>
+                <div *ngIf="name.invalid && !name.pristine" class="alert alert-danger mt-1 mb-2 rounded-0">
+                    <div *ngIf="name.errors.required">Ce champ est requis</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-bars"></i></span>
+                    </div>
+                    <input class="form-control" type="textfield" formControlName="description" name="description" id="name" placeholder="Description"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block" id="submitDetails" name="submitDetails" [disabled]="!newChannelForm.valid"> Créer  </button>
+            </div>
+
+            <p class="text-center"><a class="nav-link" >Fermer</a></p>
+
+        </form>
+    </article>
+</div>
+
+<div class="jumbotron">
+
+    <div class="mb-5 pb-2">
+        <h2>Salons publics</h2>
+    </div>
+
+    <div class="card-columns">
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Salon n°1</h5>
+                <p class="card-text">Salon n°1 description</p>
+                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
+                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Salon n°2</h5>
+                <p class="card-text">Salon n°2 description</p>
+                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
+                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Salon n°3</h5>
+                <p class="card-text">Salon n°3 description</p>
+                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
+                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Salon n°4</h5>
+                <p class="card-text">Salon n°4 description</p>
+                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
+                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Salon n°5</h5>
+                <p class="card-text">Salon n°5 description</p>
+                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
+                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Salon n°6</h5>
+                <p class="card-text">Salon n°6 description</p>
+                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
+                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
+            </div>
+        </div>
+
+    </div>
+</div>
+

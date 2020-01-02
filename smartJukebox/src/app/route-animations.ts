@@ -26,7 +26,7 @@ export const slideInAnimation =
             style({opacity: 0}),
             animate(200)
         ]),
-        transition('Channel => Auth', [
+        transition('Channels => Auth', [
             style({opacity: 0}),
             animate(200)
         ]),
