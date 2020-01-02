@@ -12,40 +12,40 @@ export const slideInAnimation =
 
         transition('Players => Auth', [
             style({opacity: 0}),
-            animate(200)
+            animate(300)
         ]),
         transition('Search => Auth', [
             style({opacity: 0}),
-            animate(200)
+            animate(300)
         ]),
         transition('Youtube => Auth', [
             style({opacity: 0}),
-            animate(200)
+            animate(300)
         ]),
         transition('Spotify => Auth', [
             style({opacity: 0}),
-            animate(200)
+            animate(300)
         ]),
         transition('Channels => Auth', [
             style({opacity: 0}),
-            animate(200)
+            animate(300)
         ]),
         transition('Home => Auth', [
             style({opacity: 0}),
-            animate(200)
+            animate(300)
         ]),
         
         transition('Auth => Home', [
             style({opacity: 0}),
-            animate(200)
+            animate(300)
         ]),
         transition('Signup => Home', [
             style({opacity: 0}),
-            animate(200)
+            animate(300)
         ]),
         transition('Login => Home', [
             style({opacity: 0}),
-            animate(200)
+            animate(300)
         ]),
 
         transition('Home => Players', [
@@ -403,6 +403,110 @@ export const slideInAnimation =
                     style({ transform: 'translateX(0%)' }),
                     animate('0.2s ease-in-out',
                         style({ transform: 'translateX(100%)' }))
+                ], { optional: true }),
+            ])
+        ]),
+        
+        transition('Login => Signup', [
+            query(':enter, :leave',
+                style({ position: 'fixed', width: '100%' }),
+                { optional: true }),
+            group([
+                query(':enter', [
+                    style({ transform: 'translateX(-100%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(0%)' }))
+                ], { optional: true }),
+                query(':leave', [
+                    style({ transform: 'translateX(0%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(100%)' }))
+                ], { optional: true }),
+            ])
+        ]),
+        transition('Login => Auth', [
+            query(':enter, :leave',
+                style({ position: 'fixed', width: '100%' }),
+                { optional: true }),
+            group([
+                query(':enter', [
+                    style({ transform: 'translateX(-100%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(0%)' }))
+                ], { optional: true }),
+                query(':leave', [
+                    style({ transform: 'translateX(0%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(100%)' }))
+                ], { optional: true }),
+            ])
+        ]),
+        transition('Signup => Auth', [
+            query(':enter, :leave',
+                style({ position: 'fixed', width: '100%' }),
+                { optional: true }),
+            group([
+                query(':enter', [
+                    style({ transform: 'translateX(-100%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(0%)' }))
+                ], { optional: true }),
+                query(':leave', [
+                    style({ transform: 'translateX(0%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(100%)' }))
+                ], { optional: true }),
+            ])
+        ]),
+
+        transition('Auth => Signup', [
+            query(':enter, :leave',
+                style({ position: 'fixed', width: '100%' }),
+                { optional: true }),
+            group([
+                query(':enter', [
+                    style({ transform: 'translateX(100%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(0%)' }))
+                ], { optional: true }),
+                query(':leave', [
+                    style({ transform: 'translateX(0%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(-100%)' }))
+                ], { optional: true }),
+            ])
+        ]),
+        transition('Auth => Login', [
+            query(':enter, :leave',
+                style({ position: 'fixed', width: '100%' }),
+                { optional: true }),
+            group([
+                query(':enter', [
+                    style({ transform: 'translateX(100%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(0%)' }))
+                ], { optional: true }),
+                query(':leave', [
+                    style({ transform: 'translateX(0%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(-100%)' }))
+                ], { optional: true }),
+            ])
+        ]),
+        transition('Signup => Login', [
+            query(':enter, :leave',
+                style({ position: 'fixed', width: '100%' }),
+                { optional: true }),
+            group([
+                query(':enter', [
+                    style({ transform: 'translateX(100%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(0%)' }))
+                ], { optional: true }),
+                query(':leave', [
+                    style({ transform: 'translateX(0%)' }),
+                    animate('0.2s ease-in-out',
+                        style({ transform: 'translateX(-100%)' }))
                 ], { optional: true }),
             ])
         ]),
