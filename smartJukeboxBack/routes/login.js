@@ -3,7 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
-let Login = require('./userModel.js');
+let Login = require('../models/userModel.js');
 
 router.get('/', function(req, res, next) {
     

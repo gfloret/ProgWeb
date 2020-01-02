@@ -14,5 +14,8 @@
   },
   "/login/*": {
     "target": "http://localhost:3000"
+  },
+  "/channel/*": {
+    "target": "http://localhost:3000"
   }
 }
