@@ -4,6 +4,20 @@ var mongoose = require('mongoose');
 
 let Channel = require('../models/channelModel.js');
 
+router.get('/', function(req,res,next){
+    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        if (err){
+            res.statusMessage = err;
+            mongoose.connection.close();
+            return res.status(500).end();
+        }else{
+            Channel.find().lean().exec(function (err, channels) {
+                return res.json(channels);  
+            });    
+        }
+});
+});
+
 router.post('/', function(req, res, next){
 
     if (req.body.name){

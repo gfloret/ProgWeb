@@ -31,7 +31,8 @@ export class ChannelsComponent implements OnInit {
   takenName = false;
   isPublic = true;
   creatingNewChannel = false;
-  
+  channels;
+
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
     if(localStorage.getItem('userName') === null){
       router.navigate(['/auth']);
@@ -66,6 +67,10 @@ export class ChannelsComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("initTest");
+    this.http.get('/api/v1/channel').subscribe((data:any) => {
+      this.channels = data;
+    });
   }
 
 }

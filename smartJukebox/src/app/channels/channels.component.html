@@ -63,55 +63,10 @@
 
     <div class="card-columns">
 
-        <div class="card">
+        <div *ngFor="let channel of channels;" class="card">
             <div class="card-body">
-                <h5 class="card-title">Salon n°1</h5>
-                <p class="card-text">Salon n°1 description</p>
-                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
-                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Salon n°2</h5>
-                <p class="card-text">Salon n°2 description</p>
-                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
-                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Salon n°3</h5>
-                <p class="card-text">Salon n°3 description</p>
-                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
-                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Salon n°4</h5>
-                <p class="card-text">Salon n°4 description</p>
-                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
-                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Salon n°5</h5>
-                <p class="card-text">Salon n°5 description</p>
-                <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
-                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Salon n°6</h5>
-                <p class="card-text">Salon n°6 description</p>
+                <h5 class="card-title">{{channel.name}}</h5>
+                <p class="card-text">{{channel.description}}</p>
                 <p class="card-text"><small class="text-muted">User1, User2, User3</small></p>
                 <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
             </div>
