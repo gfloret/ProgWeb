@@ -74,15 +74,22 @@ export class ChannelsComponent implements OnInit {
         this.takenName = true;
       } else {
         this.creatingNewChannel = false;
-        this.router.navigate(['/channels']);
+        this.loadPersonnalView();
       }
     });
   }
 
   ngOnInit() {
+    this.loadMainView();
+    this.loadPersonnalView();
+  }
+
+  loadMainView(){
     this.http.get('/api/v1/channel/publicchannels?host='+this.currentUser).subscribe((data:any) => {
       this.publicChannels = data;
     });
+  }
+  loadPersonnalView(){
     this.http.get('/api/v1/channel/userchannels?host='+this.currentUser).subscribe((data: any) => {
       this.userChannels = data;
     });
