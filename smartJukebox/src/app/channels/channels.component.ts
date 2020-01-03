@@ -82,11 +82,9 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
     this.http.get('/api/v1/channel/publicchannels?host='+this.currentUser).subscribe((data:any) => {
       this.publicChannels = data;
-      console.log(data);
     });
     this.http.get('/api/v1/channel/userchannels?host='+this.currentUser).subscribe((data: any) => {
       this.userChannels = data;
-      console.log(data);
     });
   }
 

@@ -11,9 +11,7 @@ router.get('/publicchannels', function(req,res,next){
             mongoose.connection.close();
             return res.status(500).end();
         }else{
-            Channels.find().lean().exec({$not: [
-                {'host': req.query.host}
-            ]}, function (err, channels) {
+            Channels.find({ 'host': { $ne: req.query.host } }).lean().exec(function (err, channels) {
                 return res.json(channels);  
             });    
         }
@@ -27,7 +25,7 @@ router.get('/userchannels', function(req, res, next){
             mongoose.connection.close();
             return res.status(500).end();
         } else {
-            Channels.find().lean().exec({'host': req.query.host}, function (err, channels) {
+            Channels.find({'host': req.query.host}).lean().exec(function (err, channels) {
                 return res.json(channels);
             });
         }
