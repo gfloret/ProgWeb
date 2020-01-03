@@ -75,7 +75,15 @@ export class ChannelsComponent implements OnInit {
     if (channel.host === this.currentUser){
       this.isHost = true;
     } else {
-      // Rejoint le channel
+      this.http.get('/api/v1/channel/ismemberofchannel?user='+this.currentUser+'&channel='+this.currentChannel.name).subscribe((data:any) => {
+        if (data.member === false){
+          console.log(data);
+          this.http.post('/api/v1/channel/add', this.currentUser).subscribe((data:any) => {
+            this.individualView = true;
+          });
+        }
+      });
+      this.isHost = false;
     }
   }
 
@@ -85,7 +93,7 @@ export class ChannelsComponent implements OnInit {
 
   onSubmit(channelData: any){
     const dataToSend = {channelData: channelData, currentUser: this.currentUser}
-    this.http.post('/api/v1/channel', dataToSend).subscribe((data:any) => {
+    this.http.post('/api/v1/channel/create', dataToSend).subscribe((data:any) => {
       this.takenName = false;
       if (data.channel === "takenName"){
         this.takenName = true;
@@ -93,7 +101,6 @@ export class ChannelsComponent implements OnInit {
         this.creatingNewChannel = false;
         this.loadPersonnalView();
         this.currentChannel = data.channel;
-        console.log(this.currentChannel);
         this.individualView = true;
       }
     });

@@ -32,8 +32,36 @@ router.get('/userchannels', function(req, res, next){
     });
 });
 
-router.post('/', function(req, res, next){
+router.get('/ismemberofchannel', function(req, res, next){
+    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        if (err){
+            res.statusMessage = err;
+            mongoose.connection.close();
+            return res.status(500).end();
+        } else {
+            Channels.findOne({$and: [
+                {'name': req.query.channel},
+                {'members': req.query.user}
+            ]}, function(err, member){
+                if(err) {
+                    console.log(err);
+                    mongoose.connection.close();
+                    return res.status(500).end();
+                } else {
+                    if (!member){
+                        console.log(member);
+                        return res.json({member: false});
+                    }else{
+                        console.log(member);
+                        return res.json({member: true});
+                    }
+                }
+            });
+        }
+    });
+});
 
+router.post('/create', function(req, res, next){
     if (req.body.channelData.name){
         var channelData = {
             name: req.body.channelData.name,
@@ -72,7 +100,6 @@ router.post('/', function(req, res, next){
         res.statusMessage = "Missing fields";
         return res.status(500).end();
     }
-
 });
 
 module.exports = router;
