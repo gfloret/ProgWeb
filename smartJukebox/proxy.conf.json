@@ -7,15 +7,5 @@
   "/title/*": {
     "target": "https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=",
     "pathRewrite": {"^/title/" : ""}
-  },
-  "/signup/*": {
-    "target": "http://localhost:3000"
-    
-  },
-  "/login/*": {
-    "target": "http://localhost:3000"
-  },
-  "/channel/*": {
-    "target": "http://localhost:3000"
   }
 }

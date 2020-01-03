@@ -67,7 +67,6 @@ export class ChannelsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("initTest");
     this.http.get('/api/v1/channel').subscribe((data:any) => {
       this.channels = data;
     });

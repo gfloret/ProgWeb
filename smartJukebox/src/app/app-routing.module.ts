@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent , data: {animation:'Search'} },
   { path: 'players/youtube', component: YoutubeComponent , data: {animation:'Youtube'} },
   { path: 'players/spotify', component: SpotifyComponent , data: {animation:'Spotify'} },
-  { path: 'channels', component: ChannelsComponent , data: {animation:'Channels'}},
+  { path: 'channels', component: ChannelsComponent , data: {animation:'Channels'} },
   { path: 'home', component: HomeComponent , data: {animation:'Home'} }
 ];
 
