@@ -32,16 +32,20 @@ export class ChannelsComponent implements OnInit {
   isPublic = true;
   creatingNewChannel = false;
   channels;
+  currentUser;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
-    if(localStorage.getItem('userName') === null){
+
+    this.currentUser = localStorage.getItem('userName');
+
+    if(this.currentUser === null){
       router.navigate(['/auth']);
     }
 
     this.newChannelForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: '',
-      visibility: 'true',
+      visibility: 'true'
     });
 
   }
@@ -55,7 +59,8 @@ export class ChannelsComponent implements OnInit {
   get visibility() { return this.newChannelForm.get('visibility'); }
 
   onSubmit(channelData: any){
-    this.http.post('/api/v1/channel', channelData).subscribe((data:any) => {
+    const dataToSend = {channelData: channelData, currentUser: this.currentUser}
+    this.http.post('/api/v1/channel', dataToSend).subscribe((data:any) => {
       this.takenName = false;
       if (data.channel === "takenName"){
         this.takenName = true;

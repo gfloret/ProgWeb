@@ -15,16 +15,17 @@ router.get('/', function(req,res,next){
                 return res.json(channels);  
             });    
         }
-});
+    });
 });
 
 router.post('/', function(req, res, next){
 
-    if (req.body.name){
+    if (req.body.channelData.name){
         var channelData = {
-            name: req.body.name,
-            description: req.body.description,
-            visibility: req.body.visibility
+            name: req.body.channelData.name,
+            description: req.body.channelData.description,
+            visibility: req.body.channelData.visibility,
+            host: req.body.currentUser
         };
         mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
             if (err){

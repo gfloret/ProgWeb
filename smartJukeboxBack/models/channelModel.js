@@ -16,6 +16,13 @@ const ChannelSchema = new mongoose.Schema({
         type: Boolean,
         unique: false,
         required: false
+    },
+    host: {
+        type: String,
+    },
+    members: {
+        type: [String],
+        unique: false
     }
 });
 let Channel = mongoose.model('Channel', ChannelSchema);
