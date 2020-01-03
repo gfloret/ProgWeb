@@ -61,7 +61,7 @@ router.post('/', function(req, res, next){
                             } else {
                                 console.log("Channel successfully created");
                                 mongoose.connection.close();
-                                return res.json({channel: "success"});
+                                return res.json({channel: channel});
                             }
                         });
                     }

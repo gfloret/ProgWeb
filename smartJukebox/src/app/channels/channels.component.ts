@@ -92,6 +92,9 @@ export class ChannelsComponent implements OnInit {
       } else {
         this.creatingNewChannel = false;
         this.loadPersonnalView();
+        this.currentChannel = data.channel;
+        console.log(this.currentChannel);
+        this.individualView = true;
       }
     });
   }
