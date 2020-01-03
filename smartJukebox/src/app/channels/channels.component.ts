@@ -32,11 +32,14 @@ export class ChannelsComponent implements OnInit {
   isPublic = true;
   creatingNewChannel = false;
   mainView = true;
+  individualView = false;
+  isHost = false;
 
   newChannelForm: FormGroup;
   currentUser: string;
   publicChannels;
   userChannels;
+  currentChannel;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
 
@@ -60,6 +63,20 @@ export class ChannelsComponent implements OnInit {
 
   toggleCreationForm(){
     this.creatingNewChannel = !this.creatingNewChannel;
+  }
+
+  backToMainView(){
+    this.individualView = false;
+  }
+
+  openIndividualView(channel){
+    this.individualView = true;
+    this.currentChannel = channel;
+    if (channel.host === this.currentUser){
+      this.isHost = true;
+    } else {
+      // Rejoint le channel
+    }
   }
 
   get name() { return this.newChannelForm.get('name'); }

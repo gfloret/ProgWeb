@@ -1,102 +1,139 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div class="card border-0">    
-    <div class="d-flex justify-content-center">
-        <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleCreationForm()">Créer un nouveau salon</a>
-        <a *ngIf="mainView" class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleMainView()">Accéder à mes salons</a>
-        <a *ngIf="!mainView" class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleMainView()">Revenir à la vue principale</a>
+<div *ngIf="individualView">
+    <div class="card border-0">    
+        <div class="d-flex justify-content-center">
+            <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="backToMainView()">Retour</a>
+        </div>
+    </div>
+
+    <div class="jumbotron">
+
+        <div class="row mb-5">
+            <div class="col">
+                <div align="center">
+                    <h5>Membres du salon : </h5>
+                    <p>{{currentChannel.host}}&nbsp;&nbsp;&nbsp;<i class="fa fa-podcast fa-lg"></i></p>
+                    <div *ngFor="let m of currentChannel.members;">{{m}}</div>
+                </div>
+            </div>
+            <div class="col">
+                <div align="center">
+                    <h1>{{currentChannel.name}}</h1>
+                </div>
+            </div>
+            <div class="col">
+                <div align="center">
+                    <h5>Description : </h5>
+                    <p>{{currentChannel.description}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-5 mb-5">
+            <div class="col">
+                <div align="center">
+                    <strong>[PLAYER GOES HERE]</strong>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div *ngIf="creatingNewChannel" [@formAnimation]>
-    <article class="card-body">
-        <h4 class="card-title text-center mb-4 mt-1">Création d'un salon</h4>
-
-        <div *ngIf="takenName" class="alert alert-danger">
-            Ce nom de salon est déjà utilisé. Veuillez en choisir un nouveau.
+<div *ngIf="!individualView">
+    <div class="card border-0">    
+        <div class="d-flex justify-content-center">
+            <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleCreationForm()">Créer un nouveau salon</a>
+            <a *ngIf="mainView" class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleMainView()">Accéder à mes salons</a>
+            <a *ngIf="!mainView" class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleMainView()">Revenir à la vue principale</a>
         </div>
-
-        <form [formGroup]="newChannelForm" (ngSubmit)="onSubmit(newChannelForm.value)">
-
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-bars"></i></span>
-                    </div>
-                    <input class="form-control" type="text" formControlName="name" name="name" id="name" placeholder="Nom du salon" required/>
-                </div>
-                <div *ngIf="name.invalid && !name.pristine" class="alert alert-danger mt-1 mb-2 rounded-0">
-                    <div *ngIf="name.errors.required">Ce champ est requis</div>
-                </div>
+    </div>
+    
+    <div *ngIf="creatingNewChannel" [@formAnimation]>
+        <article class="card-body">
+            <h4 class="card-title text-center mb-4 mt-1">Création d'un salon</h4>
+    
+            <div *ngIf="takenName" class="alert alert-danger">
+                Ce nom de salon est déjà utilisé. Veuillez en choisir un nouveau.
             </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-bars"></i></span>
+    
+            <form [formGroup]="newChannelForm" (ngSubmit)="onSubmit(newChannelForm.value)">
+    
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-bars"></i></span>
+                        </div>
+                        <input class="form-control" type="text" formControlName="name" name="name" id="name" placeholder="Nom du salon" required/>
                     </div>
-                    <input class="form-control" type="textfield" formControlName="description" name="description" id="description" placeholder="Description"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="custom-control custom-switch">
-                        <input class="custom-control-input" type="checkbox" formControlName="visibility" id="visibility" name="visibility" [checked]="isPublic" (change)="isPublic = $event.target.checked" ng-value="isPublic">
-                        <label class="custom-control-label" for="visibility" name="visibility"> Public ? </label>
+                    <div *ngIf="name.invalid && !name.pristine" class="alert alert-danger mt-1 mb-2 rounded-0">
+                        <div *ngIf="name.errors.required">Ce champ est requis</div>
                     </div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block" id="submitDetails" name="submitDetails" [disabled]="!newChannelForm.valid"> Créer  </button>
-            </div>
-
-            <p class="text-center"><a class="nav-link" (click)="toggleCreationForm()">Fermer</a></p>
-
-        </form>
-    </article>
-</div>
-
-<div *ngIf="mainView" class="jumbotron">
-
-    <div class="mb-5 pb-2">
-        <h2>Salons publics</h2>
-        <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadMainView()"><i class="fa fa-refresh"></i></a>
+    
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-bars"></i></span>
+                        </div>
+                        <input class="form-control" type="textfield" formControlName="description" name="description" id="description" placeholder="Description"/>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="custom-control custom-switch">
+                            <input class="custom-control-input" type="checkbox" formControlName="visibility" id="visibility" name="visibility" [checked]="isPublic" (change)="isPublic = $event.target.checked" ng-value="isPublic">
+                            <label class="custom-control-label" for="visibility" name="visibility"> Public ? </label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block" id="submitDetails" name="submitDetails" [disabled]="!newChannelForm.valid"> Créer  </button>
+                </div>
+    
+                <p class="text-center"><a class="nav-link" (click)="toggleCreationForm()">Fermer</a></p>
+    
+            </form>
+        </article>
     </div>
-
-    <div class="card-columns">
-
-        <div *ngFor="let pc of publicChannels;" class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{pc.name}}</h5>
-                <p class="card-text">{{pc.description}}</p>
-                <p class="card-text"><small class="text-muted">Participants : {{pc.members.length+1}}</small></p>
-                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
+    
+    <div *ngIf="mainView" class="jumbotron">
+    
+        <div class="mb-5 pb-2">
+            <h2>Salons publics</h2>
+            <a class="p2 mt-3 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadMainView()"><i class="fa fa-refresh"></i></a>
+        </div>
+    
+        <div class="card-columns">
+            <div *ngFor="let pc of publicChannels;" class="card rounded-0 border-0">
+                <div class="card-body">
+                    <h5 class="card-title">{{pc.name}}</h5>
+                    <p class="card-text">{{pc.description}}</p>
+                    <p class="card-text"><small class="text-muted">Participants : {{pc.members.length+1}}</small></p>
+                    <a class="hidden stretched-link" (click)="openIndividualView(pc)"></a>
+                </div>
             </div>
         </div>
-
     </div>
-</div>
-
-<div *ngIf="!mainView" class="jumbotron">
-
-    <div class="mb-5 pb-2">
-        <h2>Mes salons</h2>
-        <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadPersonnalView()"><i class="fa fa-refresh"></i></a>
-    </div>
-
-    <div class="card-columns">
-
-        <div *ngFor="let uc of userChannels;" class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{uc.name}}</h5>
-                <p class="card-text">{{uc.description}}</p>
-                <p class="card-text"><small class="text-muted">Participants : {{uc.members.length+1}}</small></p>
-                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
+    
+    <div *ngIf="!mainView" class="jumbotron">
+    
+        <div class="mb-5 pb-2">
+            <h2>Mes salons</h2>
+            <a class="p2 mt-3 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadPersonnalView()"><i class="fa fa-refresh"></i></a>
+        </div>
+    
+        <div class="card-columns">
+            <div *ngFor="let uc of userChannels;" class="card rounded-0 border-0">
+                <div class="card-body">
+                    <h5 class="card-title">{{uc.name}}</h5>
+                    <p class="card-text">{{uc.description}}</p>
+                    <p class="card-text"><small class="text-muted">Participants : {{uc.members.length+1}}</small></p>
+                    <a class="hidden stretched-link" (click)="openIndividualView(uc)"></a>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
