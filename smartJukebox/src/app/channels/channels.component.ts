@@ -27,12 +27,16 @@ import { trigger, style, animate, transition } from '@angular/animations';
 
 export class ChannelsComponent implements OnInit {
 
-  newChannelForm: FormGroup;
+  // States
   takenName = false;
   isPublic = true;
   creatingNewChannel = false;
-  channels;
-  currentUser;
+  mainView = true;
+
+  newChannelForm: FormGroup;
+  currentUser: string;
+  publicChannels;
+  userChannels;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
 
@@ -48,6 +52,10 @@ export class ChannelsComponent implements OnInit {
       visibility: 'true'
     });
 
+  }
+
+  toggleMainView(){
+    this.mainView = !this.mainView;
   }
 
   toggleCreationForm(){
@@ -72,8 +80,13 @@ export class ChannelsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get('/api/v1/channel').subscribe((data:any) => {
-      this.channels = data;
+    this.http.get('/api/v1/channel/publicchannels?host='+this.currentUser).subscribe((data:any) => {
+      this.publicChannels = data;
+      console.log(data);
+    });
+    this.http.get('/api/v1/channel/userchannels?host='+this.currentUser).subscribe((data: any) => {
+      this.userChannels = data;
+      console.log(data);
     });
   }
 

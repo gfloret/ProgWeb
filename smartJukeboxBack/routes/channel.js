@@ -2,18 +2,34 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-let Channel = require('../models/channelModel.js');
+let Channels = require('../models/channelModel.js');
 
-router.get('/', function(req,res,next){
+router.get('/publicchannels', function(req,res,next){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
             return res.status(500).end();
         }else{
-            Channel.find().lean().exec(function (err, channels) {
+            Channels.find().lean().exec({$not: [
+                {'host': req.query.host}
+            ]}, function (err, channels) {
                 return res.json(channels);  
             });    
+        }
+    });
+});
+
+router.get('/userchannels', function(req, res, next){
+    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        if (err){
+            res.statusMessage = err;
+            mongoose.connection.close();
+            return res.status(500).end();
+        } else {
+            Channels.find().lean().exec({'host': req.query.host}, function (err, channels) {
+                return res.json(channels);
+            });
         }
     });
 });
@@ -33,13 +49,13 @@ router.post('/', function(req, res, next){
                 mongoose.connection.close();
                 return res.status(500).end();
             } else {
-                Channel.findOne({'name': req.body.name}, function(err, channel){
+                Channels.findOne({'name': req.body.name}, function(err, channel){
                     if (channel){
                         console.log("Channel name already exists");
                         mongoose.connection.close();
                         return res.json({channel: "takenName"});
                     } else {
-                        Channel.create(channelData, function(err, channel) {
+                        Channels.create(channelData, function(err, channel) {
                             if (err) {
                                 res.statusMessage = "An error has occured during channel creation";
                                 mongoose.connection.close();

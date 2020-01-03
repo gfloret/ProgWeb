@@ -1,7 +1,8 @@
 <div class="card border-0">    
     <div class="d-flex justify-content-center">
         <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleCreationForm()">Créer un nouveau salon</a>
-        <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light">Accéder à mes salons</a>
+        <a *ngIf="mainView" class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleMainView()">Accéder à mes salons</a>
+        <a *ngIf="!mainView" class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleMainView()">Revenir à la vue principale</a>
     </div>
 </div>
 
@@ -55,7 +56,7 @@
     </article>
 </div>
 
-<div class="jumbotron">
+<div *ngIf="mainView" class="jumbotron">
 
     <div class="mb-5 pb-2">
         <h2>Salons publics</h2>
@@ -63,11 +64,31 @@
 
     <div class="card-columns">
 
-        <div *ngFor="let channel of channels;" class="card">
+        <div *ngFor="let pc of publicChannels;" class="card">
             <div class="card-body">
-                <h5 class="card-title">{{channel.name}}</h5>
-                <p class="card-text">{{channel.description}}</p>
-                <p class="card-text"><small class="text-muted">Participants : {{channel.members.length+1}}</small></p>
+                <h5 class="card-title">{{pc.name}}</h5>
+                <p class="card-text">{{pc.description}}</p>
+                <p class="card-text"><small class="text-muted">Participants : {{pc.members.length+1}}</small></p>
+                <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="!mainView" class="jumbotron">
+
+    <div class="mb-5 pb-2">
+        <h2>Mes salons</h2>
+    </div>
+
+    <div class="card-columns">
+
+        <div *ngFor="let uc of userChannels;" class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{uc.name}}</h5>
+                <p class="card-text">{{uc.description}}</p>
+                <p class="card-text"><small class="text-muted">Participants : {{uc.members.length+1}}</small></p>
                 <a class="hidden stretched-link" href="https://getbootstrap.com/docs/4.4/utilities/stretched-link/"></a>
             </div>
         </div>
