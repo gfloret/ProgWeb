@@ -76,21 +76,21 @@ export class ChannelsComponent implements OnInit {
   }
 
   openIndividualView(channel){
-    this.individualView = true;
     this.currentChannel = channel;
     if (channel.host === this.currentUser){
       this.isHost = true;
     } else {
       this.http.get('/api/v1/channel/ismemberofchannel?user='+this.currentUser+'&channel='+this.currentChannel.name).subscribe((data:any) => {
         if (data.member === false){
-          console.log(data);
-          this.http.post('/api/v1/channel/add', this.currentUser).subscribe((data:any) => {
-            this.individualView = true;
+          const dataToSend = {userToAdd: this.currentUser, currentChannel: this.currentChannel};
+          this.http.post('/api/v1/channel/addmember', dataToSend).subscribe((data:any) => {
+            this.currentChannel = data.channel;
           });
         }
       });
       this.isHost = false;
     }
+    this.individualView = true;
   }
 
   get name() { return this.newChannelForm.get('name'); }

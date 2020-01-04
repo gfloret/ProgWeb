@@ -63,10 +63,8 @@ router.get('/ismemberofchannel', function(req, res, next){
                     return res.status(500).end();
                 } else {
                     if (!member){
-                        console.log(member);
                         return res.json({member: false});
                     }else{
-                        console.log(member);
                         return res.json({member: true});
                     }
                 }
@@ -113,6 +111,36 @@ router.post('/create', function(req, res, next){
         });
     } else {
         res.statusMessage = "Missing fields";
+        return res.status(500).end();
+    }
+});
+
+router.post('/addmember', function(req, res, next){
+    if (req.body.userToAdd && req.body.currentChannel){
+        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+            if (err){
+                res.statusMessage = err;
+                mongoose.connection.close();
+                return res.status(500).end();
+            } else {
+                Channels.findOne({'name': req.body.currentChannel.name}, function(err, channel){
+                    if (channel){
+                        channel.members.push(req.body.userToAdd);
+                        channel.save(function(err, member){
+                            console.log("Member " + req.body.userToAdd + " successfully added to channel " + req.body.currentChannel.name);
+                            mongoose.connection.close();
+                            return res.json({channel: channel});
+                        });
+                    } else {
+                        res.statusMessage = "Can't add member to unknown channel";
+                        mongoose.connection.close();
+                        return res.status(500).end();
+                    }
+                });    
+            }
+        });
+    } else {
+        res.statusMessage = "Must specify member and channel to add a member to a channel";
         return res.status(500).end();
     }
 });
