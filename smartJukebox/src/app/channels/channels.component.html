@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<div *ngIf="individualView">
+<div *ngIf="individualView" [@changeViewAnimation]>
     <div class="card border-0">    
         <div class="d-flex justify-content-center">
             <a *ngIf="isHost" class="p2 flex-fill btn btn-lg btn-danger rounded-0 text-light" (click)="deleteChannel()">Supprimer le salon</a>
@@ -45,7 +45,7 @@
     </div>
 </div>
 
-<div *ngIf="!individualView">
+<div *ngIf="!individualView" [@changeViewAnimation]>
     <div class="card border-0">    
         <div class="d-flex justify-content-center">
             <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleCreationForm()">Créer un nouveau salon</a>
@@ -104,7 +104,7 @@
         </article>
     </div>
     
-    <div *ngIf="mainView" class="jumbotron">
+    <div *ngIf="mainView" class="jumbotron" [@changeViewAnimation]>
     
         <div class="mb-5 pb-2">
             <h2>Salons publics</h2>
@@ -129,7 +129,7 @@
         </div>
     </div>
     
-    <div *ngIf="!mainView" class="jumbotron">
+    <div *ngIf="!mainView" class="jumbotron" [@changeViewAnimation]>
     
         <div class="mb-5 pb-2">
             <h2>Mes salons</h2>

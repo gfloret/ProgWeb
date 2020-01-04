@@ -2,30 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
-import { trigger, style, animate, transition } from '@angular/animations';
+import { divAnimation } from './channels-animations';
 
 @Component({
   selector: 'app-channels',
-  animations: [
-    trigger(
-      'formAnimation', [
-        transition(':enter', [
-          style({transform: 'translateX(-100%)', opacity: 0}),
-          animate('200ms', style({transform: 'translateX(0)', opacity: 1}))
-        ]),
-        transition(':leave', [
-          style({transform: 'translateX(0)', opacity: 1}),
-          animate('300ms', style({transform: 'translateX(-100%)', opacity: 0}))
-        ])
-      ]
-    ),
-  ],
+  animations: [divAnimation],
   templateUrl: './channels.component.html',
   styleUrls: ['./channels.component.css']
 })
-
-
-
 
 export class ChannelsComponent implements OnInit {
 
@@ -65,9 +49,9 @@ export class ChannelsComponent implements OnInit {
   }
 
   toggleMainView(){
+    this.mainView = !this.mainView;
     this.loadPersonnalView();
     this.loadMainView();
-    this.mainView = !this.mainView;
   }
 
   toggleCreationForm(){
