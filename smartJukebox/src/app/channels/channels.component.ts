@@ -18,7 +18,7 @@ import { trigger, style, animate, transition } from '@angular/animations';
           animate('300ms', style({transform: 'translateX(-100%)', opacity: 0}))
         ])
       ]
-    )
+    ),
   ],
   templateUrl: './channels.component.html',
   styleUrls: ['./channels.component.css']
@@ -83,7 +83,7 @@ export class ChannelsComponent implements OnInit {
       this.http.get('/api/v1/channel/ismemberofchannel?user='+this.currentUser+'&channel='+this.currentChannel.name).subscribe((data:any) => {
         if (data.member === false){
           const dataToSend = {userToAdd: this.currentUser, currentChannel: this.currentChannel};
-          this.http.post('/api/v1/channel/addmember', dataToSend).subscribe((data:any) => {
+          this.http.put('/api/v1/channel/addmember', dataToSend).subscribe((data:any) => {
             this.currentChannel = data.channel;
           });
         }
@@ -141,5 +141,15 @@ export class ChannelsComponent implements OnInit {
     });
   }
   
+  deleteChannel(){
+    this.http.delete('/api/v1/channel/deletechannel?channelToDelete='+this.currentChannel.name).subscribe((data:any) => {});
+    this.loadMainView();
+    this.loadPersonnalView();
+    this.individualView = false;
+  }
+
+  leaveChannel(){
+
+  }
 
 }

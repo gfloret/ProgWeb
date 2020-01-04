@@ -3,7 +3,9 @@
 <div *ngIf="individualView">
     <div class="card border-0">    
         <div class="d-flex justify-content-center">
-            <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="backToMainView()">Retour</a>
+            <a *ngIf="isHost" class="p2 flex-fill btn btn-lg btn-danger rounded-0 text-light" (click)="deleteChannel()">Supprimer le salon</a>
+            <a *ngIf="!isHost" class="p2 flex-fill btn btn-lg btn-warning rounded-0 text-light" (click)="leaveChannel()">Quitter le salon</a>
+            <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="backToMainView()">Retourner à la vue principale</a>
         </div>
     </div>
 
@@ -32,6 +34,11 @@
             <div class="col">
                 <div align="center">
                     <strong>[PLAYER GOES HERE]</strong>
+                </div>
+            </div>
+            <div class="col">
+                <div align="center">
+                    <strong>[CHAT GOES HERE]</strong>
                 </div>
             </div>
         </div>
@@ -101,10 +108,9 @@
     
         <div class="mb-5 pb-2">
             <h2>Salons publics</h2>
-            <form class="form-inline" [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
+            <form class="form-inline mt-4 mb-3" [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
                 <i class="fa fa-search" aria-hidden="true"></i>
-                <input class="form-control form-control-sm ml-3 w-75" type="text" formControlName="search" name="search" placeholder="Chercher un salon"
-                  aria-label="Search">
+                <input class="form-control form-control-sm ml-3 w-75 rounded-0 border-0" type="text" formControlName="search" name="search" placeholder="Rechercher un salon" aria-label="Search">
             </form>
             <a class="p2 mt-3 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadMainView()"><i class="fa fa-refresh"></i></a>
             

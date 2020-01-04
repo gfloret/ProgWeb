@@ -115,7 +115,7 @@ router.post('/create', function(req, res, next){
     }
 });
 
-router.post('/addmember', function(req, res, next){
+router.put('/addmember', function(req, res, next){
     if (req.body.userToAdd && req.body.currentChannel){
         mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
             if (err){
@@ -143,6 +143,24 @@ router.post('/addmember', function(req, res, next){
         res.statusMessage = "Must specify member and channel to add a member to a channel";
         return res.status(500).end();
     }
+});
+
+router.delete('/deletechannel', function(req, res, next){
+    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        if (err){
+            res.statusMessage = err;
+            mongoose.connection.close();
+            return res.status(500).end();
+        } else {
+            Channels.deleteOne({name: req.query.channelToDelete}, function(err){
+                if (err){
+                    res.statusMessage = err;
+                    mongoose.connection.close();
+                    return res.status(500).end();
+                }
+            });
+        }
+    });
 });
 
 module.exports = router;
