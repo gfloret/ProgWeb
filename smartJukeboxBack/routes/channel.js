@@ -87,7 +87,18 @@ router.get('/search', function(req, res, next){
             mongoose.connection.close();
             return res.status(500).end();
         } else {
-            Channels.find({'host': req.query.keywords}).lean().exec(function (err, channels) {
+            str = req.query.keywords;
+            let keywords = str.split(" ");
+            let regex = "";
+            for(let i = 0; i<keywords.length;i++){
+                if (regex === ""){
+                    regex = keywords[i];
+                }
+                else{
+                    regex = regex + "|" + keywords[i];
+                }  
+            }
+            Channels.find({toSearch:{ $regex : regex }}).lean().exec(function (err, channels) {
                 return res.json(channels);
             });
         }

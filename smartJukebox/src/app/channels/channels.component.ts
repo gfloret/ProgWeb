@@ -86,7 +86,7 @@ export class ChannelsComponent implements OnInit {
 
   onSubmit(channelData: any){
     let toSearch = channelData.name + " " + channelData.description + " " + this.currentUser;
-    toSearch.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    toSearch = toSearch.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const dataToSend = {channelData: channelData, currentUser: this.currentUser, toSearch: toSearch}
     this.http.post('/api/v1/channel/create', dataToSend).subscribe((data:any) => {
       this.takenName = false;
@@ -109,7 +109,7 @@ export class ChannelsComponent implements OnInit {
 
   search(toSearch){
     let keywords = toSearch.search;
-    keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    keywords = keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     console.log(keywords);
     if(keywords !== ""){
       this.http.get('/api/v1/channel/search?keywords='+keywords).subscribe((data:any) => {
