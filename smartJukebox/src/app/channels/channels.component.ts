@@ -112,7 +112,7 @@ export class ChannelsComponent implements OnInit {
     keywords = keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     console.log(keywords);
     if(keywords !== ""){
-      this.http.get('/api/v1/channel/search?keywords='+keywords).subscribe((data:any) => {
+      this.http.get('/api/v1/channel/publicSearch?keywords='+keywords+'&user='+this.currentUser).subscribe((data:any) => {
         this.publicChannels = data;
       });
     }

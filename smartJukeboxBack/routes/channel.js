@@ -80,7 +80,7 @@ router.get('/memberchannels', function(req, res, next){
     });
 });
 
-router.get('/search', function(req, res, next){
+router.get('/publicSearch', function(req, res, next){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
@@ -98,7 +98,13 @@ router.get('/search', function(req, res, next){
                     regex = regex + "|" + keywords[i];
                 }  
             }
-            Channels.find({toSearch:{ $regex : regex }}).lean().exec(function (err, channels) {
+            Channels.find(
+                {$and: [
+                    {'host': { $ne: req.query.user }}, 
+                    { 'members': { $ne: req.query.user }},
+                    {'toSearch':{ $regex : regex }}
+                ]}
+                ).lean().exec(function (err, channels) {
                 return res.json(channels);
             });
         }
