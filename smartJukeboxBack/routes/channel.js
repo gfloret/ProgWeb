@@ -32,6 +32,20 @@ router.get('/userchannels', function(req, res, next){
     });
 });
 
+router.get('/search', function(req, res, next){
+    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        if (err){
+            res.statusMessage = err;
+            mongoose.connection.close();
+            return res.status(500).end();
+        } else {
+            Channels.find({'host': req.query.keywords}).lean().exec(function (err, channels) {
+                return res.json(channels);
+            });
+        }
+    });
+});
+
 router.get('/ismemberofchannel', function(req, res, next){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
@@ -67,7 +81,8 @@ router.post('/create', function(req, res, next){
             name: req.body.channelData.name,
             description: req.body.channelData.description,
             visibility: req.body.channelData.visibility,
-            host: req.body.currentUser
+            host: req.body.currentUser,
+            toSearch: req.body.toSearch
         };
         mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
             if (err){

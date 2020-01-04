@@ -25,6 +25,8 @@ import { trigger, style, animate, transition } from '@angular/animations';
 })
 
 
+
+
 export class ChannelsComponent implements OnInit {
 
   // States
@@ -36,6 +38,7 @@ export class ChannelsComponent implements OnInit {
   isHost = false;
 
   newChannelForm: FormGroup;
+  searchForm: FormGroup;
   currentUser: string;
   publicChannels;
   userChannels;
@@ -53,6 +56,9 @@ export class ChannelsComponent implements OnInit {
       name: ['', Validators.required],
       description: '',
       visibility: 'true'
+    });
+    this.searchForm = this.formBuilder.group({
+      search: ['', Validators.required]
     });
 
   }
@@ -92,7 +98,9 @@ export class ChannelsComponent implements OnInit {
   get visibility() { return this.newChannelForm.get('visibility'); }
 
   onSubmit(channelData: any){
-    const dataToSend = {channelData: channelData, currentUser: this.currentUser}
+    let toSearch = channelData.name + " " + channelData.description + " " + this.currentUser;
+    toSearch.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const dataToSend = {channelData: channelData, currentUser: this.currentUser, toSearch: toSearch}
     this.http.post('/api/v1/channel/create', dataToSend).subscribe((data:any) => {
       this.takenName = false;
       if (data.channel === "takenName"){
@@ -111,6 +119,17 @@ export class ChannelsComponent implements OnInit {
     this.loadPersonnalView();
   }
 
+  search(toSearch){
+    let keywords = toSearch.search;
+    keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    console.log(keywords);
+    if(keywords !== ""){
+      this.http.get('/api/v1/channel/search?keywords='+keywords).subscribe((data:any) => {
+        this.publicChannels = data;
+      });
+    }
+  }
+
   loadMainView(){
     this.http.get('/api/v1/channel/publicchannels?host='+this.currentUser).subscribe((data:any) => {
       this.publicChannels = data;
@@ -121,5 +140,6 @@ export class ChannelsComponent implements OnInit {
       this.userChannels = data;
     });
   }
+  
 
 }

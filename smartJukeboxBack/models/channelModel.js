@@ -23,6 +23,10 @@ const ChannelSchema = new mongoose.Schema({
     members: {
         type: [String],
         unique: false
+    },
+    toSearch: {
+        type: String,
+        unique: false
     }
 });
 let Channel = mongoose.model('Channel', ChannelSchema);
