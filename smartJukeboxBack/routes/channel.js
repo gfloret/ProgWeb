@@ -145,6 +145,38 @@ router.put('/addmember', function(req, res, next){
     }
 });
 
+router.put('/leavechannel', function(req, res, next){
+    if (req.body.channel && req.body.member){
+        console.log("channel = " + req.body.channel);
+        console.log("member = " + req.body.member);
+        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+            if (err){
+                res.statusMessage = err;
+                mongoose.connection.close();
+                return res.status(500).end();
+            } else {
+                Channels.findOne({'name': req.body.channel}, function(err, channel){
+                    if (channel){
+                        channel.members.pull(req.body.member);
+                        channel.save(function(err, member){
+                            console.log("Member " + req.body.member + " successfully left channel " + req.body.channel);
+                            mongoose.connection.close();
+                            return res.json({channel: channel});
+                        });
+                    } else {
+                        res.statusMessage = "Can't leave unknown channel";
+                        mongoose.connection.close();
+                        return res.status(500).end();
+                    }
+                });
+            }
+        });        
+    } else {
+        res.statusMessage = "Must specify member and channel to make a member leave a channel";
+        return res.status(500).end();
+    }
+});
+
 router.delete('/deletechannel', function(req, res, next){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){

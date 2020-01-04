@@ -64,6 +64,8 @@ export class ChannelsComponent implements OnInit {
   }
 
   toggleMainView(){
+    this.loadMainView();
+    this.loadPersonnalView();
     this.mainView = !this.mainView;
   }
 
@@ -149,7 +151,13 @@ export class ChannelsComponent implements OnInit {
   }
 
   leaveChannel(){
-
+    const dataToSend = {channel: this.currentChannel.name, member: this.currentUser};
+    this.http.put('/api/v1/channel/leavechannel', dataToSend).subscribe((data:any) => {
+      this.currentChannel = data.channel;
+    });    
+    this.loadMainView();
+    this.loadPersonnalView();
+    this.individualView = false;
   }
 
 }
