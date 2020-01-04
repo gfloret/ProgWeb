@@ -41,7 +41,8 @@ export class ChannelsComponent implements OnInit {
   searchForm: FormGroup;
   currentUser: string;
   publicChannels;
-  userChannels;
+  hostChannels;
+  memberChannels;
   currentChannel;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
@@ -64,8 +65,8 @@ export class ChannelsComponent implements OnInit {
   }
 
   toggleMainView(){
-    this.loadMainView();
     this.loadPersonnalView();
+    this.loadMainView();
     this.mainView = !this.mainView;
   }
 
@@ -111,14 +112,15 @@ export class ChannelsComponent implements OnInit {
         this.creatingNewChannel = false;
         this.loadPersonnalView();
         this.currentChannel = data.channel;
+        this.isHost = true;
         this.individualView = true;
       }
     });
   }
 
   ngOnInit() {
-    this.loadMainView();
     this.loadPersonnalView();
+    this.loadMainView();
   }
 
   search(toSearch){
@@ -133,20 +135,24 @@ export class ChannelsComponent implements OnInit {
   }
 
   loadMainView(){
-    this.http.get('/api/v1/channel/publicchannels?host='+this.currentUser).subscribe((data:any) => {
+    this.http.get('/api/v1/channel/publicchannels?user='+this.currentUser).subscribe((data:any) => {
       this.publicChannels = data;
     });
   }
+
   loadPersonnalView(){
-    this.http.get('/api/v1/channel/userchannels?host='+this.currentUser).subscribe((data: any) => {
-      this.userChannels = data;
+    this.http.get('/api/v1/channel/hostchannels?host='+this.currentUser).subscribe((data: any) => {
+      this.hostChannels = data;
+    });
+    this.http.get('/api/v1/channel/memberchannels?member='+this.currentUser).subscribe((data: any) => {
+      this.memberChannels = data;
     });
   }
   
   deleteChannel(){
     this.http.delete('/api/v1/channel/deletechannel?channelToDelete='+this.currentChannel.name).subscribe((data:any) => {});
-    this.loadMainView();
     this.loadPersonnalView();
+    this.loadMainView();
     this.individualView = false;
   }
 
@@ -155,8 +161,8 @@ export class ChannelsComponent implements OnInit {
     this.http.put('/api/v1/channel/leavechannel', dataToSend).subscribe((data:any) => {
       this.currentChannel = data.channel;
     });    
-    this.loadMainView();
     this.loadPersonnalView();
+    this.loadMainView();
     this.individualView = false;
   }
 
