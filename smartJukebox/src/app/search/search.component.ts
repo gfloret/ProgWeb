@@ -2,22 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import { Router } from '@angular/router';
 
-let searchPlayer = null;
-let results = null;
-
-function preview(index){
-  var id = this.results[index];
-  searchPlayer.loadVideoById(id);
-  searchPlayer.playVideo();
-  searchPlayer.unMute();
-  searchPlayer.setVolume(100);
-}
-
-function addSong(index){
-  var id = results[index];
-  this.http.post('/api/v1/uniqueSongYoutube', {id_video: id}).subscribe((data : any) => {});
-}
-
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -28,6 +12,8 @@ export class SearchComponent implements OnInit {
   public YT : any;
   private firstSearch = true;
   private resultsDisplayed = false;
+  private searchPlayer = null;
+  private results = null;
 
   constructor(private http:HttpClient, private router: Router) {
     if(localStorage.getItem('userName') === null){
@@ -37,7 +23,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     console.log(this);
-    (<HTMLButtonElement>document.getElementById("searchYoutubeButton")).addEventListener("click", this.search);
+    (<HTMLButtonElement>document.getElementById("searchYoutubeButton")).addEventListener("click", this.search.bind(this));
     // 2. This code loads the IFrame Player API code asynchronously.
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
@@ -45,10 +31,33 @@ export class SearchComponent implements OnInit {
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     window['onYouTubeIframeAPIReady'] = () => this.initPlayer();
+
+    document.addEventListener('click', function(e){
+      if(e.target && e.target.id.split("_")[0].localeCompare("add")===0) {
+        const index = parseInt(e.target.id.split('_')[1], 10);
+        this.addSong(index);
+      }else if(e.target && e.target.id.split('_')[0].localeCompare("preview")===0){
+        const index = parseInt(e.target.id.split('_')[1], 10);
+        this.preview(index);
+      }
+    }.bind(this));
+  }
+
+  preview(index){
+    var id = this.results[index];
+    this.searchPlayer.loadVideoById(id);
+    this.searchPlayer.playVideo();
+    this.searchPlayer.unMute();
+    this.searchPlayer.setVolume(100);
+  }
+
+  addSong(index){
+    var id = this.results[index];
+    this.http.post('/api/v1/uniqueSongYoutube', {id_video: id}).subscribe((data : any) => {});
   }
 
   initPlayer(){
-    searchPlayer = new window['YT'].Player('searchPlayer', {
+    this.searchPlayer = new window['YT'].Player('searchPlayer', {
       height: '200',
       width: '400',
       videoId: '',
@@ -60,13 +69,13 @@ export class SearchComponent implements OnInit {
   }
 
   enableAdding(event){
-    searchPlayer.mute();
+    this.searchPlayer.mute();
     (<HTMLButtonElement>document.getElementById("searchYoutubeButton")).disabled = false;
   }
 
   search(){
     this.resultsDisplayed = false;
-    searchPlayer.cuePlaylist({
+    this.searchPlayer.cuePlaylist({
       'listType': "search",
       'list': (<HTMLInputElement> document.getElementById("keyWords")).value
     });
@@ -78,22 +87,20 @@ export class SearchComponent implements OnInit {
   }
 
   displayResults(event){
-    console.log("display");
-    console.log(searchPlayer);
     if(event.data == window['YT'].PlayerState.CUED){
-      results = searchPlayer.getPlaylist();
-      searchPlayer.playVideo();
+      this.results = this.searchPlayer.getPlaylist();
+      this.searchPlayer.playVideo();
       return;
     }
     else if(event.data != window['YT'].PlayerState.PLAYING)
       return;
     if(this.resultsDisplayed === false)
-      searchPlayer.pauseVideo();
+      this.searchPlayer.pauseVideo();
     if(this.firstSearch === false)
       this.removeAllChild();
     this.firstSearch = false;
     var i;
-    for(i=0; i<results.length; i++){
+    for(i=0; i<this.results.length; i++){
       var elem = document.createElement("div");
       elem.setAttribute("class", "elem");
       elem.setAttribute("id", i);
@@ -101,23 +108,21 @@ export class SearchComponent implements OnInit {
       var img = document.createElement("div");
       img.setAttribute("class", "img");
       var thumbnail = document.createElement("img");
-      thumbnail.setAttribute("src", "https://img.youtube.com/vi/"+results[i]+"/0.jpg");
+      thumbnail.setAttribute("src", "https://img.youtube.com/vi/"+this.results[i]+"/0.jpg");
       img.appendChild(thumbnail);
       elem.appendChild(img);
 
-      this.displayTitle(results[i], elem);
+      this.displayTitle(this.results[i], elem);
 
       var add = document.createElement("button");
-      //add.type = "submit";
-      add.setAttribute("onclick", "addSong("+i+")");
+      add.setAttribute("id", "add_"+i);
       var plus = document.createElement("i");
       plus.setAttribute("class", "fa fa-plus-circle");
       add.appendChild(plus);
       elem.appendChild(add);
 
       var preview = document.createElement("button");
-      //add.type = "submit";
-      preview.setAttribute("onclick", "preview("+i+")");
+      preview.setAttribute("id", "preview_"+i);
       var play = document.createElement("i");
       play.setAttribute("class", "fa fa-play-circle");
       preview.appendChild(play);
@@ -129,8 +134,6 @@ export class SearchComponent implements OnInit {
   }
 
   displayTitle(id, elem){
-    console.log("displayTitle");
-    console.log(searchPlayer);
     this.http.get('/title/'+id+'&format=json').subscribe((data: any) => {
       var title = document.createElement("div");
       title.setAttribute("class", "titre");
