@@ -81,12 +81,20 @@ router.get('/memberchannels', function(req, res, next){
 });
 
 router.get('/publicSearch', function(req, res, next){
+    search(true,req,res);
+});
+
+router.get('/privateSearch', function(req, res, next){
+    search(false,req,res);
+});
+
+function search(public, req, res){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
             return res.status(500).end();
-        } else {
+        }else{
             str = req.query.keywords;
             let keywords = str.split(" ");
             let regex = "";
@@ -98,7 +106,8 @@ router.get('/publicSearch', function(req, res, next){
                     regex = regex + "|" + keywords[i];
                 }  
             }
-            Channels.find(
+            if(public) {
+                Channels.find(
                 {$and: [
                     {'host': { $ne: req.query.user }}, 
                     { 'members': { $ne: req.query.user }},
@@ -106,10 +115,24 @@ router.get('/publicSearch', function(req, res, next){
                 ]}
                 ).lean().exec(function (err, channels) {
                 return res.json(channels);
-            });
-        }
+                });
+            }
+            else{
+                Channels.find(
+                {$and: [
+                    {$or : [
+                        {'host': req.query.user }, 
+                        { 'members': req.query.user }
+                    ]},
+                    {'toSearch':{ $regex : regex }}
+                ]}
+                ).lean().exec(function (err, channels) {
+                return res.json(channels);
+                });
+            }
+        } 
     });
-});
+}
 
 router.get('/ismemberofchannel', function(req, res, next){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){

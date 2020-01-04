@@ -133,6 +133,10 @@
     
         <div class="mb-5 pb-2">
             <h2>Mes salons</h2>
+            <form class="form-inline mt-4 mb-3" [formGroup]="privateSearchForm" (ngSubmit)="privateSearch(privateSearchForm.value)">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <input class="form-control form-control-sm ml-3 w-75 rounded-0 border-0" type="text" formControlName="search" name="search" placeholder="Rechercher un salon" aria-label="Search">
+            </form>
             <a class="p2 mt-3 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadPersonnalView()"><i class="fa fa-refresh"></i></a>
         </div>
     

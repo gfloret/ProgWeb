@@ -23,6 +23,7 @@ export class ChannelsComponent implements OnInit {
 
   newChannelForm: FormGroup;
   searchForm: FormGroup;
+  privateSearchForm: FormGroup;
   currentUser: string;
   publicChannels;
   hostChannels;
@@ -43,6 +44,9 @@ export class ChannelsComponent implements OnInit {
       visibility: 'true'
     });
     this.searchForm = this.formBuilder.group({
+      search: ['', Validators.required]
+    });
+    this.privateSearchForm = this.formBuilder.group({
       search: ['', Validators.required]
     });
 
@@ -110,10 +114,19 @@ export class ChannelsComponent implements OnInit {
   search(toSearch){
     let keywords = toSearch.search;
     keywords = keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    console.log(keywords);
     if(keywords !== ""){
       this.http.get('/api/v1/channel/publicSearch?keywords='+keywords+'&user='+this.currentUser).subscribe((data:any) => {
         this.publicChannels = data;
+      });
+    }
+  }
+  privateSearch(toSearch){
+    let keywords = toSearch.search;
+    keywords = keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if(keywords !== ""){
+      this.http.get('/api/v1/channel/privateSearch?keywords='+keywords+'&user='+this.currentUser).subscribe((data:any) => {
+        this.memberChannels = data;
+        this.hostChannels = null;
       });
     }
   }
