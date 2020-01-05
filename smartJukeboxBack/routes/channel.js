@@ -2,9 +2,13 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-let Channels = require('../models/channelModel.js');
+const Channels = require('../models/channelModel.js');
 let Playlist = require('../models/playlistModel');
+const Channels = require('../models/channelModel.js');
+const Messages = require('../models/messageModel.js');
 
+
+// Channels
 router.get('/publicchannels', function(req,res,next){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
@@ -23,6 +27,7 @@ router.get('/publicchannels', function(req,res,next){
                         mongoose.connection.close();
                         return res.status(500).end();
                     } else {
+                        mongoose.connection.close();
                         return res.json(channels);
                     }
                 }
@@ -48,6 +53,7 @@ router.get('/hostchannels', function(req, res, next){
                         mongoose.connection.close();
                         return res.status(500).end();
                     } else {
+                        mongoose.connection.close();
                         return res.json(channels);
                     }
                 }
@@ -73,6 +79,7 @@ router.get('/memberchannels', function(req, res, next){
                         mongoose.connection.close();
                         return res.status(500).end();
                     } else {
+                        mongoose.connection.close();
                         return res.json(channels);
                     }
                 }
@@ -81,19 +88,59 @@ router.get('/memberchannels', function(req, res, next){
     });
 });
 
-router.get('/search', function(req, res, next){
+router.get('/publicSearch', function(req, res, next){
+    search(true,req,res);
+});
+
+router.get('/privateSearch', function(req, res, next){
+    search(false,req,res);
+});
+
+function search(public, req, res){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
             return res.status(500).end();
-        } else {
-            Channels.find({'host': req.query.keywords}).lean().exec(function (err, channels) {
+        }else{
+            str = req.query.keywords;
+            let keywords = str.split(" ");
+            let regex = "";
+            for(let i = 0; i<keywords.length;i++){
+                if (regex === ""){
+                    regex = keywords[i];
+                }
+                else{
+                    regex = regex + "|" + keywords[i];
+                }  
+            }
+            if(public) {
+                Channels.find(
+                {$and: [
+                    {'host': { $ne: req.query.user }}, 
+                    { 'members': { $ne: req.query.user }},
+                    {'toSearch':{ $regex : regex }}
+                ]}
+                ).lean().exec(function (err, channels) {
                 return res.json(channels);
-            });
-        }
+                });
+            }
+            else{
+                Channels.find(
+                {$and: [
+                    {$or : [
+                        {'host': req.query.user }, 
+                        { 'members': req.query.user }
+                    ]},
+                    {'toSearch':{ $regex : regex }}
+                ]}
+                ).lean().exec(function (err, channels) {
+                return res.json(channels);
+                });
+            }
+        } 
     });
-});
+}
 
 router.get('/ismemberofchannel', function(req, res, next){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
@@ -112,8 +159,10 @@ router.get('/ismemberofchannel', function(req, res, next){
                     return res.status(500).end();
                 } else {
                     if (!member){
+                        mongoose.connection.close();
                         return res.json({member: false});
                     }else{
+                        mongoose.connection.close();
                         return res.json({member: true});
                     }
                 }
@@ -267,6 +316,63 @@ router.delete('/deletechannel', function(req, res, next){
                     res.statusMessage = err;
                     mongoose.connection.close();
                     return res.status(500).end();
+                }
+            });
+        }
+    });
+});
+
+
+// Messages
+
+router.post('/message', function(req, res, next){
+    if (req.body.messageContent && req.body.author && req.body.channelName){
+        const datetime = new Date();
+        const messageData = {
+            content: req.body.messageContent,
+            datetime: datetime,
+            author: req.body.author,
+            channelName: req.body.channelName
+        };
+        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+            if (err){
+                res.statusMessage = err;
+                mongoose.connection.close();
+                return res.status(500).end();
+            } else {
+                Messages.create(messageData, function(err, message) {
+                    if (err) {
+                        res.statusMessage = err;
+                        mongoose.connection.close();
+                        return res.status(500).end();
+                    } else {
+                        mongoose.connection.close();
+                        return res.json({message: message});
+                    }
+                });
+            }
+        });
+    } else {
+        res.statusMessage = "Missing fields";
+        return res.status(500).end();
+    }
+});
+
+router.get('/messages', function(req, res, next){
+    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        if (err){
+            res.statusMessage = err;
+            mongoose.connection.close();
+            return res.status(500).end();
+        } else {
+            Messages.find({'channelName': req.query.channel}).lean().exec(function(err, messages){
+                if (err) {
+                    res.statusMessage = err;
+                    mongoose.connection.close();
+                    return res.status(500).end();
+                } else {
+                    mongoose.connection.close();
+                    return res.json({messages: messages});
                 }
             });
         }

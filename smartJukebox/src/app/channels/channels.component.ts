@@ -21,13 +21,20 @@ export class ChannelsComponent implements OnInit {
   individualView = false;
   isHost = false;
 
+  // Forms
   newChannelForm: FormGroup;
   searchForm: FormGroup;
+  privateSearchForm: FormGroup;
+  postChatMessage: FormGroup;
+
+  // Variables to stock current data
   currentUser: string;
   publicChannels;
   hostChannels;
   memberChannels;
   currentChannel;
+  currentChannelMessages;
+  interval;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
 
@@ -44,6 +51,13 @@ export class ChannelsComponent implements OnInit {
     });
     this.searchForm = this.formBuilder.group({
       search: ['', Validators.required]
+    });
+    this.privateSearchForm = this.formBuilder.group({
+      search: ['', Validators.required]
+    });
+
+    this.postChatMessage = this.formBuilder.group({
+      message: ['', Validators.required]
     });
 
   }
@@ -62,8 +76,16 @@ export class ChannelsComponent implements OnInit {
     this.individualView = false;
   }
 
+  loadCurrentChannelMessages(){
+    this.http.get('/api/v1/channel/messages?channel='+this.currentChannel.name).subscribe((data: any) => {
+      this.currentChannelMessages = data.messages;
+    });
+    console.log(this.currentChannelMessages);
+  }
+
   openIndividualView(channel){
     this.currentChannel = channel;
+    this.loadCurrentChannelMessages();
     if (channel.host === this.currentUser){
       this.isHost = true;
     } else {
@@ -86,7 +108,7 @@ export class ChannelsComponent implements OnInit {
 
   onSubmit(channelData: any){
     let toSearch = channelData.name + " " + channelData.description + " " + this.currentUser;
-    toSearch.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    toSearch = toSearch.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const dataToSend = {channelData: channelData, currentUser: this.currentUser, toSearch: toSearch}
     this.http.post('/api/v1/channel/create', dataToSend).subscribe((data:any) => {
       this.takenName = false;
@@ -102,18 +124,40 @@ export class ChannelsComponent implements OnInit {
     });
   }
 
+  onPost(messageContent){
+    const dataToSend = {messageContent: messageContent.message, author: this.currentUser, channelName: this.currentChannel.name};
+    this.http.post('/api/v1/channel/message', dataToSend).subscribe((data: any) => {
+      this.currentChannelMessages = data.messages;
+    });
+    this.loadCurrentChannelMessages();
+  }
+
   ngOnInit() {
     this.loadPersonnalView();
     this.loadMainView();
+    this.interval = setInterval(() => {
+      if (this.individualView && (this.currentChannelMessages != null)){
+        this.loadCurrentChannelMessages();
+      }
+    }, 3000);
   }
 
   search(toSearch){
     let keywords = toSearch.search;
-    keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    console.log(keywords);
+    keywords = keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     if(keywords !== ""){
-      this.http.get('/api/v1/channel/search?keywords='+keywords).subscribe((data:any) => {
+      this.http.get('/api/v1/channel/publicSearch?keywords='+keywords+'&user='+this.currentUser).subscribe((data:any) => {
         this.publicChannels = data;
+      });
+    }
+  }
+  privateSearch(toSearch){
+    let keywords = toSearch.search;
+    keywords = keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if(keywords !== ""){
+      this.http.get('/api/v1/channel/privateSearch?keywords='+keywords+'&user='+this.currentUser).subscribe((data:any) => {
+        this.memberChannels = data;
+        this.hostChannels = null;
       });
     }
   }

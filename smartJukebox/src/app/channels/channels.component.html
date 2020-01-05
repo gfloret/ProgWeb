@@ -1,5 +1,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
+
+<!-- Individual view of a selected channel -->
+
 <div *ngIf="individualView" [@changeViewAnimation]>
     <div class="card border-0">    
         <div class="d-flex justify-content-center">
@@ -38,12 +42,37 @@
             </div>
             <div class="col">
                 <div align="center">
-                    <strong>[CHAT GOES HERE]</strong>
+                    <div *ngFor="let m of currentChannelMessages;" class="card rounded-0 border-0">
+                        <div class="card-body">
+                            <h5 class="card-title">{{m.content}}</h5>
+                            <p class="card-text">{{m.author}}</p>
+                            <p class="card-text">{{m.date}}</p>
+                        </div>
+                    </div>
+                    <form [formGroup]="postChatMessage" (ngSubmit)="onPost(postChatMessage.value)">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-share"></i>
+                                    </span>
+                                </div>
+                                <input class="form-control" type="text" formControlName="message" name="message" id="message" placeholder="Écrire un nouveau message" required/>
+                            </div>
+                        </div>
+    
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block" id="postMessage" name="postMessage" [disabled]="!postChatMessage.valid"> Envoyer  </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+<!-- Global views of channels (public/user channels) -->
 
 <div *ngIf="!individualView" [@changeViewAnimation]>
     <div class="card border-0">    
@@ -53,6 +82,9 @@
             <a *ngIf="!mainView" class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleMainView()">Revenir à la vue principale</a>
         </div>
     </div>
+
+
+    <!-- Channel creation form -->
     
     <div *ngIf="creatingNewChannel" [@formAnimation]>
         <article class="card-body">
@@ -103,6 +135,10 @@
             </form>
         </article>
     </div>
+
+
+
+    <!-- Public channels -->
     
     <div *ngIf="mainView" class="jumbotron" [@changeViewAnimation]>
     
@@ -128,11 +164,19 @@
             </div>
         </div>
     </div>
+
+
+
+    <!-- User channels -->
     
     <div *ngIf="!mainView" class="jumbotron" [@changeViewAnimation]>
     
         <div class="mb-5 pb-2">
             <h2>Mes salons</h2>
+            <form class="form-inline mt-4 mb-3" [formGroup]="privateSearchForm" (ngSubmit)="privateSearch(privateSearchForm.value)">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <input class="form-control form-control-sm ml-3 w-75 rounded-0 border-0" type="text" formControlName="search" name="search" placeholder="Rechercher un salon" aria-label="Search">
+            </form>
             <a class="p2 mt-3 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadPersonnalView()"><i class="fa fa-refresh"></i></a>
         </div>
     
