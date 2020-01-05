@@ -70,6 +70,23 @@ export class ChannelsComponent implements OnInit {
 
   }
 
+
+  ngOnInit() {
+    this.loadPersonnalView();
+    this.loadMainView();
+    this.interval = setInterval(() => {
+      if (this.individualView && (this.currentChannelMessages != null)){
+        this.loadCurrentChannelMessages();
+      }
+    }, 3000);
+  }
+
+
+  get name() { return this.newChannelForm.get('name'); }
+  get description() { return this.newChannelForm.get('description'); }
+  get password() { return this.newChannelForm.get('password'); }
+
+
   toggleMainView(){
     this.mainView = !this.mainView;
     this.loadPersonnalView();
@@ -110,9 +127,6 @@ export class ChannelsComponent implements OnInit {
     this.individualView = true;
   }
 
-  get name() { return this.newChannelForm.get('name'); }
-  get description() { return this.newChannelForm.get('description'); }
-  get password() { return this.newChannelForm.get('password'); }
 
   onSubmit(channelData: any){
     let toSearch = channelData.name + " " + channelData.description + " " + this.currentUser;
@@ -140,16 +154,6 @@ export class ChannelsComponent implements OnInit {
     this.loadCurrentChannelMessages();
   }
 
-  ngOnInit() {
-    this.loadPersonnalView();
-    this.loadMainView();
-    this.interval = setInterval(() => {
-      if (this.individualView && (this.currentChannelMessages != null)){
-        this.loadCurrentChannelMessages();
-      }
-    }, 3000);
-  }
-
   search(toSearch){
     let keywords = toSearch.search;
     keywords = keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -159,6 +163,7 @@ export class ChannelsComponent implements OnInit {
       });
     }
   }
+
   privateSearch(toSearch){
     let keywords = toSearch.search;
     keywords = keywords.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -201,6 +206,7 @@ export class ChannelsComponent implements OnInit {
     this.loadMainView();
     this.individualView = false;
   }
+  
   checkPassword(res){
     this.http.get('/api/v1/channel/checkPassword?name='+this.channelToTest.name+'&password='+res.password).subscribe((data:any) => {
       if(!data){

@@ -14,9 +14,9 @@ export class SearchComponent implements OnInit {
   public YT : any;
   private searchPlayer = null;
   resultsDisplayed = false;
-  resultsReady = false;
   results = null;
-  hostChannels;
+  resultsTitles = null;
+  hostChannels: any;
 
   searchForm: FormGroup;
   channelSelection: FormGroup;
@@ -42,19 +42,16 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this);
-    
-    // 2. This code loads the IFrame Player API code asynchronously.
+
+    // This code loads the IFrame Player API code asynchronously
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+    // Wait for initializations before loading
     setTimeout(() => this.initPlayer(), 1000);
-
   }
-
-  // ==============================
 
   initPlayer(){
     this.searchPlayer = new window['YT'].Player('searchPlayer', {
@@ -62,30 +59,17 @@ export class SearchComponent implements OnInit {
       width: '800',
       videoId: '',
       events: {
-        'onStateChange' : this.displayResults.bind(this)
+        'onStateChange' : this.updatePlayerState.bind(this)
       }
     });
   }
 
-  displayResults(event){
+  updatePlayerState(event){
     if(event.data == window['YT'].PlayerState.CUED){
       this.results = this.searchPlayer.getPlaylist();
       this.searchPlayer.playVideo();
-      return;
     }
-    else if(event.data != window['YT'].PlayerState.PLAYING)
-      return;
-    if(this.resultsDisplayed === false)
-      this.searchPlayer.pauseVideo();
   }
-
-  displayTitle(id){
-    this.http.get('/title/'+id+'&format=json').subscribe((data: any) => {
-      console.log(data);
-    });
-  }
-
-  // ==============================
 
   onSubmit(searchContent: any){
     this.resultsDisplayed = false;

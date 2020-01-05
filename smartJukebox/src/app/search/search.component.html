@@ -29,6 +29,7 @@
       <div class="img pb-1">
         <img src="https://img.youtube.com/vi/{{r}}/0.jpg">
       </div>
+      <h5>{{r.title}}</h5>
       <form [formGroup]="channelSelection" (ngSubmit)="sendToChannel(channelSelection.value, r)">
         <div class="d-flex justify-content-center">
           <button type="button" class="btn btn-success rounded-0 border-0" (click)="sendToPreview(i)"><i class="fa fa-play"></i></button>
