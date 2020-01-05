@@ -166,7 +166,7 @@ router.post('/create', function(req, res, next){
         var channelData = {
             name: req.body.channelData.name,
             description: req.body.channelData.description,
-            visibility: req.body.channelData.visibility,
+            password: req.body.channelData.password,
             host: req.body.currentUser,
             toSearch: req.body.toSearch
         };

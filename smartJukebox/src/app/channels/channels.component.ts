@@ -41,7 +41,7 @@ export class ChannelsComponent implements OnInit {
     this.newChannelForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: '',
-      visibility: 'true'
+      password: ''
     });
     this.searchForm = this.formBuilder.group({
       search: ['', Validators.required]
@@ -86,7 +86,7 @@ export class ChannelsComponent implements OnInit {
 
   get name() { return this.newChannelForm.get('name'); }
   get description() { return this.newChannelForm.get('description'); }
-  get visibility() { return this.newChannelForm.get('visibility'); }
+  get password() { return this.newChannelForm.get('password'); }
 
   onSubmit(channelData: any){
     let toSearch = channelData.name + " " + channelData.description + " " + this.currentUser;

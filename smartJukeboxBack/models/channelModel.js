@@ -12,8 +12,8 @@ const ChannelSchema = new mongoose.Schema({
         unique: false,
         required: false
     },
-    visibility: {
-        type: Boolean,
+    password: {
+        type: String,
         unique: false,
         required: false
     },

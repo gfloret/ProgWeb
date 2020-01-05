@@ -87,10 +87,10 @@
     
                 <div class="form-group">
                     <div class="input-group">
-                        <div class="custom-control custom-switch">
-                            <input class="custom-control-input" type="checkbox" formControlName="visibility" id="visibility" name="visibility" [checked]="isPublic" (change)="isPublic = $event.target.checked" ng-value="isPublic">
-                            <label class="custom-control-label" for="visibility" name="visibility"> Public ? </label>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-lock"></i></span>
                         </div>
+                        <input class="form-control" type="textfield" formControlName="password" name="password" id="password" placeholder="Mot de passe (optionnel)"/>
                     </div>
                 </div>
     
