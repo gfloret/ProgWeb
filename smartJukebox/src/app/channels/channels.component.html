@@ -149,23 +149,59 @@
                 <input class="form-control form-control-sm ml-3 w-75 rounded-0 border-0" type="text" formControlName="search" name="search" placeholder="Rechercher un salon" aria-label="Search">
             </form>
             <a class="p2 mt-3 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadMainView()"><i class="fa fa-refresh"></i></a>
-            
-              
         </div>
     
         <div class="card-columns">
             <div *ngFor="let pc of publicChannels;" class="card rounded-0 border-0">
                 <div class="card-body">
+                    <i *ngIf="pc.password" class="fa fa-lock" aria-hidden="true"></i>
                     <h5 class="card-title">{{pc.name}}</h5>
                     <p class="card-text">{{pc.description}}</p>
                     <p class="card-text"><small class="text-muted">Participants : {{pc.members.length+1}}</small></p>
-                    <a class="hidden stretched-link" (click)="openIndividualView(pc)"></a>
+                    <a *ngIf="!pc.password" class="hidden stretched-link" (click)="openIndividualView(pc)"></a>
+                    <a *ngIf="pc.password" class="hidden stretched-link" (click)="showModal=true;channelToTest=pc"></a>
                 </div>
             </div>
         </div>
     </div>
-
-
+    
+    <!-- Modal -->
+    <div class="modal" id="myModal" [ngClass]="{'show':showModal}">
+        <div class="modal-dialog">
+        <div class="modal-content">
+    
+            <!-- Modal Header -->
+            <div class="modal-header">
+            <h4 class="modal-title">Salon privé</h4>
+            <button type="button" class="close" (click)="showModal=false" data-dismiss="modal">&times;</button>
+            </div>
+    
+            <!-- Modal body -->
+            <form [formGroup]="passwordForm" (ngSubmit)="checkPassword(passwordForm.value)">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa fa-lock"></i>
+                            </span>
+                        </div>
+                        <input class="form-control" type="text" formControlName="password" name="password" id="password" placeholder="Mot de passe du salon" required/>
+                    </div>
+                    <div *ngIf="incorrectPassword" class="alert alert-danger mt-1 mb-2 rounded-0">
+                        <div> Le mot de passe est incorrect</div>                                    
+                    </div>
+                </div>
+            
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <div class="form-group">
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Entrer</button>
+                    </div>
+                </div>
+            </form> 
+    
+            </div>
+        </div>
+    </div>
 
     <!-- User channels -->
     
@@ -184,6 +220,7 @@
             <div *ngFor="let hc of hostChannels;" class="card rounded-0 border-0">
                 <div class="card-body">
                     <h5 class="card-title">{{hc.name}} &nbsp;<i class="fa fa-podcast fa-lg"></i></h5>
+                    <i *ngIf="hc.password" class="fa fa-unlock" aria-hidden="true"></i>
                     <p class="card-text">{{hc.description}}</p>
                     <p class="card-text"><small class="text-muted">Participants : {{hc.members.length+1}}</small></p>
                     <a class="hidden stretched-link" (click)="openIndividualView(hc)"></a>

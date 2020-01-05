@@ -20,12 +20,14 @@ export class ChannelsComponent implements OnInit {
   mainView = true;
   individualView = false;
   isHost = false;
+  incorrectPassword = false;
 
   // Forms
   newChannelForm: FormGroup;
   searchForm: FormGroup;
   privateSearchForm: FormGroup;
   postChatMessage: FormGroup;
+  passwordForm: FormGroup;
 
   // Variables to stock current data
   currentUser: string;
@@ -35,6 +37,9 @@ export class ChannelsComponent implements OnInit {
   currentChannel;
   currentChannelMessages;
   interval;
+  channelToTest;
+  showModal = false;
+  
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
 
@@ -58,6 +63,9 @@ export class ChannelsComponent implements OnInit {
 
     this.postChatMessage = this.formBuilder.group({
       message: ['', Validators.required]
+    });
+    this.passwordForm = this.formBuilder.group({
+      password: ['', Validators.required]
     });
 
   }
@@ -192,6 +200,17 @@ export class ChannelsComponent implements OnInit {
     this.loadPersonnalView();
     this.loadMainView();
     this.individualView = false;
+  }
+  checkPassword(res){
+    this.http.get('/api/v1/channel/checkPassword?name='+this.channelToTest.name+'&password='+res.password).subscribe((data:any) => {
+      if(!data){
+        this.incorrectPassword = true;
+      }
+      else{
+        this.showModal = false;
+        this.openIndividualView(this.channelToTest);
+      }
+    });    
   }
 
 }

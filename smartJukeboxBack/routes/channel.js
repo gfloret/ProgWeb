@@ -4,7 +4,6 @@ var mongoose = require('mongoose');
 
 const Channels = require('../models/channelModel.js');
 let Playlist = require('../models/playlistModel');
-const Channels = require('../models/channelModel.js');
 const Messages = require('../models/messageModel.js');
 
 
@@ -88,6 +87,32 @@ router.get('/memberchannels', function(req, res, next){
     });
 });
 
+router.get('/checkPassword', function(req, res, next){
+    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        if (err){
+            res.statusMessage = err;
+            mongoose.connection.close();
+            return res.status(500).end();
+        } else {
+            Channels.findOne(
+                {$and: [
+                    {'name': req.query.name},
+                    {'password': req.query.password }
+                ]},function(err, channel){
+                    if (err) {
+                        res.statusMessage = err;
+                        mongoose.connection.close();
+                        return res.status(500).end();
+                    } else {
+                        mongoose.connection.close();
+                        return res.json(channel);
+                    }
+                }
+            );
+        }
+    });
+});
+
 router.get('/publicSearch', function(req, res, next){
     search(true,req,res);
 });
@@ -122,7 +147,8 @@ function search(public, req, res){
                     {'toSearch':{ $regex : regex }}
                 ]}
                 ).lean().exec(function (err, channels) {
-                return res.json(channels);
+                    mongoose.connection.close();
+                    return res.json(channels);
                 });
             }
             else{
@@ -135,7 +161,8 @@ function search(public, req, res){
                     {'toSearch':{ $regex : regex }}
                 ]}
                 ).lean().exec(function (err, channels) {
-                return res.json(channels);
+                    mongoose.connection.close();
+                    return res.json(channels);
                 });
             }
         } 
