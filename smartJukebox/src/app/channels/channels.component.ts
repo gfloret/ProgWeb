@@ -127,17 +127,19 @@ export class ChannelsComponent implements OnInit {
   onPost(messageContent){
     const dataToSend = {messageContent: messageContent.message, author: this.currentUser, channelName: this.currentChannel.name};
     this.http.post('/api/v1/channel/message', dataToSend).subscribe((data: any) => {
-      
+      this.currentChannelMessages = data.messages;
     });
+    this.loadCurrentChannelMessages();
   }
 
   ngOnInit() {
     this.loadPersonnalView();
     this.loadMainView();
-    this.interval = setInterval(() => {if (this.individualView && (this.currentChannelMessages != null)){
-      this.loadCurrentChannelMessages();
-    }
-    }, 5000);
+    this.interval = setInterval(() => {
+      if (this.individualView && (this.currentChannelMessages != null)){
+        this.loadCurrentChannelMessages();
+      }
+    }, 3000);
   }
 
   search(toSearch){

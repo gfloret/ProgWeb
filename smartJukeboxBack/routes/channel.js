@@ -26,6 +26,7 @@ router.get('/publicchannels', function(req,res,next){
                         mongoose.connection.close();
                         return res.status(500).end();
                     } else {
+                        mongoose.connection.close();
                         return res.json(channels);
                     }
                 }
@@ -51,6 +52,7 @@ router.get('/hostchannels', function(req, res, next){
                         mongoose.connection.close();
                         return res.status(500).end();
                     } else {
+                        mongoose.connection.close();
                         return res.json(channels);
                     }
                 }
@@ -76,6 +78,7 @@ router.get('/memberchannels', function(req, res, next){
                         mongoose.connection.close();
                         return res.status(500).end();
                     } else {
+                        mongoose.connection.close();
                         return res.json(channels);
                     }
                 }
@@ -155,8 +158,10 @@ router.get('/ismemberofchannel', function(req, res, next){
                     return res.status(500).end();
                 } else {
                     if (!member){
+                        mongoose.connection.close();
                         return res.json({member: false});
                     }else{
+                        mongoose.connection.close();
                         return res.json({member: true});
                     }
                 }
@@ -334,6 +339,7 @@ router.get('/messages', function(req, res, next){
                     mongoose.connection.close();
                     return res.status(500).end();
                 } else {
+                    mongoose.connection.close();
                     return res.json({messages: messages});
                 }
             });
