@@ -219,8 +219,8 @@
         <div class="card-columns">
             <div *ngFor="let hc of hostChannels;" class="card rounded-0 border-0">
                 <div class="card-body">
-                    <h5 class="card-title">{{hc.name}} &nbsp;<i class="fa fa-podcast fa-lg"></i></h5>
                     <i *ngIf="hc.password" class="fa fa-unlock" aria-hidden="true"></i>
+                    <h5 class="card-title">{{hc.name}} &nbsp;<i class="fa fa-podcast fa-lg"></i></h5>
                     <p class="card-text">{{hc.description}}</p>
                     <p class="card-text"><small class="text-muted">Participants : {{hc.members.length+1}}</small></p>
                     <a class="hidden stretched-link" (click)="openIndividualView(hc)"></a>
@@ -228,6 +228,7 @@
             </div>
             <div *ngFor="let mc of memberChannels;" class="card rounded-0 border-0">
                 <div class="card-body">
+                    <i *ngIf="mc.password" class="fa fa-unlock" aria-hidden="true"></i>
                     <h5 class="card-title">{{mc.name}}</h5>
                     <p class="card-text">{{mc.description}}</p>
                     <p class="card-text"><small class="text-muted">Participants : {{mc.members.length+1}}</small></p>
