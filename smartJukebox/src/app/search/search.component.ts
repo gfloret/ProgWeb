@@ -93,7 +93,7 @@ export class SearchComponent implements OnInit {
       'listType': "search",
       'list': searchContent.title
     });
-    setTimeout(() => this.resultsDisplayed = true, 2000);
+    setTimeout(() => this.resultsDisplayed = true, 1000);
   }
 
   sendToChannel(channel: any, songID: any){

@@ -3,7 +3,6 @@ var router = express.Router();
 var mongoose = require('mongoose');
 
 const Channels = require('../models/channelModel.js');
-let Playlist = require('../models/playlistModel');
 const Messages = require('../models/messageModel.js');
 
 
