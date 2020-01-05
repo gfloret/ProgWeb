@@ -42,6 +42,10 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    this.http.get('/api/v1/channel/hostchannels?host='+this.currentUser).subscribe((data: any) => {
+      this.hostChannels = data;
+    });
 
     // This code loads the IFrame Player API code asynchronously
     var tag = document.createElement('script');
