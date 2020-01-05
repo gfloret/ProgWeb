@@ -27,7 +27,10 @@ const ChannelSchema = new mongoose.Schema({
     toSearch: {
         type: String,
         unique: false
-    }
+    },
+    playlist: {
+        type: [String]
+ }
 });
-let Channel = mongoose.model('Channel', ChannelSchema);
+const Channel = mongoose.model('Channel', ChannelSchema);
 module.exports = Channel;

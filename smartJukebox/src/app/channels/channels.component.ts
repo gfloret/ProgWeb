@@ -21,14 +21,20 @@ export class ChannelsComponent implements OnInit {
   individualView = false;
   isHost = false;
 
+  // Forms
   newChannelForm: FormGroup;
   searchForm: FormGroup;
   privateSearchForm: FormGroup;
+  postChatMessage: FormGroup;
+
+  // Variables to stock current data
   currentUser: string;
   publicChannels;
   hostChannels;
   memberChannels;
   currentChannel;
+  currentChannelMessages;
+  interval;
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
 
@@ -50,6 +56,10 @@ export class ChannelsComponent implements OnInit {
       search: ['', Validators.required]
     });
 
+    this.postChatMessage = this.formBuilder.group({
+      message: ['', Validators.required]
+    });
+
   }
 
   toggleMainView(){
@@ -66,8 +76,16 @@ export class ChannelsComponent implements OnInit {
     this.individualView = false;
   }
 
+  loadCurrentChannelMessages(){
+    this.http.get('/api/v1/channel/messages?channel='+this.currentChannel.name).subscribe((data: any) => {
+      this.currentChannelMessages = data.messages;
+    });
+    console.log(this.currentChannelMessages);
+  }
+
   openIndividualView(channel){
     this.currentChannel = channel;
+    this.loadCurrentChannelMessages();
     if (channel.host === this.currentUser){
       this.isHost = true;
     } else {
@@ -106,9 +124,22 @@ export class ChannelsComponent implements OnInit {
     });
   }
 
+  onPost(messageContent){
+    const dataToSend = {messageContent: messageContent.message, author: this.currentUser, channelName: this.currentChannel.name};
+    this.http.post('/api/v1/channel/message', dataToSend).subscribe((data: any) => {
+      this.currentChannelMessages = data.messages;
+    });
+    this.loadCurrentChannelMessages();
+  }
+
   ngOnInit() {
     this.loadPersonnalView();
     this.loadMainView();
+    this.interval = setInterval(() => {
+      if (this.individualView && (this.currentChannelMessages != null)){
+        this.loadCurrentChannelMessages();
+      }
+    }, 3000);
   }
 
   search(toSearch){

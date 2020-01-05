@@ -2,8 +2,13 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-let Channels = require('../models/channelModel.js');
+const Channels = require('../models/channelModel.js');
+let Playlist = require('../models/playlistModel');
+const Channels = require('../models/channelModel.js');
+const Messages = require('../models/messageModel.js');
 
+
+// Channels
 router.get('/publicchannels', function(req,res,next){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
@@ -22,6 +27,7 @@ router.get('/publicchannels', function(req,res,next){
                         mongoose.connection.close();
                         return res.status(500).end();
                     } else {
+                        mongoose.connection.close();
                         return res.json(channels);
                     }
                 }
@@ -47,6 +53,7 @@ router.get('/hostchannels', function(req, res, next){
                         mongoose.connection.close();
                         return res.status(500).end();
                     } else {
+                        mongoose.connection.close();
                         return res.json(channels);
                     }
                 }
@@ -72,6 +79,7 @@ router.get('/memberchannels', function(req, res, next){
                         mongoose.connection.close();
                         return res.status(500).end();
                     } else {
+                        mongoose.connection.close();
                         return res.json(channels);
                     }
                 }
@@ -151,8 +159,10 @@ router.get('/ismemberofchannel', function(req, res, next){
                     return res.status(500).end();
                 } else {
                     if (!member){
+                        mongoose.connection.close();
                         return res.json({member: false});
                     }else{
+                        mongoose.connection.close();
                         return res.json({member: true});
                     }
                 }
@@ -199,6 +209,37 @@ router.post('/create', function(req, res, next){
         });
     } else {
         res.statusMessage = "Missing fields";
+        return res.status(500).end();
+    }
+});
+
+router.put('/addSong', function(req, res, next){
+    if (req.body.songID && req.body.channel && req.body.host){
+        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+            if (err){
+                res.statusMessage = err;
+                mongoose.connection.close();
+                return res.status(500).end();
+            } else {
+                console.log(req.body);
+                Channels.findOne({'name': req.body.channel}, function(err, channel){
+                    if (channel){
+                        channel.playlist.push(req.body.songID);
+                        channel.save(function(err, member){
+                            console.log("Song " + req.body.songID + " successfully added to channel " + req.body.channel);
+                            mongoose.connection.close();
+                            return res.status(201).end();
+                        });
+                    } else {
+                        res.statusMessage = "Can't add song to unknown channel";
+                        mongoose.connection.close();
+                        return res.status(500).end();
+                    }
+                });
+            }
+        });
+    } else {
+        res.statusMessage = "Must specify host, channel and song id to add a song to a channel";
         return res.status(500).end();
     }
 });
@@ -275,6 +316,63 @@ router.delete('/deletechannel', function(req, res, next){
                     res.statusMessage = err;
                     mongoose.connection.close();
                     return res.status(500).end();
+                }
+            });
+        }
+    });
+});
+
+
+// Messages
+
+router.post('/message', function(req, res, next){
+    if (req.body.messageContent && req.body.author && req.body.channelName){
+        const datetime = new Date();
+        const messageData = {
+            content: req.body.messageContent,
+            datetime: datetime,
+            author: req.body.author,
+            channelName: req.body.channelName
+        };
+        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+            if (err){
+                res.statusMessage = err;
+                mongoose.connection.close();
+                return res.status(500).end();
+            } else {
+                Messages.create(messageData, function(err, message) {
+                    if (err) {
+                        res.statusMessage = err;
+                        mongoose.connection.close();
+                        return res.status(500).end();
+                    } else {
+                        mongoose.connection.close();
+                        return res.json({message: message});
+                    }
+                });
+            }
+        });
+    } else {
+        res.statusMessage = "Missing fields";
+        return res.status(500).end();
+    }
+});
+
+router.get('/messages', function(req, res, next){
+    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        if (err){
+            res.statusMessage = err;
+            mongoose.connection.close();
+            return res.status(500).end();
+        } else {
+            Messages.find({'channelName': req.query.channel}).lean().exec(function(err, messages){
+                if (err) {
+                    res.statusMessage = err;
+                    mongoose.connection.close();
+                    return res.status(500).end();
+                } else {
+                    mongoose.connection.close();
+                    return res.json({messages: messages});
                 }
             });
         }

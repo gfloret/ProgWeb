@@ -16,7 +16,11 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    playlist: {
+        type: [String],
+        required: true
     }
 });
-let User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 module.exports = User;

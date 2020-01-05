@@ -10,6 +10,7 @@ export class YoutubeComponent implements OnInit {
 
   private playerOne = null;
   public YT : any;
+  private songs = null;
 
   constructor(private http:HttpClient) { }
 
@@ -21,6 +22,23 @@ export class YoutubeComponent implements OnInit {
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     window['onYouTubeIframeAPIReady'] = () => this.initPlayer();
+
+    document.addEventListener('click', function(e){
+      if(e.target && e.target.id.split("_")[0].localeCompare("play")===0) {
+        const index = parseInt(e.target.id.split('_')[1], 10);
+        this.playerOne.loadVideoById(this.songs[index]);
+        this.playerOne.setVolume(100);
+        this.playerOne.unMute();
+        this.playerOne.playVideo();
+      }else if(e.target && e.target.id.split("_")[0].localeCompare("deleteSong")===0) {
+        const index = parseInt(e.target.id.split('_')[1], 10);
+        console.log(localStorage.getItem('userName'));
+        this.http.delete('/api/v1/user/playlist?songID='+this.songs[index]+'&host='+localStorage.getItem('userName'))
+          .subscribe((data: any) => {});
+      }
+    }.bind(this));
+
+    this.refresh();
   }
 
   // 3. This function creates an <iframe> (and YouTube player)
@@ -31,21 +49,57 @@ export class YoutubeComponent implements OnInit {
       width: '500',
       videoId: '',
       events: {
-        'onReady': this.onPlayerReady.bind(this)
       }
     });
   }
 
-  onPlayerReady(event) {
-    this.http.get('/api/v1/uniqueSongYoutube').subscribe((data: any) => {
-        this.playerOne.loadVideoById(data.id_video);
-        this.playerOne.setVolume(100);
-        this.playerOne.playVideo();
-        this.http.delete('/api/v1/uniqueSongYoutube').subscribe((data: any) => {});
-      },
-      err => {
-        console.log(err);
-      });
+  refresh(){
+    document.getElementById('songs').innerHTML = '';
+    this.http.get('/api/v1/user/playlist?host='+localStorage.getItem('userName')).subscribe((data: any) => {
+      this.songs = data.ids;
+      this.displayResults();
+    });
+  }
+
+  displayResults(){
+    var i;
+    for(i=0; i<this.songs.length; i++){
+      var elem = document.createElement("div");
+      elem.setAttribute("class", "elem");
+      elem.setAttribute("id", i);
+
+      var img = document.createElement("div");
+      img.setAttribute("class", "img");
+      var thumbnail = document.createElement("img");
+      thumbnail.setAttribute("src", "https://img.youtube.com/vi/"+this.songs[i]+"/0.jpg");
+      img.appendChild(thumbnail);
+      elem.appendChild(img);
+
+      this.displayTitle(this.songs[i], elem);
+
+      var preview = document.createElement("button");
+      preview.setAttribute("id", "play_"+i);
+      var play = document.createElement("i");
+      play.setAttribute("class", "fa fa-play-circle");
+      preview.appendChild(play);
+      elem.appendChild(preview);
+
+      var deleteSong = document.createElement("button");
+      deleteSong.setAttribute("id", "deleteSong_"+i);
+      deleteSong.innerHTML = "Delete song";
+      elem.appendChild(deleteSong);
+
+      document.getElementById("songs").appendChild(elem);
+    }
+  }
+
+  displayTitle(id, elem){
+    this.http.get('/title/'+id+'&format=json').subscribe((data: any) => {
+      var title = document.createElement("div");
+      title.setAttribute("class", "titre");
+      title.innerHTML = data.title;
+      elem.appendChild(title);
+    });
   }
 
 }
