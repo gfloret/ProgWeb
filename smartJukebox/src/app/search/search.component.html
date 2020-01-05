@@ -1,18 +1,46 @@
-<div class="top">
-  <div class="header">
-    <label for="channel-select">Choose a channel :</label>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <select name="pets" id="channel-select">
-    </select>
-
-    <input id="keyWords" type="search" placeholder="Rechercher">
-    <button id="searchYoutubeButton" disabled>Rechercher</button>
-  </div>
-  <div class="footer">
-
-    <div id="searchPlayer"></div>
-
-  </div>
+<div class="container">
+  <article class="card-body">
+    <h4 class="card-title text-center mb-4 mt-1">Effectuer une recherhce</h4>
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm.value)">
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"> <i class="fa fa-search"></i></span>
+          </div>
+          <input class="form-control" type="text" formControlName="title" name="title" id="title"   placeholder="Rechercher" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block" id="submitDetails" name="submitDetails"   [disabled]="!searchForm.valid"> Rechercher </button>
+      </div>
+    </form>
+  </article>
 </div>
-<div class="content" id="results">
+
+<div class="d-flex justify-content-center mb-4">
+  <div id="searchPlayer"></div>
+</div>
+
+<div *ngIf="resultsDisplayed" class="row">
+  <div *ngFor="let r of results; index as i;" class="col mb-3">
+    <div style="max-width: 400px;" id={{i}}>
+      <div class="img pb-1">
+        <img src="https://img.youtube.com/vi/{{r}}/0.jpg">
+      </div>
+      <form [formGroup]="channelSelection" (ngSubmit)="sendToChannel(channelSelection.value, r)">
+        <div class="d-flex justify-content-center">
+          <button type="button" class="btn btn-success rounded-0 border-0" (click)="sendToPreview(i)"><i class="fa fa-play"></i></button>
+          <button type="button" class="btn btn-light rounded-0 border-0" (click)="saveForUser(r)"><i class="fa fa-save"></i></button>
+          <select formControlName="channel" class="form-control" required name="selectedChannel" id="selectedChannel">
+            <option [value]="hc.name" *ngFor="let hc of hostChannels">
+              {{hc.name}}
+            </option>
+          </select>
+          <button type="submit" id="selectChannel" name="selectChannel" [disabled]="!channelSelection.valid" class="btn btn-light rounded-0 border-0"><i class="fa fa-share"></i></button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
