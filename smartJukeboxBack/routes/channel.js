@@ -3,6 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 
 let Channels = require('../models/channelModel.js');
+let Playlist = require('../models/playlistModel');
 
 router.get('/publicchannels', function(req,res,next){
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
@@ -159,6 +160,37 @@ router.post('/create', function(req, res, next){
         });
     } else {
         res.statusMessage = "Missing fields";
+        return res.status(500).end();
+    }
+});
+
+router.put('/addSong', function(req, res, next){
+    if (req.body.songID && req.body.channel && req.body.host){
+        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+            if (err){
+                res.statusMessage = err;
+                mongoose.connection.close();
+                return res.status(500).end();
+            } else {
+                console.log(req.body);
+                Channels.findOne({'name': req.body.channel}, function(err, channel){
+                    if (channel){
+                        channel.playlist.push(req.body.songID);
+                        channel.save(function(err, member){
+                            console.log("Song " + req.body.songID + " successfully added to channel " + req.body.channel);
+                            mongoose.connection.close();
+                            return res.status(201).end();
+                        });
+                    } else {
+                        res.statusMessage = "Can't add song to unknown channel";
+                        mongoose.connection.close();
+                        return res.status(500).end();
+                    }
+                });
+            }
+        });
+    } else {
+        res.statusMessage = "Must specify host, channel and song id to add a song to a channel";
         return res.status(500).end();
     }
 });

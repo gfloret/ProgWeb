@@ -33,14 +33,26 @@ export class SearchComponent implements OnInit {
     window['onYouTubeIframeAPIReady'] = () => this.initPlayer();
 
     document.addEventListener('click', function(e){
-      if(e.target && e.target.id.split("_")[0].localeCompare("add")===0) {
+      if(e.target && e.target.id.split("_")[0].localeCompare("addUser")===0) {
         const index = parseInt(e.target.id.split('_')[1], 10);
-        this.addSong(index);
+        this.addSongUser(index);
+      }else if(e.target && e.target.id.split("_")[0].localeCompare("addChannel")===0) {
+        const index = parseInt(e.target.id.split('_')[1], 10);
+        this.addSongChannel(index);
       }else if(e.target && e.target.id.split('_')[0].localeCompare("preview")===0){
         const index = parseInt(e.target.id.split('_')[1], 10);
         this.preview(index);
       }
     }.bind(this));
+
+    this.http.get('/api/v1/channel/hostchannels?host='+localStorage.getItem('userName')).subscribe((data: any) => {
+      data.forEach(e => {
+        var op = document.createElement('option');
+        op.setAttribute('value', e.name);
+        op.innerHTML = e.name;
+        document.getElementById('channel-select').append(op);
+      });
+    });
   }
 
   preview(index){
@@ -51,9 +63,19 @@ export class SearchComponent implements OnInit {
     this.searchPlayer.setVolume(100);
   }
 
-  addSong(index){
+  addSongChannel(index){
+    var select = (<HTMLSelectElement>document.getElementById('channel-select'));
+    var channel = select.options[select.selectedIndex].innerHTML;
     var id = this.results[index];
-    this.http.post('/api/v1/uniqueSongYoutube', {id_video: id}).subscribe((data : any) => {});
+    this.http.put('/api/v1/channel/addSong', {songID: id,
+                                                        channel: channel,
+                                                        host: localStorage.getItem('userName')})
+      .subscribe((data : any) => {});
+  }
+
+  addSongUser(index){
+    var id = this.results[index];
+    this.http.put('/api/v1/user/playlist', {host: localStorage.getItem('userName'), songID: id}).subscribe((data : any) => {});
   }
 
   initPlayer(){
@@ -114,12 +136,12 @@ export class SearchComponent implements OnInit {
 
       this.displayTitle(this.results[i], elem);
 
-      var add = document.createElement("button");
-      add.setAttribute("id", "add_"+i);
+      var addUser = document.createElement("button");
+      addUser.setAttribute("id", "addUser_"+i);
       var plus = document.createElement("i");
       plus.setAttribute("class", "fa fa-plus-circle");
-      add.appendChild(plus);
-      elem.appendChild(add);
+      addUser.appendChild(plus);
+      elem.appendChild(addUser);
 
       var preview = document.createElement("button");
       preview.setAttribute("id", "preview_"+i);
@@ -127,6 +149,11 @@ export class SearchComponent implements OnInit {
       play.setAttribute("class", "fa fa-play-circle");
       preview.appendChild(play);
       elem.appendChild(preview);
+
+      var addChannel = document.createElement("button");
+      addChannel.setAttribute("id", "addChannel_"+i);
+      addChannel.innerHTML = "Add to Channel";
+      elem.appendChild(addChannel);
 
       document.getElementById("results").appendChild(elem);
     }
