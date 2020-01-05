@@ -29,5 +29,5 @@ const ChannelSchema = new mongoose.Schema({
         unique: false
     }
 });
-let Channel = mongoose.model('Channel', ChannelSchema);
+const Channel = mongoose.model('Channel', ChannelSchema);
 module.exports = Channel;
