@@ -81,7 +81,9 @@ export class ChannelsComponent implements OnInit {
     this.loadPersonnalView();
     this.loadMainView();
     this.interval = setInterval(() => {
-      if (this.individualView && (this.currentChannelMessages != null)){
+      if (this.individualView){
+        var chatHistory = document.getElementById("chatBox");
+        chatHistory.scrollTop = chatHistory.scrollHeight;
         this.loadCurrentChannelMessages();
       }
     }, 1000);
@@ -114,10 +116,10 @@ export class ChannelsComponent implements OnInit {
       console.log(this.songs);
     });
 
-    console.log("Playlist  have been get, songs are " + this.songs);
+    console.log("Playlist have been get, songs are " + this.songs);
 
     // Wait for initializations before loading
-    setTimeout(() => this.initPlayerView(), 2000);
+    setTimeout(() => this.initPlayerView(), 1000);
 
     console.log("Player and playlist intialization done.")
   }

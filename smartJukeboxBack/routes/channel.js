@@ -353,10 +353,21 @@ router.delete('/deletechannel', function(req, res, next){
 
 router.post('/message', function(req, res, next){
     if (req.body.messageContent && req.body.author && req.body.channelName){
-        const datetime = new Date().toString();
+        const datetime = new Date();
+        const datetimeString =
+            " le " +
+            ("0" + datetime.getDate()).slice(-2) +
+            "/" +
+            ("0" + (datetime.getMonth() + 1)).slice(-2) +
+            " " + datetime.getFullYear() + 
+            " à " +
+            datetime.getHours() +
+            "h "+
+            datetime.getMinutes()
+        ;
         const messageData = {
             content: req.body.messageContent,
-            datetime: datetime,
+            datetime: datetimeString,
             author: req.body.author,
             channelName: req.body.channelName
         };

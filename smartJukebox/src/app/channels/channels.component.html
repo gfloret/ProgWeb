@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="row pt-5 mb-5">
-            <div class="col">
+            <div class="col" [@messageBoxAnimation]>
                 <div align="center">
                     <div class="row">
                         <div class="col mb-5">
@@ -62,10 +62,12 @@
             <div class="col">
                 <div align="center" [@messageBoxAnimation]>
                     <h3 class="pb-5"> Chat </h3>
-                    <div *ngFor="let m of currentChannelMessages;" class="card rounded-0 border-0">
-                        <span>
-                            <p>{{m.content}}<small class="text-muted">, de {{m.author}}</small></p>
-                        </span>
+                    <div class="overflow-auto" style="max-height: 500px;" id="chatBox">
+                        <div *ngFor="let m of currentChannelMessages;" class="card rounded-0 border-0">
+                            <span>
+                                <p>{{m.content}}<small class="text-muted">, de {{m.author}},{{m.datetime}}</small></p>
+                            </span>
+                        </div>
                     </div>
                     <form [formGroup]="postChatMessage" (ngSubmit)="onPost(postChatMessage.value)">
                         <div class="form-group">
