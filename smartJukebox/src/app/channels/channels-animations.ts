@@ -1,10 +1,9 @@
 import {
     transition,
     trigger,
-    query,
     style,
-    animate,
-    group} from '@angular/animations';
+    animate
+} from '@angular/animations';
 
 export const divAnimation = [
     trigger(

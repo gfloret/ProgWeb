@@ -19,13 +19,13 @@
   </article>
 </div>
 
-<div [ngClass]="!resultsDisplayed ? 'notClickable' : 'clickable'"> 
+<div [ngClass]="!resultsDisplayed ? 'notClickable' : 'clickable'" [@changeViewAnimation]> 
   <div class="d-flex justify-content-center mb-4">
     <div id="searchPlayer"></div>
   </div>
 </div>
 
-<div *ngIf="resultsDisplayed" class="row">
+<div *ngIf="resultsDisplayed" class="row" [@changeViewAnimation]>
   <div *ngFor="let r of results; index as i;" class="col mb-3">
     <div style="max-width: 400px;" id={{i}}>
       <div class="img pb-1">
@@ -47,3 +47,11 @@
     </div>
   </div>
 </div>
+
+<footer *ngIf="successfullyAdded" class="footer fixed-bottom" [@alertAnimation]>
+  <div class="card border-0 rounded-0">
+    <div class="d-flex justify-content-center">
+      <div *ngIf="successfullyAdded" class="p2 flex-fill btn btn-lg btn-success rounded-0 text-light"> Morceau ajouté avec succès ! </div>
+    </div>
+  </div>
+</footer>

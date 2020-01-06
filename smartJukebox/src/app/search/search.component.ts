@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
+import { divAnimation } from './search-animations';
 
 @Component({
   selector: 'app-search',
+  animations: [divAnimation],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
@@ -17,6 +19,7 @@ export class SearchComponent implements OnInit {
   results = null;
   resultsTitles = null;
   hostChannels: any;
+  successfullyAdded = false;
 
   searchForm: FormGroup;
   channelSelection: FormGroup;
@@ -85,12 +88,17 @@ export class SearchComponent implements OnInit {
   }
 
   sendToChannel(channel: any, songID: any){
-    this.http.put('/api/v1/channel/addSong', {songID: songID, channel: channel.channel, host: this.currentUser}).subscribe((data : any) => {});
+    this.http.put('/api/v1/channel/addSong', {songID: songID, channel: channel.channel, host: this.currentUser}).subscribe((data : any) => {
+      this.successfullyAdded = true;
+    });
+    setTimeout(() => this.successfullyAdded = false, 1500);
   }
 
   saveForUser(songID){
-    console.log(songID);
-    this.http.put('/api/v1/playlists/playlist', {host: this.currentUser, songID: songID}).subscribe((data : any) => {});
+    this.http.put('/api/v1/playlists/playlist', {host: this.currentUser, songID: songID}).subscribe((data : any) => {
+      this.successfullyAdded = true;
+    });
+    setTimeout(() => this.successfullyAdded = false, 1500);
   }
 
   sendToPreview(index){
