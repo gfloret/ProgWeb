@@ -36,9 +36,11 @@ export class PlayersComponent implements OnInit {
 
     this.http.get('/api/v1/playlists/playlist?host='+this.currentUser).subscribe((ids: any) => {
       let i;
+      let numTitles = 0;
       for(i=0; i<ids.ids.length; i++){
         this.http.get('/watch?v='+ids.ids[i]+'&format=json').subscribe((titles:any) => {
-          this.songs[i] = {id: ids.ids[i], title: titles.title};
+          this.songs[numTitles] = {id: ids.ids[numTitles], title: titles.title};
+          numTitles = numTitles + 1;
         });
       }
     });
