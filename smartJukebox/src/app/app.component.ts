@@ -30,4 +30,5 @@ export class AppComponent {
     this.router.navigate(['/auth']);
     this.userName = null;
   }
+
 }

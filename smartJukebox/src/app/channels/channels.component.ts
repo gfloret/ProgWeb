@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { divAnimation } from './channels-animations';
 
 @Component({
@@ -74,6 +74,12 @@ export class ChannelsComponent implements OnInit {
     this.passwordForm = this.formBuilder.group({
       password: ['', Validators.required]
     });
+
+    this.router.events.subscribe((e) =>{
+      if (e instanceof NavigationEnd) {
+        this.individualView = false;
+      }
+    })
 
   }
 
@@ -150,6 +156,7 @@ export class ChannelsComponent implements OnInit {
     this.http.get('/api/v1/channel/messages?channel='+this.currentChannel.name).subscribe((data: any) => {
       this.currentChannelMessages = data.messages;
     });
+    this.individualView = true;
   }
 
   openIndividualView(channel){
