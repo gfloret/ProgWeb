@@ -1,6 +1,15 @@
 a { 
     cursor: pointer; 
 }
+
 .modal.show{
     display: block;
+}
+
+.notClickable {
+    pointer-events:none;
+}
+
+.clickable {
+    pointer-events: auto;
 }

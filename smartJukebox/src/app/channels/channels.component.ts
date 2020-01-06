@@ -13,23 +13,24 @@ import { divAnimation } from './channels-animations';
 
 export class ChannelsComponent implements OnInit {
 
-  // States
+  // ===== States ===== 
   takenName = false;
   isPublic = true;
   creatingNewChannel = false;
   mainView = true;
   individualView = false;
   isHost = false;
+  listeningMusic = false;
   incorrectPassword = false;
 
-  // Forms
+  // ===== Forms ===== 
   newChannelForm: FormGroup;
   searchForm: FormGroup;
   privateSearchForm: FormGroup;
   postChatMessage: FormGroup;
   passwordForm: FormGroup;
 
-  // Variables to stock current data
+  // ===== Variables to stock current data ===== 
   currentUser: string;
   publicChannels;
   hostChannels;
@@ -39,7 +40,13 @@ export class ChannelsComponent implements OnInit {
   interval;
   channelToTest;
   showModal = false;
+  public YT : any;
+  mainPlayer = null;
+  songs = null;
   
+
+
+  // ===== Inits ===== 
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
 
@@ -70,7 +77,6 @@ export class ChannelsComponent implements OnInit {
 
   }
 
-
   ngOnInit() {
     this.loadPersonnalView();
     this.loadMainView();
@@ -78,14 +84,51 @@ export class ChannelsComponent implements OnInit {
       if (this.individualView && (this.currentChannelMessages != null)){
         this.loadCurrentChannelMessages();
       }
-    }, 3000);
+    }, 1000);
   }
 
+  initPlayerView() {
+    this.mainPlayer = new window['YT'].Player('mainPlayer', {
+      height: '480',
+      width: '720',
+      videoId: '',
+      events: {
+      }
+    });
+  }
+
+  initPlayer() {
+
+    console.log("Starting initialization of Youtube player ...");
+
+    // Loads the IFrame Player API code asynchronously
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    console.log("Initialization done, getting playlist from database ...");
+
+    this.http.get('/api/v1/playlists/channelplaylist?channelName='+this.currentChannel.name).subscribe((data: any) => {
+      this.songs = data.playlist;
+      console.log(this.songs);
+    });
+
+    console.log("Playlist  have been get, songs are " + this.songs);
+
+    // Wait for initializations before loading
+    setTimeout(() => this.initPlayerView(), 2000);
+
+    console.log("Player and playlist intialization done.")
+  }
 
   get name() { return this.newChannelForm.get('name'); }
   get description() { return this.newChannelForm.get('description'); }
   get password() { return this.newChannelForm.get('password'); }
 
+
+
+  // ===== View controllers ===== 
 
   toggleMainView(){
     this.mainView = !this.mainView;
@@ -105,15 +148,17 @@ export class ChannelsComponent implements OnInit {
     this.http.get('/api/v1/channel/messages?channel='+this.currentChannel.name).subscribe((data: any) => {
       this.currentChannelMessages = data.messages;
     });
-    console.log(this.currentChannelMessages);
   }
 
   openIndividualView(channel){
+    
     this.currentChannel = channel;
     this.loadCurrentChannelMessages();
+    this.initPlayer();
+
     if (channel.host === this.currentUser){
       this.isHost = true;
-    } else {
+    } else { // Add user to channel members if not already in or host
       this.http.get('/api/v1/channel/ismemberofchannel?user='+this.currentUser+'&channel='+this.currentChannel.name).subscribe((data:any) => {
         if (data.member === false){
           const dataToSend = {userToAdd: this.currentUser, currentChannel: this.currentChannel};
@@ -125,8 +170,27 @@ export class ChannelsComponent implements OnInit {
       this.isHost = false;
     }
     this.individualView = true;
+
   }
 
+  loadMainView(){
+    this.http.get('/api/v1/channel/publicchannels?user='+this.currentUser).subscribe((data:any) => {
+      this.publicChannels = data;
+    });
+  }
+
+  loadPersonnalView(){
+    this.http.get('/api/v1/channel/hostchannels?host='+this.currentUser).subscribe((data: any) => {
+      this.hostChannels = data;
+    });
+    this.http.get('/api/v1/channel/memberchannels?member='+this.currentUser).subscribe((data: any) => {
+      this.memberChannels = data;
+    });
+  }
+
+
+
+  // ===== Buttons and forms controllers ===== 
 
   onSubmit(channelData: any){
     let toSearch = channelData.name + " " + channelData.description + " " + this.currentUser;
@@ -174,21 +238,6 @@ export class ChannelsComponent implements OnInit {
       });
     }
   }
-
-  loadMainView(){
-    this.http.get('/api/v1/channel/publicchannels?user='+this.currentUser).subscribe((data:any) => {
-      this.publicChannels = data;
-    });
-  }
-
-  loadPersonnalView(){
-    this.http.get('/api/v1/channel/hostchannels?host='+this.currentUser).subscribe((data: any) => {
-      this.hostChannels = data;
-    });
-    this.http.get('/api/v1/channel/memberchannels?member='+this.currentUser).subscribe((data: any) => {
-      this.memberChannels = data;
-    });
-  }
   
   deleteChannel(){
     this.http.delete('/api/v1/channel/deletechannel?channelToDelete='+this.currentChannel.name).subscribe((data:any) => {});
@@ -217,6 +266,23 @@ export class ChannelsComponent implements OnInit {
         this.openIndividualView(this.channelToTest);
       }
     });    
+  }
+
+  sendToPreview(index){
+    this.listeningMusic = true;
+    var id = this.songs[index];
+    this.mainPlayer.loadVideoById(id);
+    this.mainPlayer.playVideo();
+    this.mainPlayer.unMute();
+    this.mainPlayer.setVolume(100);
+  }
+
+  deleteSong(index){
+    this.http.delete('/api/v1/playlists/channelplaylist?songID='+this.songs[index]+'&channelName='+this.currentChannel.name).subscribe((data: any) => {
+      this.http.get('/api/v1/playlists/channelplaylist?channelName='+this.currentChannel.name).subscribe((data: any) => {
+        this.songs = data.playlist;
+      });
+    });
   }
 
 }

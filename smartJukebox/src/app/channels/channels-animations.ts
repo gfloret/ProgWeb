@@ -25,5 +25,17 @@ export const divAnimation = [
                 animate(200)
             ])
         ]
+    ),
+    trigger(
+        'messageBoxAnimation', [
+            transition(':enter', [
+                style({opacity: 0}),
+                animate(300)
+            ]),
+            transition(':leave', [
+                style({opacity: 0}),
+                animate(300)
+            ])
+        ]
     )
 ];

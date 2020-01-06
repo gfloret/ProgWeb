@@ -8,7 +8,7 @@ const MessageSchema = new mongoose.Schema({
         trim: true
     },
     datetime: {
-        type: Date,
+        type: String,
         unique: false,
         required: true
     },

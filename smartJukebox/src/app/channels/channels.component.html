@@ -37,17 +37,35 @@
         <div class="row pt-5 mb-5">
             <div class="col">
                 <div align="center">
-                    <strong>[PLAYER GOES HERE]</strong>
+                    <div class="row">
+                        <div class="col mb-5">
+                            <div [ngClass]="!listeningMusic ? 'notClickable' : 'clickable'">
+                                <div align="center">
+                                    <h3 class="pb-5"> Écouter </h3>
+                                    <div id="mainPlayer"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngFor="let s of songs; index as i;" class="col mb-4">
+                            <div class="img">
+                                <img src="https://img.youtube.com/vi/{{s}}/0.jpg">
+                            </div>
+                            <h5>{{s.title}}</h5>
+                            <div class="d-flex justify-content-center">
+                                <button type="button" class="btn btn-success rounded-0 border-0" (click)="sendToPreview(i)"><i class="fa fa-play"></i></button>
+                                <button type="button" class="btn btn-danger rounded-0 border-0" (click)="deleteSong(i)"><i class="fa fa-trash"></i></button>              
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col">
-                <div align="center">
+                <div align="center" [@messageBoxAnimation]>
+                    <h3 class="pb-5"> Chat </h3>
                     <div *ngFor="let m of currentChannelMessages;" class="card rounded-0 border-0">
-                        <div class="card-body">
-                            <h5 class="card-title">{{m.content}}</h5>
-                            <p class="card-text">{{m.author}}</p>
-                            <p class="card-text">{{m.date}}</p>
-                        </div>
+                        <span>
+                            <p>{{m.content}}<small class="text-muted">, de {{m.author}}</small></p>
+                        </span>
                     </div>
                     <form [formGroup]="postChatMessage" (ngSubmit)="onPost(postChatMessage.value)">
                         <div class="form-group">
