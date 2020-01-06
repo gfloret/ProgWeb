@@ -168,6 +168,8 @@ export class ChannelsComponent implements OnInit {
 
   openIndividualView(channel){
 
+    this.songs = [];
+
     this.currentChannel = channel;
     this.loadCurrentChannelMessages();
     this.initPlayer();
