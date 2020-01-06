@@ -7,12 +7,12 @@
                 <div class="row">
                     <div *ngFor="let s of songs; index as i;" class="col mb-4">
                         <div class="img">
-                          <img src="https://img.youtube.com/vi/{{s}}/0.jpg">
+                          <img src="https://img.youtube.com/vi/{{s.id}}/0.jpg">
                         </div>
                         <h5>{{s.title}}</h5>
                         <div class="d-flex justify-content-center">
                             <button type="button" class="btn btn-success rounded-0 border-0" (click)="sendToPreview(i)"><i class="fa fa-play"></i></button>
-                            <button type="button" class="btn btn-danger rounded-0 border-0" (click)="delete(i)"><i class="fa fa-trash"></i></button>              
+                            <button type="button" class="btn btn-danger rounded-0 border-0" (click)="delete(i)"><i class="fa fa-trash"></i></button>
                         </div>
                     </div>
                 </div>

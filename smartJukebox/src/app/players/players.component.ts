@@ -12,7 +12,7 @@ export class PlayersComponent implements OnInit {
 
   public YT : any;
   mainPlayer = null;
-  songs = null;
+  songs = [];
   currentUser: string;
   listeningMusic = false;
 
@@ -34,8 +34,13 @@ export class PlayersComponent implements OnInit {
     // Wait for initializations before loading
     setTimeout(() => this.initPlayer(), 1000);
 
-    this.http.get('/api/v1/playlists/playlist?host='+this.currentUser).subscribe((data: any) => {
-      this.songs = data.ids;
+    this.http.get('/api/v1/playlists/playlist?host='+this.currentUser).subscribe((ids: any) => {
+      let i;
+      for(i=0; i<ids.ids.length; i++){
+        this.http.get('/watch?v='+ids.ids[i]+'&format=json').subscribe((titles:any) => {
+          this.songs[i] = {id: ids.ids[i], title: titles.title};
+        });
+      }
     });
 
   }

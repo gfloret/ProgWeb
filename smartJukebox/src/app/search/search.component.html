@@ -19,7 +19,7 @@
   </article>
 </div>
 
-<div [ngClass]="!resultsDisplayed ? 'notClickable' : 'clickable'" [@changeViewAnimation]> 
+<div [ngClass]="!resultsDisplayed ? 'notClickable' : 'clickable'" [@changeViewAnimation]>
   <div class="d-flex justify-content-center mb-4">
     <div id="searchPlayer"></div>
   </div>
@@ -29,13 +29,13 @@
   <div *ngFor="let r of results; index as i;" class="col mb-3">
     <div style="max-width: 400px;" id={{i}}>
       <div class="img pb-1">
-        <img src="https://img.youtube.com/vi/{{r}}/0.jpg">
+        <img src="https://img.youtube.com/vi/{{r.id}}/0.jpg">
       </div>
       <h5>{{r.title}}</h5>
       <form [formGroup]="channelSelection" (ngSubmit)="sendToChannel(channelSelection.value, r)">
         <div class="d-flex justify-content-center">
           <button type="button" class="btn btn-success rounded-0 border-0" (click)="sendToPreview(i)"><i class="fa fa-play"></i></button>
-          <button type="button" class="btn btn-light rounded-0 border-0" (click)="saveForUser(r)"><i class="fa fa-save"></i></button>
+          <button type="button" class="btn btn-light rounded-0 border-0" (click)="saveForUser(r.id)"><i class="fa fa-save"></i></button>
           <select formControlName="channel" class="form-control" required name="selectedChannel" id="selectedChannel">
             <option [value]="hc.name" *ngFor="let hc of hostChannels">
               {{hc.name}}

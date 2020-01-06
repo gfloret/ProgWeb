@@ -18,8 +18,8 @@ export class SearchComponent implements OnInit {
 
   searchPlayer = null;
   resultsDisplayed = false;
-  results = null;
-  resultsTitles = null;
+  resultsID = null;
+  results = [];
   hostChannels: any;
   successfullyAdded = false;
 
@@ -45,7 +45,7 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
     this.http.get('/api/v1/channel/hostchannels?host='+this.currentUser).subscribe((data: any) => {
       this.hostChannels = data;
     });
@@ -58,6 +58,8 @@ export class SearchComponent implements OnInit {
 
     // Wait for initializations before loading
     setTimeout(() => this.initPlayer(), 1000);
+
+    this.displayTitle('ixkoVwKQaJg');
   }
 
   initPlayer(){
@@ -71,9 +73,22 @@ export class SearchComponent implements OnInit {
     });
   }
 
+  displayTitle(id){
+    this.http.get('/watch?v='+id+'&format=json').subscribe((data:any) => {
+    });
+  }
+
   updatePlayerState(event){
     if(event.data == window['YT'].PlayerState.CUED){
-      this.results = this.searchPlayer.getPlaylist();
+      this.resultsID = this.searchPlayer.getPlaylist();
+      let i;
+      let nbTitles = 0;
+      for(i=0; i<this.resultsID.length; i++){
+        this.http.get('/watch?v='+this.resultsID[i]+'&format=json').subscribe((data:any) => {
+          this.results[nbTitles] = {id: this.resultsID[nbTitles], title: data.title};
+          nbTitles = nbTitles + 1;
+        });
+      }
       this.searchPlayer.playVideo();
     }
   }
