@@ -5,7 +5,7 @@
 <!-- Individual view of a selected channel -->
 
 <div *ngIf="individualView" [@changeViewAnimation]>
-    <div class="card border-0">    
+    <div class="card border-0">
         <div class="d-flex justify-content-center">
             <a *ngIf="isHost" class="p2 flex-fill btn btn-lg btn-danger rounded-0 text-light" (click)="deleteChannel()">Supprimer le salon</a>
             <a *ngIf="!isHost" class="p2 flex-fill btn btn-lg btn-warning rounded-0 text-light" (click)="leaveChannel()">Quitter le salon</a>
@@ -48,12 +48,12 @@
                         </div>
                         <div *ngFor="let s of songs; index as i;" class="col mb-4">
                             <div class="img">
-                                <img src="https://img.youtube.com/vi/{{s}}/0.jpg">
+                                <img src="https://img.youtube.com/vi/{{s.id}}/0.jpg">
                             </div>
                             <h5>{{s.title}}</h5>
                             <div class="d-flex justify-content-center">
                                 <button type="button" class="btn btn-success rounded-0 border-0" (click)="sendToPreview(i)"><i class="fa fa-play"></i></button>
-                                <button type="button" class="btn btn-danger rounded-0 border-0" (click)="deleteSong(i)"><i class="fa fa-trash"></i></button>              
+                                <button type="button" class="btn btn-danger rounded-0 border-0" (click)="deleteSong(i)"><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                                 <input class="form-control" type="text" formControlName="message" name="message" id="message" placeholder="Écrire un nouveau message" required/>
                             </div>
                         </div>
-    
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-block" id="postMessage" name="postMessage" [disabled]="!postChatMessage.valid"> Envoyer  </button>
                         </div>
@@ -95,7 +95,7 @@
 <!-- Global views of channels (public/user channels) -->
 
 <div *ngIf="!individualView" [@changeViewAnimation]>
-    <div class="card border-0">    
+    <div class="card border-0">
         <div class="d-flex justify-content-center">
             <a class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleCreationForm()">Créer un nouveau salon</a>
             <a *ngIf="mainView" class="p2 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="toggleMainView()">Accéder à mes salons</a>
@@ -105,17 +105,17 @@
 
 
     <!-- Channel creation form -->
-    
+
     <div *ngIf="creatingNewChannel" [@formAnimation]>
         <article class="card-body">
             <h4 class="card-title text-center mb-4 mt-1">Création d'un salon</h4>
-    
+
             <div *ngIf="takenName" class="alert alert-danger">
                 Ce nom de salon est déjà utilisé. Veuillez en choisir un nouveau.
             </div>
-    
+
             <form [formGroup]="newChannelForm" (ngSubmit)="onSubmit(newChannelForm.value)">
-    
+
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -127,7 +127,7 @@
                         <div *ngIf="name.errors.required">Ce champ est requis</div>
                     </div>
                 </div>
-    
+
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -136,7 +136,7 @@
                         <input class="form-control" type="textfield" formControlName="description" name="description" id="description" placeholder="Description"/>
                     </div>
                 </div>
-    
+
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -145,13 +145,13 @@
                         <input class="form-control" type="textfield" formControlName="password" name="password" id="password" placeholder="Mot de passe (optionnel)"/>
                     </div>
                 </div>
-    
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block" id="submitDetails" name="submitDetails" [disabled]="!newChannelForm.valid"> Créer  </button>
                 </div>
-    
+
                 <p class="text-center"><a class="nav-link" (click)="toggleCreationForm()">Fermer</a></p>
-    
+
             </form>
         </article>
     </div>
@@ -159,9 +159,9 @@
 
 
     <!-- Public channels -->
-    
+
     <div *ngIf="mainView" class="jumbotron" [@changeViewAnimation]>
-    
+
         <div class="mb-5 pb-2">
             <h2>Salons publics</h2>
             <form class="form-inline mt-4 mb-3" [formGroup]="searchForm" (ngSubmit)="search(searchForm.value)">
@@ -170,7 +170,7 @@
             </form>
             <a class="p2 mt-3 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadMainView()"><i class="fa fa-refresh"></i></a>
         </div>
-    
+
         <div class="card-columns">
             <div *ngFor="let pc of publicChannels;" class="card rounded-0 border-0">
                 <div class="card-body">
@@ -184,18 +184,18 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal -->
     <div class="modal" id="myModal" [ngClass]="{'show':showModal}">
         <div class="modal-dialog">
         <div class="modal-content">
-    
+
             <!-- Modal Header -->
             <div class="modal-header">
             <h4 class="modal-title">Salon privé</h4>
             <button type="button" class="close" (click)="showModal=false" data-dismiss="modal">&times;</button>
             </div>
-    
+
             <!-- Modal body -->
             <form [formGroup]="passwordForm" (ngSubmit)="checkPassword(passwordForm.value)">
                 <div class="form-group">
@@ -207,26 +207,26 @@
                         <input class="form-control" type="text" formControlName="password" name="password" id="password" placeholder="Mot de passe du salon" required/>
                     </div>
                     <div *ngIf="incorrectPassword" class="alert alert-danger mt-1 mb-2 rounded-0">
-                        <div> Le mot de passe est incorrect</div>                                    
+                        <div> Le mot de passe est incorrect</div>
                     </div>
                 </div>
-            
+
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <div class="form-group">
                     <button type="submit" class="btn btn-primary" data-dismiss="modal">Entrer</button>
                     </div>
                 </div>
-            </form> 
-    
+            </form>
+
             </div>
         </div>
     </div>
 
     <!-- User channels -->
-    
+
     <div *ngIf="!mainView" class="jumbotron" [@changeViewAnimation]>
-    
+
         <div class="mb-5 pb-2">
             <h2>Mes salons</h2>
             <form class="form-inline mt-4 mb-3" [formGroup]="privateSearchForm" (ngSubmit)="privateSearch(privateSearchForm.value)">
@@ -235,7 +235,7 @@
             </form>
             <a class="p2 mt-3 flex-fill btn btn-lg btn-dark rounded-0 text-light" (click)="loadPersonnalView()"><i class="fa fa-refresh"></i></a>
         </div>
-    
+
         <div class="card-columns">
             <div *ngFor="let hc of hostChannels;" class="card rounded-0 border-0">
                 <div class="card-body">

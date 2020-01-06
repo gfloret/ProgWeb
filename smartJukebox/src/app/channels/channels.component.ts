@@ -13,7 +13,7 @@ import { divAnimation } from './channels-animations';
 
 export class ChannelsComponent implements OnInit {
 
-  // ===== States ===== 
+  // ===== States =====
   takenName = false;
   isPublic = true;
   creatingNewChannel = false;
@@ -23,14 +23,14 @@ export class ChannelsComponent implements OnInit {
   listeningMusic = false;
   incorrectPassword = false;
 
-  // ===== Forms ===== 
+  // ===== Forms =====
   newChannelForm: FormGroup;
   searchForm: FormGroup;
   privateSearchForm: FormGroup;
   postChatMessage: FormGroup;
   passwordForm: FormGroup;
 
-  // ===== Variables to stock current data ===== 
+  // ===== Variables to stock current data =====
   currentUser: string;
   publicChannels;
   hostChannels;
@@ -42,13 +42,13 @@ export class ChannelsComponent implements OnInit {
   showModal = false;
   public YT : any;
   mainPlayer = null;
-  songs = null;
-  
+  songs = [];
 
 
-  // ===== Inits ===== 
 
-  constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) { 
+  // ===== Inits =====
+
+  constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) {
 
     this.currentUser = localStorage.getItem('userName');
 
@@ -117,9 +117,15 @@ export class ChannelsComponent implements OnInit {
 
     console.log("Initialization done, getting playlist from database ...");
 
-    this.http.get('/api/v1/playlists/channelplaylist?channelName='+this.currentChannel.name).subscribe((data: any) => {
-      this.songs = data.playlist;
-      console.log(this.songs);
+    this.http.get('/api/v1/playlists/channelplaylist?channelName='+this.currentChannel.name).subscribe((ids: any) => {
+      let i;
+      let numTitles = 0;
+      for(i=0; i<ids.playlist.length; i++){
+        this.http.get('/watch?v='+ids.playlist[i]+'&format=json').subscribe((titles:any) => {
+          this.songs[numTitles] = {id: ids.playlist[numTitles], title: titles.title};
+          numTitles = numTitles + 1;
+        });
+      }
     });
 
     console.log("Playlist have been get, songs are " + this.songs);
@@ -136,7 +142,7 @@ export class ChannelsComponent implements OnInit {
 
 
 
-  // ===== View controllers ===== 
+  // ===== View controllers =====
 
   toggleMainView(){
     this.mainView = !this.mainView;
@@ -160,7 +166,7 @@ export class ChannelsComponent implements OnInit {
   }
 
   openIndividualView(channel){
-    
+
     this.currentChannel = channel;
     this.loadCurrentChannelMessages();
     this.initPlayer();
@@ -199,7 +205,7 @@ export class ChannelsComponent implements OnInit {
 
 
 
-  // ===== Buttons and forms controllers ===== 
+  // ===== Buttons and forms controllers =====
 
   onSubmit(channelData: any){
     let toSearch = channelData.name + " " + channelData.description + " " + this.currentUser;
@@ -247,7 +253,7 @@ export class ChannelsComponent implements OnInit {
       });
     }
   }
-  
+
   deleteChannel(){
     this.http.delete('/api/v1/channel/deletechannel?channelToDelete='+this.currentChannel.name).subscribe((data:any) => {});
     this.loadPersonnalView();
@@ -259,12 +265,12 @@ export class ChannelsComponent implements OnInit {
     const dataToSend = {channel: this.currentChannel.name, member: this.currentUser};
     this.http.put('/api/v1/channel/leavechannel', dataToSend).subscribe((data:any) => {
       this.currentChannel = data.channel;
-    });    
+    });
     this.loadPersonnalView();
     this.loadMainView();
     this.individualView = false;
   }
-  
+
   checkPassword(res){
     this.http.get('/api/v1/channel/checkPassword?name='+this.channelToTest.name+'&password='+res.password).subscribe((data:any) => {
       if(!data){
@@ -274,12 +280,12 @@ export class ChannelsComponent implements OnInit {
         this.showModal = false;
         this.openIndividualView(this.channelToTest);
       }
-    });    
+    });
   }
 
   sendToPreview(index){
     this.listeningMusic = true;
-    var id = this.songs[index];
+    var id = this.songs[index].id;
     this.mainPlayer.loadVideoById(id);
     this.mainPlayer.playVideo();
     this.mainPlayer.unMute();
