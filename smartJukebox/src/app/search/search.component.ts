@@ -14,7 +14,9 @@ import { divAnimation } from './search-animations';
 export class SearchComponent implements OnInit {
 
   public YT : any;
-  private searchPlayer = null;
+  currentUser: string;
+
+  searchPlayer = null;
   resultsDisplayed = false;
   results = null;
   resultsTitles = null;
@@ -23,8 +25,6 @@ export class SearchComponent implements OnInit {
 
   searchForm: FormGroup;
   channelSelection: FormGroup;
-
-  currentUser: string;
 
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router) {
@@ -50,7 +50,7 @@ export class SearchComponent implements OnInit {
       this.hostChannels = data;
     });
 
-    // This code loads the IFrame Player API code asynchronously
+    // Loads the IFrame Player API code asynchronously
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];

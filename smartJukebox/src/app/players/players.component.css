@@ -1,0 +1,7 @@
+.notClickable {
+    pointer-events:none;
+}
+
+.clickable {
+    pointer-events: auto;
+}

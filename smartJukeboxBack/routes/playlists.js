@@ -41,29 +41,28 @@ router.put('/playlist', function(req, res, next) {
 });
 
 router.delete('/playlist', function(req, res, next) {
-    console.log('delete');
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if(err)
             console.log(err);
         else{
-            console.log("co ok");
-            console.log(req.query.host);
             user.findOne({username: req.query.host}, function(err, us){
                 if(err)
                     console.log(err);
                 else if(us){
-                    console.log("user found");
                     us.playlist.splice(us.playlist.indexOf(req.query.songID), 1);
                     us.save(function(err, songID){
-                        if(err)
-                            console.log(err);
-                        else
-                            console.log("save ok");
-                        mongoose.connection.close();
-                        return res.status(200).end();
+                        if(err){
+                            res.statusMessage = err;
+                            mongoose.connection.close();
+                            return res.status(500).end();
+                        } else{
+                            mongoose.connection.close();
+                            return res.status(200).end();
+                        }
                     });
-                }else
+                } else {
                     console.log("user not found");
+                }    
             });
         }
     });
