@@ -85,7 +85,8 @@ export class SearchComponent implements OnInit {
       let nbTitles = 0;
       for(i=0; i<this.resultsID.length; i++){
         this.http.get('/watch?v='+this.resultsID[i]+'&format=json').subscribe((data:any) => {
-          this.results[nbTitles] = {id: this.resultsID[nbTitles], title: data.title};
+          let num = data.html.split("embed/")[1].split("?feature")[0];
+          this.results[nbTitles] = {id: num, title: data.title};
           nbTitles = nbTitles + 1;
         });
       }

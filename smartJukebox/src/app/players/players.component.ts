@@ -39,7 +39,8 @@ export class PlayersComponent implements OnInit {
       let numTitles = 0;
       for(i=0; i<ids.ids.length; i++){
         this.http.get('/watch?v='+ids.ids[i]+'&format=json').subscribe((titles:any) => {
-          this.songs[numTitles] = {id: ids.ids[numTitles], title: titles.title};
+          let num = titles.html.split("embed/")[1].split("?feature")[0];
+          this.songs[numTitles] = {id: num, title: titles.title};
           numTitles = numTitles + 1;
         });
       }
@@ -58,6 +59,7 @@ export class PlayersComponent implements OnInit {
   }
 
   sendToPreview(index){
+    console.log(this.songs);
     this.listeningMusic = true;
     var id = this.songs[index].id;
     this.mainPlayer.loadVideoById(id);

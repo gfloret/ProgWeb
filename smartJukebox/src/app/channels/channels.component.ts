@@ -122,7 +122,8 @@ export class ChannelsComponent implements OnInit {
       let numTitles = 0;
       for(i=0; i<ids.playlist.length; i++){
         this.http.get('/watch?v='+ids.playlist[i]+'&format=json').subscribe((titles:any) => {
-          this.songs[numTitles] = {id: ids.playlist[numTitles], title: titles.title};
+          let num = titles.html.split("embed/")[1].split("?feature")[0];
+          this.songs[numTitles] = {id: num, title: titles.title};
           numTitles = numTitles + 1;
         });
       }
