@@ -59,7 +59,7 @@ export class PlayersComponent implements OnInit {
 
   sendToPreview(index){
     this.listeningMusic = true;
-    var id = this.songs[index];
+    var id = this.songs[index].id;
     this.mainPlayer.loadVideoById(id);
     this.mainPlayer.playVideo();
     this.mainPlayer.unMute();

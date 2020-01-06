@@ -117,7 +117,7 @@ export class SearchComponent implements OnInit {
   }
 
   sendToPreview(index){
-    var id = this.results[index];
+    var id = this.results[index].id;
     this.searchPlayer.loadVideoById(id);
     this.searchPlayer.playVideo();
     this.searchPlayer.unMute();
