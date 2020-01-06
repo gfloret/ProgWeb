@@ -90,7 +90,7 @@ export class SearchComponent implements OnInit {
 
   saveForUser(songID){
     console.log(songID);
-    this.http.put('/api/v1/user/playlist', {host: this.currentUser, songID: songID}).subscribe((data : any) => {});
+    this.http.put('/api/v1/playlists/playlist', {host: this.currentUser, songID: songID}).subscribe((data : any) => {});
   }
 
   sendToPreview(index){

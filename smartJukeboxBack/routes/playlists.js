@@ -3,16 +3,6 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var user = require('../models/userModel');
 
-var uniqueSongSchema = new mongoose.Schema({
-    ID_Video : { type: String, required: true}
-});
-var uniqueSongModel = mongoose.model('uniqueSongYoutube', uniqueSongSchema, 'uniqueSongYoutube');
-
-var archivesYoutubeSchema = new mongoose.Schema({
-    ID_Video : { type: String, unique : true, required: true}
-});
-var archivesYoutubeModel = mongoose.model('archivesYoutube', archivesYoutubeSchema, 'archivesYoutube');
-
 router.get('/playlist', function(req, res, next) {
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if(err)

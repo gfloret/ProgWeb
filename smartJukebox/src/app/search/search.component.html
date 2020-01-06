@@ -19,8 +19,10 @@
   </article>
 </div>
 
-<div class="d-flex justify-content-center mb-4">
-  <div id="searchPlayer"></div>
+<div [ngClass]="!resultsDisplayed ? 'notClickable' : 'clickable'"> 
+  <div class="d-flex justify-content-center mb-4">
+    <div id="searchPlayer"></div>
+  </div>
 </div>
 
 <div *ngIf="resultsDisplayed" class="row">
