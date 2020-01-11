@@ -6,8 +6,8 @@ info:
 tags:
 - name: "Authentification"
   description: "Inscription et Connexion d'un utilisateur"
-- name: "YouTube"
-  description: "Operations about YouTube"
+- name: "Channels"
+  description: "Opérations sur les salons"
 - name: "Spotify"
   description: "Operations about Spotify"
 schemes:
@@ -87,114 +87,337 @@ paths:
           description: "Champs manquants"
         500:
           description: "Erreur de connexion à la base de données"
-  /uniqueSongYouTube:
+  /channel/publicchannels:
     get:
       tags:
-      - "YouTube"
-      summary: "Recupère la vidéo YouTube courante"
-      description: ""
-      operationId: "findCurrentVideo"
-      produces:
-      - "application/xml"
-      - "application/json"
+      - "Channels"
+      summary: "Recupère la liste des salons publiques"
+      description: "Recupère tous les salons publiques que l'utilisateur n'a pas rejoint"
+      parameters:
+        - name : user
+          in: query
+          type: string
+          required: true
+          description: Pseudo de l'utilisateur
       responses:
         200:
-          description: "OK"
-        400:
-          description: "Bad request"
-    delete:
-      tags:
-      - "YouTube"
-      summary: "Vide la collection uniqueSongModelYouTube"
-      description: ""
-      operationId: "deleteVideo"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
-      responses:
-        404:
-          description: "Video not found"
-        405:
-          description: "Validation exception"
-    post:
-      tags:
-      - "YouTube"
-      summary: "Ajoute une vidéo YouTube"
-      description: ""
-      operationId: "addVideo"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "id"
-        in: "query"
-        description: "ID of video that needs to be added to database"
-        required: true
-        type: "integer"
-        format: "int64"
-      responses:
-        405:
-          description: "Invalid input"
-  /uniqueSongSpotify:
+          description: "La liste des salons a bien été récupérée"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/channelModel'
+        500:
+          description: "Echec de la requete"
+  /channel/hostchannels:
     get:
       tags:
-      - "Spotify"
-      summary: "Récupère la piste Spotify courante"
-      description: ""
-      operationId: "findCurrentAudio"
-      produces:
-      - "application/xml"
-      - "application/json"
+      - "Channels"
+      summary: "Recupère la liste des salons créé par l'utilisateur"
+      description: "Recupère tous les salons que l'utilisateur a créé"
+      parameters:
+        - name : user
+          in: query
+          type: string
+          required: true
+          description: Pseudo de l'utilisateur
       responses:
         200:
-          description: "OK"
-        400:
-          description: "Bad request"
-    delete:
+          description: "La liste des salons a bien été récupérée"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/channelModel'
+        500:
+          description: "Echec de la requete"
+  /channel/memberchannels:
+    get:
       tags:
-      - "Spotify"
-      summary: "Vide la collection uniqueSongModelSpotify"
-      description: ""
-      operationId: "deleteAudio"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
+      - "Channels"
+      summary: "Recupère la liste des salons dont l'utilisateur est membre"
+      description: "Recupère la liste des salons dont l'utilisateur est membre"
+      parameters:
+        - name : user
+          in: query
+          type: string
+          required: true
+          description: Pseudo de l'utilisateur
       responses:
-        404:
-          description: "Audio not found"
-        405:
-          description: "Validation exception"
+        200:
+          description: "Connexion au salon réussie"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/channelModel'
+        500:
+          description: "Echec de la requete"
+  /channel/checkPassword:
+    get:
+      tags:
+      - "Channels"
+      summary: "Vérifie si le mot de passe du salon est correct"
+      description: "Dans le cas d'un salon privé, vérifie si le mot de passe est correct"
+      parameters:
+        - name : name
+          in: query
+          type: string
+          required: true
+          description: Nom du salon
+        - name : password
+          in: query
+          type: string
+          required: true
+          description: Mot de passe du salon
+      responses:
+        200:
+          description: "La liste des salons a bien été récupérée"
+          schema:
+            $ref: '#/definitions/channelModel'
+        500:
+          description: "Echec de la requete"
+  /channel/publicSearch:
+    get:
+      tags:
+      - "Channels"
+      summary: "Recherche un ou plusieurs salons non rejoint"
+      description: "Recherche un ou plusieurs salons parmi ceux que l'utilisateur n'a pas rejoint"
+      parameters:
+        - name : user
+          in: query
+          type: string
+          required: true
+          description: Nom de l'utilisateur
+        - name : keywords
+          in: query
+          type: string
+          required: true
+          description: Chaine de caractère à rechercher
+      responses:
+        200:
+          description: "La recherche s'est terminée sans problème"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/channelModel'
+        500:
+          description: "Echec de la requete"
+  /channel/privateSearch:
+    get:
+      tags:
+      - "Channels"
+      summary: "Recherche un ou plusieurs salons rejoint"
+      description: "Recherche un ou plusieurs salons parmi ceux que l'utilisateur a rejoint"
+      parameters:
+        - name : user
+          in: query
+          type: string
+          required: true
+          description: Nom de l'utilisateur
+        - name : keywords
+          in: query
+          type: string
+          required: true
+          description: Chaine de caractère à rechercher
+      responses:
+        200:
+          description: "La recherche s'est terminée sans problème"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/channelModel'
+        500:
+          description: "Echec de la requete"
+  /channel/ismemberofchannel:
+    get:
+      tags:
+      - "Channels"
+      summary: "Verifie qu'un utilisateur est membre d'un salon"
+      description: "Verifie qu'un utilisateur est membre d'un salon"
+      parameters:
+        - name : channel
+          in: query
+          type: string
+          required: true
+          description: Nom du salon
+        - name : user
+          in: query
+          type: string
+          required: true
+          description: Pseudo de l'utilisateur
+      responses:
+        200:
+          description: "L'utilisateur est membre de ce salon"
+        201:
+          description: "L'utilisateur n'est pas membre du salon"
+        500:
+          description: "Echec de la requete"
+  /channel/create:
     post:
       tags:
-      - "Spotify"
-      summary: "Ajoute une piste Spotify"
-      description: ""
-      operationId: "addAudio"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
+      - "Channels"
+      summary: "Créé un nouveau salon"
+      description: "Créé un nouveau salon"
       parameters:
-      - name: "id"
-        in: "query"
-        description: "ID of audio that needs to be added to database"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name : channel
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/channelModel'
+          description: Nom du salon
       responses:
-        400:
-          description: "Invalid input"
+        200:
+          description: "Le salon a bien été crée"
+          schema:
+            $ref: '#/definitions/channelModel'
+        201:
+          description: "Le nom du salon est déjà pris"
+        202:
+          description: "Le nom du salon n'a pas été renseigné"
+        500:
+          description: "Echec de la requete"
+  /channel/addmember:
+    put:
+      tags:
+      - "Channels"
+      summary: "Ajoute un utilisateur au salon"
+      description: "Ajoute un utilisateur au salon"
+      parameters:
+        - name : userToAdd
+          in: body
+          type: string
+          required: true
+          description: Pseudo de l'utilisateur
+        - name : currentChannel
+          in: body
+          type: string
+          required: true
+          description: Nom du salon
+      responses:
+        200:
+          description: "L'utilisateur a bien été ajoutée"
+          schema:
+            $ref: '#/definitions/channelModel'
+        201:
+          description: "Le salon est inconnu"
+        202:
+          description: "Tous les champs n'ont pas été renseignés"
+        500:
+          description: "Echec de la requete"
+  /channel/addSong:
+    put:
+      tags:
+      - "Channels"
+      summary: "Ajoute une vidéo au salon"
+      description: "Ajoute une vidéo au salon"
+      parameters:
+        - name : songID
+          in: body
+          type: int
+          required: true
+          description: ID de la vidéo à ajouter
+        - name : channel
+          in: body
+          type: string
+          required: true
+          description: Nom du salon
+        - name : host
+          in: body
+          type: string
+          required: true
+          description: Nom du propriétaire du salon 
+      responses:
+        200:
+          description: "La vidéo a bien été ajoutée"
+        201:
+          description: "Le salon est inconnu"
+        202:
+          description: "Tous les champs n'ont pas été renseignés"
+        500:
+          description: "Echec de la requete"
+  /channel/leavechannel:
+    put:
+      tags:
+      - "Channels"
+      summary: "Quitter un salon"
+      description: "Quitter un salon"
+      parameters:
+        - name : member
+          in: body
+          type: string
+          required: true
+          description: Pseudo de l'utilisateur
+        - name : channel
+          in: body
+          type: string
+          required: true
+          description: Nom du salon
+      responses:
+        200:
+          description: "L'utilisateur a bien été retiré"
+          schema:
+            $ref: '#/definitions/channelModel'
+        201:
+          description: "Le salon est inconnu"
+        202:
+          description: "Tous les champs n'ont pas été renseignés"
+        500:
+          description: "Echec de la requete"
+  /channel/deletechannel:
+    delete:
+      tags:
+      - "Channels"
+      summary: "Supprime un salon"
+      description: "Supprime un salon"
+      parameters:
+        - name : channelToDelete
+          in: query
+          type: string
+          required: true
+          description: Nom du salon
+      responses:
+        200:
+          description: "Le salon a été supprimé"
+        500:
+          description: "Echec de la requete"
+  /channel/message:
+    post:
+      tags:
+      - "Channels"
+      summary: "Ajoute un message au salon"
+      parameters:
+        - name : message
+          in: body
+          schema:
+            $ref: '#/definitions/messageModel'
+          description: Message
+      responses:
+        200:
+          description: "Le message a bien été ajouté"
+          schema:
+            $ref: '#/definitions/messageModel'
+        201:
+          description: "Certains champs sont manquants"
+        500:
+          description: "Echec de la requete"
+  /channel/messages:
+    get:
+      tags:
+      - "Channels"
+      summary: "Récupère les messages du salon"
+      parameters:
+        - name : channel
+          in: query
+          type: string
+          required: true
+          description: "Nom du salon"
+      responses:
+        200:
+          description: "Récupération de la liste de messages d'un salon"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/messageModel'
+        500:
+          description: "Echec de la requete"
 definitions:
   channelModel:
     type: object

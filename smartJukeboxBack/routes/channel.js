@@ -26,7 +26,7 @@ router.get('/publicchannels', function(req,res,next){
                         return res.status(500).end();
                     } else {
                         mongoose.connection.close();
-                        return res.json(channels);
+                        return res.status(200).json(channels);
                     }
                 }
             );
@@ -52,7 +52,7 @@ router.get('/hostchannels', function(req, res, next){
                         return res.status(500).end();
                     } else {
                         mongoose.connection.close();
-                        return res.json(channels);
+                        return res.status(200).json(channels);
                     }
                 }
             );
@@ -78,7 +78,7 @@ router.get('/memberchannels', function(req, res, next){
                         return res.status(500).end();
                     } else {
                         mongoose.connection.close();
-                        return res.json(channels);
+                        return res.status(200).json(channels);
                     }
                 }
             );
@@ -104,7 +104,7 @@ router.get('/checkPassword', function(req, res, next){
                         return res.status(500).end();
                     } else {
                         mongoose.connection.close();
-                        return res.json(channel);
+                        return res.status(200).json(channel);
                     }
                 }
             );
@@ -147,7 +147,7 @@ function search(public, req, res){
                 ]}
                 ).lean().exec(function (err, channels) {
                     mongoose.connection.close();
-                    return res.json(channels);
+                    return res.status(200).json(channels);
                 });
             }
             else{
@@ -161,7 +161,7 @@ function search(public, req, res){
                 ]}
                 ).lean().exec(function (err, channels) {
                     mongoose.connection.close();
-                    return res.json(channels);
+                    return res.status(200).json(channels);
                 });
             }
         } 
@@ -186,10 +186,10 @@ router.get('/ismemberofchannel', function(req, res, next){
                 } else {
                     if (!member){
                         mongoose.connection.close();
-                        return res.json({member: false});
+                        return res.status(201).json({member: false});
                     }else{
                         mongoose.connection.close();
-                        return res.json({member: true});
+                        return res.status(200).json({member: true});
                     }
                 }
             });
@@ -215,7 +215,7 @@ router.post('/create', function(req, res, next){
                 Channels.findOne({'name': req.body.name}, function(err, channel){
                     if (channel){
                         mongoose.connection.close();
-                        return res.json({channel: "takenName"});
+                        return res.status(201).json({channel: "takenName"});
                     } else {
                         Channels.create(channelData, function(err, channel) {
                             if (err) {
@@ -224,7 +224,7 @@ router.post('/create', function(req, res, next){
                                 return res.status(500).end();
                             } else {
                                 mongoose.connection.close();
-                                return res.json({channel: channel});
+                                return res.status(200).json({channel: channel});
                             }
                         });
                     }
@@ -233,7 +233,7 @@ router.post('/create', function(req, res, next){
         });
     } else {
         res.statusMessage = "Missing fields";
-        return res.status(500).end();
+        return res.status(202).end();
     }
 });
 
@@ -250,19 +250,19 @@ router.put('/addSong', function(req, res, next){
                         channel.playlist.push(req.body.songID);
                         channel.save(function(err, member){
                             mongoose.connection.close();
-                            return res.status(201).end();
+                            return res.status(200).end();
                         });
                     } else {
                         res.statusMessage = "Can't add song to unknown channel";
                         mongoose.connection.close();
-                        return res.status(500).end();
+                        return res.status(201).end();
                     }
                 });
             }
         });
     } else {
         res.statusMessage = "Must specify host, channel and song id to add a song to a channel";
-        return res.status(500).end();
+        return res.status(202).end();
     }
 });
 
@@ -279,19 +279,19 @@ router.put('/addmember', function(req, res, next){
                         channel.members.push(req.body.userToAdd);
                         channel.save(function(err, member){
                             mongoose.connection.close();
-                            return res.json({channel: channel});
+                            return res.status(200).json({channel: channel});
                         });
                     } else {
                         res.statusMessage = "Can't add member to unknown channel";
                         mongoose.connection.close();
-                        return res.status(500).end();
+                        return res.status(201).end();
                     }
                 });    
             }
         });
     } else {
         res.statusMessage = "Must specify member and channel to add a member to a channel";
-        return res.status(500).end();
+        return res.status(202).end();
     }
 });
 
@@ -308,19 +308,19 @@ router.put('/leavechannel', function(req, res, next){
                         channel.members.pull(req.body.member);
                         channel.save(function(err, member){
                             mongoose.connection.close();
-                            return res.json({channel: channel});
+                            return res.status(200).json({channel: channel});
                         });
                     } else {
                         res.statusMessage = "Can't leave unknown channel";
                         mongoose.connection.close();
-                        return res.status(500).end();
+                        return res.status(201).end();
                     }
                 });
             }
         });        
     } else {
         res.statusMessage = "Must specify member and channel to make a member leave a channel";
-        return res.status(500).end();
+        return res.status(202).end();
     }
 });
 
@@ -343,6 +343,9 @@ router.delete('/deletechannel', function(req, res, next){
                             res.statusMessage = err;
                             mongoose.connection.close();
                             return res.status(500).end();
+                        }
+                        else{
+                            return res.status(200).end();
                         }
                     });
                 } catch {}
@@ -387,14 +390,14 @@ router.post('/message', function(req, res, next){
                         return res.status(500).end();
                     } else {
                         mongoose.connection.close();
-                        return res.json({message: message});
+                        return res.status(200).json({message: message});
                     }
                 });
             }
         });
     } else {
         res.statusMessage = "Missing fields";
-        return res.status(500).end();
+        return res.status(201).end();
     }
 });
 
@@ -412,7 +415,7 @@ router.get('/messages', function(req, res, next){
                     return res.status(500).end();
                 } else {
                     mongoose.connection.close();
-                    return res.json({messages: messages});
+                    return res.status(200).json({messages: messages});
                 }
             });
         }
