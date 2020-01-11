@@ -24,7 +24,7 @@ paths:
           required: true
           description: Login et mot de passe de l'utilisateur
           schema:
-            $ref: "#/definitions/Login-Credentials"
+            $ref: "#/definitions/userModel"
       responses:
         200:
           description: "Utilisateur connecté"
@@ -59,7 +59,7 @@ paths:
           required: true
           description: Informations de l'utilisateur
           schema:
-            $ref: "#/definitions/User"
+            $ref: "#/definitions/userModel"
       responses:
         201:
           description: "Successfully created user"
@@ -191,49 +191,59 @@ paths:
         400:
           description: "Invalid input"
 definitions:
-  Signup-Credentials:
+  channelModel:
     type: object
-    required: [login, password]
+    required: [name]
     properties:
-      login: 
+      name:
+        type: string
+        unique: true
+      description:
         type: string
       password:
         type: string
-
-  Login-Credentials:
+      host:
+        type: string
+      members:
+        type: array
+        items:
+          type: string
+      toSearch:
+        type: string
+      playlist:
+        type: array
+        items:
+          type: string
+  userModel:
     type: object
-    required: user
+    required: [username,email,password]
     properties:
-      user:
-        type: object
-        properties:
-          email:
-            type: string
-            format: email
-          password:
-            type: string
-            format: password
-  User:
+      username:
+        type: string
+        unique: true
+      email:
+        type: string
+        unique: true
+        format: email
+      password:
+        type: string
+        format: password
+      playlist:
+        type: array
+        items:
+          type: string
+  messageModel:
     type: object
-    required: user
+    required: [content, datetime, author, channelName]
     properties:
-      user:
-        type: object
-        properties:
-          username:
-            type: string
-          email:
-            type: string
-            format: email
-          emailConf:
-            type: string
-            format: email
-          password:
-            type: string
-            format: password
-          passwordConf:
-            type: string
-            format: password
+      content:
+        type: string
+      datetime: 
+        type: string
+      author:
+        type: string
+      channelName:
+        type: string
 externalDocs:
   description: "GitHub de SmartJukebox"
   url: "https://github.com/gfloret/ProgWeb"
