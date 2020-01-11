@@ -8,8 +8,8 @@ tags:
   description: "Inscription et Connexion d'un utilisateur"
 - name: "Channels"
   description: "Opérations sur les salons"
-- name: "Spotify"
-  description: "Operations about Spotify"
+- name: "Playlists"
+  description: "Opérations sur les playlists"
 schemes:
 - "https"
 - "http"
@@ -416,6 +416,111 @@ paths:
             type: array
             items:
               $ref: '#/definitions/messageModel'
+        500:
+          description: "Echec de la requete"
+  /playlists/playlist:
+    get:
+      tags:
+      - "Playlists"
+      summary: "Récupère la playlist d'un utilisateur"
+      parameters:
+        - name : host
+          in: query
+          type: string
+          required: true
+          description: "Pseudo de l'utilisateur"
+      responses:
+        200:
+          description: "Récupération la playlist de l'utilisateur"
+          schema:
+            type: array
+            items:
+              type: string
+        500:
+          description: "Echec de la requete"
+  /playlists/channelplaylist:
+    get:
+      tags:
+      - "Playlists"
+      summary: "Récupère la playlist d'un salon"
+      parameters:
+        - name : channelName
+          in: query
+          type: string
+          required: true
+          description: "Nom du salon"
+      responses:
+        200:
+          description: "Récupération la playlist du salon"
+          schema:
+            type: array
+            items:
+              type: string
+        201:
+          description: "Nom du salon inconnue"
+        500:
+          description: "Echec de la requete"
+  /playlists/putplaylist:
+    put:
+      tags:
+      - "Playlists"
+      summary: "Ajoute une vidéo à la playlist"
+      parameters:
+        - name : host
+          in: body
+          type: string
+          required: true
+          description: "Pseudo du propriétaire de la playlist"
+        - name: songID
+          in : body
+          type: string
+          required: true
+          description : "ID de la vidéo à ajouter"
+      responses:
+        200:
+          description: "La vidéo a bien été ajoutée"
+        500:
+          description: "Echec de la requete"
+  /playlists/deleteplaylist:
+    delete:
+      tags:
+      - "Playlists"
+      summary: "Supprime une vidéo de la playlist d'un utilisateur"
+      parameters:
+        - name : channelName
+          in: body
+          type: string
+          required: true
+          description: "Pseudo du propriétaire de la playlist"
+        - name: songID
+          in : body
+          type: string
+          required: true
+          description : "ID de la vidéo à supprimer"
+      responses:
+        200:
+          description: "La vidéo a bien été supprimée"
+        500:
+          description: "Echec de la requete"
+  /playlists/deletechannelplaylist:
+    delete:
+      tags:
+      - "Playlists"
+      summary: "Supprime une vidéo de la playlist d'un salon"
+      parameters:
+        - name : host
+          in: body
+          type: string
+          required: true
+          description: "Nom du salon correspondant à la playlist"
+        - name: songID
+          in : body
+          type: string
+          required: true
+          description : "ID de la vidéo à supprimer"
+      responses:
+        200:
+          description: "La vidéo a bien été supprimée"
         500:
           description: "Echec de la requete"
 definitions:

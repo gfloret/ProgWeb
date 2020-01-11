@@ -18,7 +18,7 @@ router.get('/playlist', function(req, res, next) {
                     return res.status(500).end();
                 } else if (us) {
                     mongoose.connection.close();
-                    return res.json({ids: us.playlist});
+                    return res.status(200).json({ids: us.playlist});
                 }
             });
         }
@@ -40,11 +40,11 @@ router.get('/channelplaylist', function(req, res, next) {
                 } else {
                     if (channel){
                         mongoose.connection.close();
-                        return res.json({playlist: channel.playlist});
+                        return res.status(200).json({playlist: channel.playlist});
                     } else {
                         res.statusMessage = "Can't get playlist from unknown channel";
                         mongoose.connection.close();
-                        return res.status(500).end();
+                        return res.status(201).end();
                     }
                 }
             });
@@ -67,7 +67,7 @@ router.put('/playlist', function(req, res, next) {
                     us.playlist.push(req.body.songID);
                     us.save(function(err, songID){
                         mongoose.connection.close();
-                        return res.status(201).end();
+                        return res.status(200).end();
                     });
                 }
             });
