@@ -26,18 +26,18 @@ router.get('/', function(req, res, next) {
                     if (!account){
                         console.log("Account not found");
                         mongoose.connection.close();
-                        return res.json({accountInfo: ""});
+                        return res.status(202).json({accountInfo: ""});
                         
                     }
                     else if(bcrypt.compareSync(req.query.password, account.password)) {
                         console.log("Connection successful");
                         mongoose.connection.close();
-                        return res.json({accountInfo: account});
+                        return res.status(200).json({accountInfo: account});
                     }
                     else{
                         console.log("Incorrect password");
                         mongoose.connection.close();
-                        return res.json({accountInfo: ""});
+                        return res.status(201).json({accountInfo: ""});
                     }
                 }
             });

@@ -4,6 +4,8 @@ info:
   version: "0.0.1"
   title: "Smart Jukebox"
 tags:
+- name: "Authentification"
+  description: "Inscription et Connexion d'un utilisateur"
 - name: "YouTube"
   description: "Operations about YouTube"
 - name: "Spotify"
@@ -13,75 +15,78 @@ schemes:
 - "http"
 paths:
   /login:
-    post:
+    get:
       tags:
-      - "General"
+      - "Authentification"
       summary: Authentifie un utilisateur
-      description: Crée un token permettant à l'utilisateur d'accéder aux contenus protégés
+      description: Vérifie si le Pseudo/Email et Mot de passe correspondent à un utilisateur de la BDD.
       parameters:
-        - name: credentials
-          in: body
+        - name: username
+          in: query
+          type: string
           required: true
-          description: Login et mot de passe de l'utilisateur
-          schema:
-            $ref: "#/definitions/userModel"
+          description: Pseudo ou Email de l'utilisateur à connecter.
+        - name: password
+          in: query
+          type: string
+          required: true
+          description: Mot de passe de l'utilisateur à connecter.
       responses:
         200:
-          description: "Utilisateur connecté"
-        400:
-          description: "Invalid input"
-    delete:
-      tags:
-      - "General"
-      summary: Deconnecte un utilisateur
-      description: Supprime le token de l'utilisateur
-      parameters:
-        - name: id
-          in: query
-          type: integer
-          format: "int64"
-          required: true
-          description: Identifiant du token à supprimer
-      responses:
-        404:
-          description: "Id not found"
-        405:
-          description: "Validation exception"
+          description: "Informations de l'utilisateur connecté"
+          schema:
+            $ref: '#/definitions/userModel'
+        201:
+          description: "Le mot de passe n'est pas valide"
+        202:
+          description: "Le pseudo/email n'existe pas"
+        500:
+          description: "Erreur de connexion à la base de données"
   /signup:
     post:
       tags:
-      - "General"
+      - "Authentification"
       summary: Crée un utilisateur
       description: Crée un nouvel utilisateur avec les informations données
       parameters:
-        - name: user
+        - name: username
           in: body
+          type: string
           required: true
-          description: Informations de l'utilisateur
-          schema:
-            $ref: "#/definitions/userModel"
+          description: Pseudo de l'utilisateur
+        - name : email
+          in: body
+          type: string
+          required: true
+          description: Email de l'utilisateur
+        - name : emailConf
+          in: body
+          type: string
+          required: true
+          description: Confirmation de l'email
+        - name : password
+          in: body
+          type: string
+          required: true
+          description: Mot de passe de l'utilisateur
+        - name: passwordConf
+          in: body
+          type: string
+          required: true
+          description: Confirmation du mot de passe
       responses:
+        200:
+          description: "Nouveau utilisateur créé"
         201:
-          description: "Successfully created user"
+          description: "Le nom d'utilisateur est déjà utilisé"
+        202:
+          description: "L'Email est déjà utilisé"
+        203:
+          description: "Confirmation d'email ou de mot de passe incorrecte"
+        204:
+          description: "Champs manquants"
         500:
-          description: "Invalid input"
-    delete:
-      tags:
-      - "General"
-      summary: Supprime un utilisateur
-      description: Supprime les informations de l'utilisateur
-      parameters:
-        - name: id
-          in: query
-          type : integer
-          format: "int64"
-          required: true
-          description: Identifiant de l'utilisateur à supprimer
-      responses:
-        404:
-          description: "User not found"
-        405:
-          description: "Validation exception"
+          description: "Erreur de connexion à la base de données"
   /uniqueSongYouTube:
     get:
       tags:
