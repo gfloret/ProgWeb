@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var user = require('../models/userModel');
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
+const user = require('../models/userModel');
 const Channels = require('../models/channelModel.js');
 
 router.get('/playlist', function(req, res, next) {
@@ -26,14 +26,12 @@ router.get('/playlist', function(req, res, next) {
 });
 
 router.get('/channelplaylist', function(req, res, next) {
-    console.log("Getting playlists from channel " + req.query.channelName);
     mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err) {
             res.statusMessage = err;
             mongoose.connection.close();
             return res.status(500).end();
         } else {
-            console.log("Checking channel");
             Channels.findOne({name: req.query.channelName}, function(err, channel){
                 if (err) {
                     res.statusMessage = err;
@@ -41,9 +39,7 @@ router.get('/channelplaylist', function(req, res, next) {
                     return res.status(500).end();
                 } else {
                     if (channel){
-                        console.log("Found channel, checking playlist");
                         mongoose.connection.close();
-                        console.log("Found playlist is " + channel.playlist);
                         return res.json({playlist: channel.playlist});
                     } else {
                         res.statusMessage = "Can't get playlist from unknown channel";

@@ -25,7 +25,6 @@ export class AppComponent {
   userName = localStorage.getItem('userName');
 
   disconnect(){
-    console.log("deconnexion");
     localStorage.clear();
     this.router.navigate(['/auth']);
     this.userName = null;

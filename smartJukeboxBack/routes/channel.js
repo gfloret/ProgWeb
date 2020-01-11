@@ -1,6 +1,6 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
 
 const Channels = require('../models/channelModel.js');
 const Messages = require('../models/messageModel.js');
@@ -199,7 +199,7 @@ router.get('/ismemberofchannel', function(req, res, next){
 
 router.post('/create', function(req, res, next){
     if (req.body.channelData.name){
-        var channelData = {
+        const channelData = {
             name: req.body.channelData.name,
             description: req.body.channelData.description,
             password: req.body.channelData.password,
@@ -214,7 +214,6 @@ router.post('/create', function(req, res, next){
             } else {
                 Channels.findOne({'name': req.body.name}, function(err, channel){
                     if (channel){
-                        console.log("Channel name already exists");
                         mongoose.connection.close();
                         return res.json({channel: "takenName"});
                     } else {
@@ -224,7 +223,6 @@ router.post('/create', function(req, res, next){
                                 mongoose.connection.close();
                                 return res.status(500).end();
                             } else {
-                                console.log("Channel successfully created");
                                 mongoose.connection.close();
                                 return res.json({channel: channel});
                             }
@@ -247,12 +245,10 @@ router.put('/addSong', function(req, res, next){
                 mongoose.connection.close();
                 return res.status(500).end();
             } else {
-                console.log(req.body);
                 Channels.findOne({'name': req.body.channel}, function(err, channel){
                     if (channel){
                         channel.playlist.push(req.body.songID);
                         channel.save(function(err, member){
-                            console.log("Song " + req.body.songID + " successfully added to channel " + req.body.channel);
                             mongoose.connection.close();
                             return res.status(201).end();
                         });
@@ -282,7 +278,6 @@ router.put('/addmember', function(req, res, next){
                     if (channel){
                         channel.members.push(req.body.userToAdd);
                         channel.save(function(err, member){
-                            console.log("Member " + req.body.userToAdd + " successfully added to channel " + req.body.currentChannel.name);
                             mongoose.connection.close();
                             return res.json({channel: channel});
                         });
@@ -312,7 +307,6 @@ router.put('/leavechannel', function(req, res, next){
                     if (channel){
                         channel.members.pull(req.body.member);
                         channel.save(function(err, member){
-                            console.log("Member " + req.body.member + " successfully left channel " + req.body.channel);
                             mongoose.connection.close();
                             return res.json({channel: channel});
                         });
@@ -343,6 +337,15 @@ router.delete('/deletechannel', function(req, res, next){
                     mongoose.connection.close();
                     return res.status(500).end();
                 }
+                try {
+                    Messages.deleteMany({channelName: req.query.channelToDelete}, function(err){
+                        if (err){
+                            res.statusMessage = err;
+                            mongoose.connection.close();
+                            return res.status(500).end();
+                        }
+                    });
+                } catch {}
             });
         }
     });

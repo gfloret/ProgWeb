@@ -51,9 +51,9 @@ export class SearchComponent implements OnInit {
     });
 
     // Loads the IFrame Player API code asynchronously
-    var tag = document.createElement('script');
+    let tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
+    let firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     // Wait for initializations before loading
@@ -106,8 +106,8 @@ export class SearchComponent implements OnInit {
   sendToChannel(channel: any, songID: any){
     this.http.put('/api/v1/channel/addSong', {songID: songID, channel: channel.channel, host: this.currentUser}).subscribe((data : any) => {
       this.successfullyAdded = true;
+      this.successfullyAdded = false;
     });
-    setTimeout(() => this.successfullyAdded = false, 1500);
   }
 
   saveForUser(songID){
@@ -118,7 +118,7 @@ export class SearchComponent implements OnInit {
   }
 
   sendToPreview(index){
-    var id = this.results[index].id;
+    let id = this.results[index].id;
     this.searchPlayer.loadVideoById(id);
     this.searchPlayer.playVideo();
     this.searchPlayer.unMute();

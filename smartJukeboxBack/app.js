@@ -1,13 +1,13 @@
-var express = require('express');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-var playlists = require('./routes/playlists');
-var signup = require('./routes/signup');
-var login = require('./routes/login');
-var channel = require('./routes/channel');
+const playlists = require('./routes/playlists');
+const signup = require('./routes/signup');
+const login = require('./routes/login');
+const channel = require('./routes/channel');
 
-var app = express();
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

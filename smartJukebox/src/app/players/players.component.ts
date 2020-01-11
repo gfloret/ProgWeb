@@ -26,9 +26,9 @@ export class PlayersComponent implements OnInit {
   ngOnInit() {
 
     // Loads the IFrame Player API code asynchronously
-    var tag = document.createElement('script');
+    let tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
+    let firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     // Wait for initializations before loading
@@ -59,9 +59,8 @@ export class PlayersComponent implements OnInit {
   }
 
   sendToPreview(index){
-    console.log(this.songs);
     this.listeningMusic = true;
-    var id = this.songs[index].id;
+    let id = this.songs[index].id;
     this.mainPlayer.loadVideoById(id);
     this.mainPlayer.playVideo();
     this.mainPlayer.unMute();

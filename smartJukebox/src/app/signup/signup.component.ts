@@ -33,8 +33,8 @@ export class SignupComponent implements OnInit {
    }
 
   isIdenticalToPassword (passwordToCompare: string) {
-    var password: FormControl;
-    var passwordConf: FormControl;
+    let password: FormControl;
+    let passwordConf: FormControl;
     return function matchPreviousPassword (control: FormControl) {
       if (!control.parent) { return null; } // If there is nothing to compare yet
       if (!passwordConf) {
@@ -51,8 +51,8 @@ export class SignupComponent implements OnInit {
   }
 
   isIdenticalToEmail (emailToCompare: string) {
-    var email: FormControl;
-    var emailConf: FormControl;
+    let email: FormControl;
+    let emailConf: FormControl;
     return function matchPreviousEmail (control: FormControl) {
       if (!control.parent) { return null; }
       if (!emailConf) {

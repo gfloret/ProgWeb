@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 let User = require('../models/userModel.js');
 
@@ -9,7 +9,7 @@ router.post('/', function(req, res, next){
 
     if (req.body.username && req.body.email && req.body.emailConf && req.body.password && req.body.passwordConf){
         if (req.body.email === req.body.emailConf && req.body.password === req.body.passwordConf){
-            var userData = {
+            const userData = {
                 username: req.body.username,
                 email: req.body.email,
                 password: bcrypt.hashSync(req.body.password, 10),

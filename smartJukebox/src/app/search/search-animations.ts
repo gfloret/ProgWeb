@@ -20,13 +20,9 @@ export const divAnimation = [
     ),
     trigger(
         'alertAnimation', [
-            transition(':enter', [
-                style({opacity: 1}),
-                animate(800)
-            ]),
             transition(':leave', [
-                style({opacity: 0}),
-                animate(3000)
+                style({opacity: 1}),
+                animate(5000)
             ])
         ]
     )

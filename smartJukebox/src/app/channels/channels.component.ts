@@ -88,7 +88,7 @@ export class ChannelsComponent implements OnInit {
     this.loadMainView();
     this.interval = setInterval(() => {
       if (this.individualView){
-        var chatHistory = document.getElementById("chatBox");
+        let chatHistory = document.getElementById("chatBox");
         chatHistory.scrollTop = chatHistory.scrollHeight;
         this.loadCurrentChannelMessages();
       }
@@ -107,15 +107,11 @@ export class ChannelsComponent implements OnInit {
 
   initPlayer() {
 
-    console.log("Starting initialization of Youtube player ...");
-
     // Loads the IFrame Player API code asynchronously
-    var tag = document.createElement('script');
+    let tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
+    let firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    console.log("Initialization done, getting playlist from database ...");
 
     this.http.get('/api/v1/playlists/channelplaylist?channelName='+this.currentChannel.name).subscribe((ids: any) => {
       let i;
@@ -129,12 +125,8 @@ export class ChannelsComponent implements OnInit {
       }
     });
 
-    console.log("Playlist have been get, songs are " + this.songs);
-
     // Wait for initializations before loading
     setTimeout(() => this.initPlayerView(), 1000);
-
-    console.log("Player and playlist intialization done.")
   }
 
   get name() { return this.newChannelForm.get('name'); }
@@ -258,10 +250,10 @@ export class ChannelsComponent implements OnInit {
   }
 
   deleteChannel(){
-    this.http.delete('/api/v1/channel/deletechannel?channelToDelete='+this.currentChannel.name).subscribe((data:any) => {});
+    this.http.delete('/api/v1/channel/deletechannel?channelToDelete='+this.currentChannel.name).subscribe((data:any) => {});  
     this.loadPersonnalView();
     this.loadMainView();
-    this.individualView = false;
+    this.individualView = false;  
   }
 
   leaveChannel(){
@@ -288,7 +280,7 @@ export class ChannelsComponent implements OnInit {
 
   sendToPreview(index){
     this.listeningMusic = true;
-    var id = this.songs[index].id;
+    let id = this.songs[index].id;
     this.mainPlayer.loadVideoById(id);
     this.mainPlayer.playVideo();
     this.mainPlayer.unMute();
