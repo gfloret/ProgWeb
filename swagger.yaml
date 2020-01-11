@@ -311,7 +311,7 @@ paths:
       parameters:
         - name : songID
           in: body
-          type: int
+          type: string
           required: true
           description: ID de la vidéo à ajouter
         - name : channel
