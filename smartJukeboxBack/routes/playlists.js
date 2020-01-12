@@ -4,8 +4,10 @@ const mongoose = require('mongoose');
 const user = require('../models/userModel');
 const Channels = require('../models/channelModel.js');
 
+const MongoURL = 'mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority';
+
 router.get('/playlist', function(req, res, next) {
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err) {
             res.statusMessage = err;
             mongoose.connection.close();
@@ -26,7 +28,7 @@ router.get('/playlist', function(req, res, next) {
 });
 
 router.get('/channelplaylist', function(req, res, next) {
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err) {
             res.statusMessage = err;
             mongoose.connection.close();
@@ -53,7 +55,7 @@ router.get('/channelplaylist', function(req, res, next) {
 });
 
 router.put('/playlist', function(req, res, next) {
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if(err){
             res.statusMessage = err;
             mongoose.connection.close();
@@ -76,7 +78,7 @@ router.put('/playlist', function(req, res, next) {
 });
 
 router.delete('/playlist', function(req, res, next) {
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if(err){
             res.statusMessage = err;
             mongoose.connection.close();
@@ -111,7 +113,7 @@ router.delete('/playlist', function(req, res, next) {
 });
 
 router.delete('/channelplaylist', function(req, res, next) {
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err) {
             res.statusMessage = err;
             mongoose.connection.close();

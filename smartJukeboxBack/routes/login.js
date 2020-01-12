@@ -5,9 +5,11 @@ const bcrypt = require('bcrypt');
 
 let Login = require('../models/userModel.js');
 
+const MongoURL = 'mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority';
+
 router.get('/', function(req, res, next) {
     
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if(err){
             console.log(err);
             res.statusMessage = err;

@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 
 let User = require('../models/userModel.js');
 
+const MongoURL = 'mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority';
+
 router.post('/', function(req, res, next){
 
     if (req.body.username && req.body.email && req.body.emailConf && req.body.password && req.body.passwordConf){
@@ -15,7 +17,7 @@ router.post('/', function(req, res, next){
                 password: bcrypt.hashSync(req.body.password, 10),
                 playlist: []
             };
-            mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+            mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
                 if (err){
                     console.log("An error has occured during the connection to the database");
                     mongoose.connection.close();

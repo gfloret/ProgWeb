@@ -5,10 +5,12 @@ const mongoose = require('mongoose');
 const Channels = require('../models/channelModel.js');
 const Messages = require('../models/messageModel.js');
 
+const MongoURL = 'mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority';
+
 
 // Channels
 router.get('/publicchannels', function(req,res,next){
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
@@ -35,7 +37,7 @@ router.get('/publicchannels', function(req,res,next){
 });
 
 router.get('/hostchannels', function(req, res, next){
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
@@ -61,7 +63,7 @@ router.get('/hostchannels', function(req, res, next){
 });
 
 router.get('/memberchannels', function(req, res, next){
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
@@ -87,7 +89,7 @@ router.get('/memberchannels', function(req, res, next){
 });
 
 router.get('/checkPassword', function(req, res, next){
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
@@ -121,7 +123,7 @@ router.get('/privateSearch', function(req, res, next){
 });
 
 function search(public, req, res){
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
@@ -169,7 +171,7 @@ function search(public, req, res){
 }
 
 router.get('/ismemberofchannel', function(req, res, next){
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
@@ -206,7 +208,7 @@ router.post('/create', function(req, res, next){
             host: req.body.currentUser,
             toSearch: req.body.toSearch
         };
-        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
             if (err){
                 res.statusMessage = err;
                 mongoose.connection.close();
@@ -239,7 +241,7 @@ router.post('/create', function(req, res, next){
 
 router.put('/addSong', function(req, res, next){
     if (req.body.songID && req.body.channel && req.body.host){
-        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
             if (err){
                 res.statusMessage = err;
                 mongoose.connection.close();
@@ -268,7 +270,7 @@ router.put('/addSong', function(req, res, next){
 
 router.put('/addmember', function(req, res, next){
     if (req.body.userToAdd && req.body.currentChannel){
-        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
             if (err){
                 res.statusMessage = err;
                 mongoose.connection.close();
@@ -297,7 +299,7 @@ router.put('/addmember', function(req, res, next){
 
 router.put('/leavechannel', function(req, res, next){
     if (req.body.channel && req.body.member){
-        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
             if (err){
                 res.statusMessage = err;
                 mongoose.connection.close();
@@ -325,7 +327,7 @@ router.put('/leavechannel', function(req, res, next){
 });
 
 router.delete('/deletechannel', function(req, res, next){
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
@@ -377,7 +379,7 @@ router.post('/message', function(req, res, next){
             author: req.body.author,
             channelName: req.body.channelName
         };
-        mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+        mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
             if (err){
                 res.statusMessage = err;
                 mongoose.connection.close();
@@ -402,7 +404,7 @@ router.post('/message', function(req, res, next){
 });
 
 router.get('/messages', function(req, res, next){
-    mongoose.connect("mongodb+srv://dropert:SXlUQZIM1vQfImm2@progweb-hnise.gcp.mongodb.net/progWeb?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
+    mongoose.connect(MongoURL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err){
         if (err){
             res.statusMessage = err;
             mongoose.connection.close();
