@@ -365,8 +365,8 @@ paths:
     delete:
       tags:
       - "Channels"
-      summary: "Supprime un salon"
-      description: "Supprime un salon"
+      summary: "Supprime un salon et ses messages"
+      description: "Supprime un salon et tous les messages du chat associés"
       parameters:
         - name : channelToDelete
           in: query
