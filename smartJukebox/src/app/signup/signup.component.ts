@@ -14,7 +14,7 @@ import {Router} from '@angular/router';
 export class SignupComponent implements OnInit {
 
   signupForm: FormGroup;
-  passwordMinLength = 3;
+  passwordMinLength = 6;
   takenUsername = false;
   takenEmail = false;
   signupError = false;

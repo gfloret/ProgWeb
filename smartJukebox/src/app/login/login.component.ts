@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit{
       }else{
         this.userExist = true;
         localStorage.setItem('userName', data.accountInfo.username);
-        this._sharedService.emitChange('login Complete');
+        this._sharedService.emitChange('login successfull');
         this.router.navigate(['/home']);
       }
     });
