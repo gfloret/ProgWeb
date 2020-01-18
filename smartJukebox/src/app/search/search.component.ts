@@ -106,7 +106,6 @@ export class SearchComponent implements OnInit {
   sendToChannel(channel: any, songID: any){
     this.http.put('/api/v1/channel/addSong', {songID: songID, channel: channel.channel, host: this.currentUser}).subscribe((data : any) => {
       this.successfullyAdded = true;
-      this.successfullyAdded = false;
     });
   }
 
