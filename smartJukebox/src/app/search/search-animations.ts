@@ -17,13 +17,5 @@ export const divAnimation = [
                 animate(400)
             ])
         ]
-    ),
-    trigger(
-        'alertAnimation', [
-            transition(':leave', [
-                style({opacity: 1}),
-                animate(5000)
-            ])
-        ]
     )
 ];

@@ -288,9 +288,18 @@ export class ChannelsComponent implements OnInit {
   }
 
   deleteSong(index){
+    console.log("Avant = " + this.songs);
     this.http.delete('/api/v1/playlists/channelplaylist?songID='+this.songs[index]+'&channelName='+this.currentChannel.name).subscribe((data: any) => {
-      this.http.get('/api/v1/playlists/channelplaylist?channelName='+this.currentChannel.name).subscribe((data: any) => {
-        this.songs = data.playlist;
+      this.http.get('/api/v1/playlists/channelplaylist?channelName='+this.currentChannel.name).subscribe((ids: any) => {
+        let i;
+        let numTitles = 0;
+        for(i=0; i<ids.playlist.length; i++){
+          this.http.get('/watch?v='+ids.playlist[i]+'&format=json').subscribe((titles:any) => {
+            let num = titles.html.split("embed/")[1].split("?feature")[0];
+            this.songs[numTitles] = {id: num, title: titles.title};
+            numTitles = numTitles + 1;
+          });
+        }
       });
     });
   }
