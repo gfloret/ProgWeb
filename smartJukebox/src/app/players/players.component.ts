@@ -73,6 +73,7 @@ export class PlayersComponent implements OnInit {
   }
 
   sendToPreview(index){
+	this.currentIndex = index;
     this.listeningMusic = true;
     let id = this.songs[index].id;
     this.mainPlayer.loadVideoById(id);
