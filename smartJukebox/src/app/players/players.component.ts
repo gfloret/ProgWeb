@@ -61,10 +61,12 @@ export class PlayersComponent implements OnInit {
   }
   
   changeMusicIfNecessary(){
-	  if(this.mainPlayer.getDuration()>0 && this.mainPlayer.getCurrentTime()>=this.mainPlayer.getDuration()){
-		  this.currentIndex = (this.currentIndex+1)%this.songs.length;
-		  this.sendToPreview(this.currentIndex);
-	  }
+    if (this.listeningMusic){
+      if (this.mainPlayer.getDuration()>0 && this.mainPlayer.getCurrentTime()>=this.mainPlayer.getDuration()){
+        this.currentIndex = (this.currentIndex+1)%this.songs.length;
+        this.sendToPreview(this.currentIndex);
+      }
+    }
   }
 
   sendToPreview(index){

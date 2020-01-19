@@ -85,16 +85,15 @@ export class ChannelsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadPersonnalView();
-    this.loadMainView();
+    this.loadChannelView();
     this.interval = setInterval(() => {
       if (this.individualView){
         let chatHistory = document.getElementById("chatBox");
         chatHistory.scrollTop = chatHistory.scrollHeight;
         this.loadCurrentChannelMessages();
       }
-    }, 1000);
-	setInterval(this.changeMusicIfNecessary.bind(this), 1000);
+    }, 1500);
+	  setInterval(this.changeMusicIfNecessary.bind(this), 1000);
   }
 
   initPlayerView() {
@@ -108,10 +107,12 @@ export class ChannelsComponent implements OnInit {
   }
   
   changeMusicIfNecessary(){
-	  if(this.mainPlayer.getDuration()>0 && this.mainPlayer.getCurrentTime()>=this.mainPlayer.getDuration()){
-		  this.currentIndex = (this.currentIndex+1)%this.songs.length;
-		  this.sendToPreview(this.currentIndex);
-	  }
+    if (this.listeningMusic){
+      if (this.mainPlayer.getDuration()>0 && this.mainPlayer.getCurrentTime()>=this.mainPlayer.getDuration()){
+        this.currentIndex = (this.currentIndex+1)%this.songs.length;
+        this.sendToPreview(this.currentIndex);
+      }
+    }
   }
 
   initPlayer() {
@@ -148,8 +149,7 @@ export class ChannelsComponent implements OnInit {
 
   toggleMainView(){
     this.mainView = !this.mainView;
-    this.loadPersonnalView();
-    this.loadMainView();
+    this.loadChannelView();
   }
 
   toggleCreationForm(){
@@ -158,13 +158,13 @@ export class ChannelsComponent implements OnInit {
 
   backToMainView(){
     this.individualView = false;
+    this.loadChannelView();
   }
 
   loadCurrentChannelMessages(){
     this.http.get('/api/v1/channel/messages?channel='+this.currentChannel.name).subscribe((data: any) => {
       this.currentChannelMessages = data.messages;
     });
-    this.individualView = true;
   }
 
   openIndividualView(channel){
@@ -192,21 +192,23 @@ export class ChannelsComponent implements OnInit {
 
   }
 
-  loadMainView(){
-    this.http.get('/api/v1/channel/publicchannels?user='+this.currentUser).subscribe((data:any) => {
-      this.publicChannels = data;
-    });
+  loadChannelView(){
+    if (this.mainView){
+      this.publicChannels = [];
+      this.http.get('/api/v1/channel/publicchannels?user='+this.currentUser).subscribe((data:any) => {
+        this.publicChannels = data;
+      });
+    } else {
+      this.hostChannels = [];
+      this.http.get('/api/v1/channel/hostchannels?host='+this.currentUser).subscribe((data: any) => {
+        this.hostChannels = data;
+      });
+      this.memberChannels = [];
+      this.http.get('/api/v1/channel/memberchannels?member='+this.currentUser).subscribe((data: any) => {
+        this.memberChannels = data;
+      });
+    }
   }
-
-  loadPersonnalView(){
-    this.http.get('/api/v1/channel/hostchannels?host='+this.currentUser).subscribe((data: any) => {
-      this.hostChannels = data;
-    });
-    this.http.get('/api/v1/channel/memberchannels?member='+this.currentUser).subscribe((data: any) => {
-      this.memberChannels = data;
-    });
-  }
-
 
 
   // ===== Buttons and forms controllers =====
@@ -221,7 +223,7 @@ export class ChannelsComponent implements OnInit {
         this.takenName = true;
       } else {
         this.creatingNewChannel = false;
-        this.loadPersonnalView();
+        this.loadChannelView();
         this.currentChannel = data.channel;
         this.isHost = true;
         this.individualView = true;
@@ -259,9 +261,8 @@ export class ChannelsComponent implements OnInit {
   }
 
   deleteChannel(){
-    this.http.delete('/api/v1/channel/deletechannel?channelToDelete='+this.currentChannel.name).subscribe((data:any) => {});  
-    this.loadPersonnalView();
-    this.loadMainView();
+    this.http.delete('/api/v1/channel/deletechannel?channelToDelete='+this.currentChannel.name).subscribe((data:any) => {});
+    this.loadChannelView();
     this.individualView = false;  
   }
 
@@ -270,9 +271,8 @@ export class ChannelsComponent implements OnInit {
     this.http.put('/api/v1/channel/leavechannel', dataToSend).subscribe((data:any) => {
       this.currentChannel = data.channel;
     });
-    this.loadPersonnalView();
-    this.loadMainView();
     this.individualView = false;
+    this.loadChannelView();
   }
 
   checkPassword(res){
@@ -288,7 +288,7 @@ export class ChannelsComponent implements OnInit {
   }
 
   sendToPreview(index){
-	this.currentIndex = index;
+	  this.currentIndex = index;
     this.listeningMusic = true;
     let id = this.songs[index].id;
     this.mainPlayer.loadVideoById(id);
