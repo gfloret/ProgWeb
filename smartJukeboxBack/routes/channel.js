@@ -347,6 +347,7 @@ router.delete('/deletechannel', function(req, res, next){
                             return res.status(500).end();
                         }
                         else{
+                            mongoose.connection.close();
                             return res.status(200).end();
                         }
                     });

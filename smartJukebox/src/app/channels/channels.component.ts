@@ -86,13 +86,20 @@ export class ChannelsComponent implements OnInit {
 
   ngOnInit() {
     this.loadChannelView();
+    /* The following working code can be used for a chat-designed comment section (with live refresh) but can 
+     * open a large amount of Mongo connections simultaneously (which will be closed, but free demo of MongoDB
+     * clusters can have a hard time handling it when intensively used over more than an hour, with multiples 
+     * users). The actual version of the code refresh the chat section everytime someone open the individual
+     * view of a channel, or post a new message.
+
     this.interval = setInterval(() => {
       if (this.individualView){
         let chatHistory = document.getElementById("chatBox");
         chatHistory.scrollTop = chatHistory.scrollHeight;
         this.loadCurrentChannelMessages();
       }
-    }, 1500);
+    }, 800);
+    */
 	  setInterval(this.changeMusicIfNecessary.bind(this), 1000);
   }
 
@@ -162,7 +169,10 @@ export class ChannelsComponent implements OnInit {
   }
 
   loadCurrentChannelMessages(){
+    let chatHistory = document.getElementById("chatBox");
+    chatHistory.scrollTop = chatHistory.scrollHeight;
     this.http.get('/api/v1/channel/messages?channel='+this.currentChannel.name).subscribe((data: any) => {
+      this.currentChannelMessages = [];
       this.currentChannelMessages = data.messages;
     });
   }
@@ -172,7 +182,7 @@ export class ChannelsComponent implements OnInit {
     this.songs = [];
 
     this.currentChannel = channel;
-    this.loadCurrentChannelMessages();
+    setTimeout(() => this.loadCurrentChannelMessages(), 1000);
     this.initPlayer();
 
     if (channel.host === this.currentUser){
@@ -236,7 +246,7 @@ export class ChannelsComponent implements OnInit {
     this.http.post('/api/v1/channel/message', dataToSend).subscribe((data: any) => {
       this.currentChannelMessages = data.messages;
     });
-    this.loadCurrentChannelMessages();
+    setTimeout(() => this.loadCurrentChannelMessages(), 1000);
   }
 
   search(toSearch){
