@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,7 +14,13 @@ export class PlayersComponent implements OnInit {
   mainPlayer = null;
   songs = [];
   currentUser: string;
+  currentIndex = 0;
   listeningMusic = false;
+  requestOptions = {
+	  headers: new HttpHeaders({ 
+		'Access-Control-Allow-Origin':'*'
+	  })
+	};
 
   constructor(private router: Router, private http:HttpClient) {
     this.currentUser = localStorage.getItem('userName');
@@ -45,6 +51,7 @@ export class PlayersComponent implements OnInit {
         });
       }
     });
+	setInterval(this.changeMusicIfNecessary.bind(this), 1000);
 
   }
 
@@ -56,6 +63,13 @@ export class PlayersComponent implements OnInit {
       events: {
       }
     });
+  }
+  
+  changeMusicIfNecessary(){
+	  if(this.mainPlayer.getDuration()>0 && this.mainPlayer.getCurrentTime()>=this.mainPlayer.getDuration()){
+		  this.currentIndex = (this.currentIndex+1)%this.songs.length;
+		  this.sendToPreview(this.currentIndex);
+	  }
   }
 
   sendToPreview(index){
@@ -70,7 +84,16 @@ export class PlayersComponent implements OnInit {
   delete(index){
     this.http.delete('/api/v1/playlists/playlist?songID='+this.songs[index]+'&host='+this.currentUser).subscribe((data: any) => {
       this.http.get('/api/v1/playlists/playlist?host='+this.currentUser).subscribe((data: any) => {
-        this.songs = data.ids;
+        let i;
+        let numTitles = 0;
+		this.songs = [];
+        for(i=0; i<ids.ids.length; i++){
+          this.http.get('https://smart-jukebox-proxy.herokuapp.com/?url=http://www.youtube.com/watch?v='+ids.ids[i]+'&format=json&origin=https://smart-jukebox.herokuapp.com&enablejsapi=1').subscribe((titles:any) => {
+            let num = titles.html.split("embed/")[1].split("?feature")[0];
+            this.songs[numTitles] = {id: num, title: titles.title};
+            numTitles = numTitles + 1;
+          });
+        }
       });
     });
   }

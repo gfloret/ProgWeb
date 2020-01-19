@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router, NavigationEnd } from '@angular/router';
 import { divAnimation } from './channels-animations';
 
@@ -22,6 +22,7 @@ export class ChannelsComponent implements OnInit {
   isHost = false;
   listeningMusic = false;
   incorrectPassword = false;
+  currentIndex = 0;
 
   // ===== Forms =====
   newChannelForm: FormGroup;
@@ -31,6 +32,11 @@ export class ChannelsComponent implements OnInit {
   passwordForm: FormGroup;
 
   // ===== Variables to stock current data =====
+  requestOptions = {	
+	headers: new HttpHeaders({ 	
+	'Access-Control-Allow-Origin':'*'	
+	})	
+  };
   currentUser: string;
   publicChannels;
   hostChannels;
@@ -93,6 +99,7 @@ export class ChannelsComponent implements OnInit {
         this.loadCurrentChannelMessages();
       }
     }, 1000);
+	setInterval(this.changeMusicIfNecessary.bind(this), 1000);
   }
 
   initPlayerView() {
@@ -103,6 +110,13 @@ export class ChannelsComponent implements OnInit {
       events: {
       }
     });
+  }
+  
+  changeMusicIfNecessary(){
+	  if(this.mainPlayer.getDuration()>0 && this.mainPlayer.getCurrentTime()>=this.mainPlayer.getDuration()){
+		  this.currentIndex = (this.currentIndex+1)%this.songs.length;
+		  this.sendToPreview(this.currentIndex);
+	  }
   }
 
   initPlayer() {
@@ -279,6 +293,7 @@ export class ChannelsComponent implements OnInit {
   }
 
   sendToPreview(index){
+	this.currentIndex = index;
     this.listeningMusic = true;
     let id = this.songs[index].id;
     this.mainPlayer.loadVideoById(id);
@@ -290,7 +305,16 @@ export class ChannelsComponent implements OnInit {
   deleteSong(index){
     this.http.delete('/api/v1/playlists/channelplaylist?songID='+this.songs[index]+'&channelName='+this.currentChannel.name).subscribe((data: any) => {
       this.http.get('/api/v1/playlists/channelplaylist?channelName='+this.currentChannel.name).subscribe((data: any) => {
-        this.songs = data.playlist;
+        let i;
+        let numTitles = 0;
+		this.songs = [];
+        for(i=0; i<ids.playlist.length; i++){
+          this.http.get('https://smart-jukebox-proxy.herokuapp.com/?url=http://www.youtube.com/watch?v='+ids.playlist[i]+'&format=json').subscribe((titles:any) => {
+            let num = titles.html.split("embed/")[1].split("?feature")[0];
+            this.songs[numTitles] = {id: num, title: titles.title};
+            numTitles = numTitles + 1;
+          });
+        }
       });
     });
   }

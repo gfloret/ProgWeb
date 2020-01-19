@@ -15,6 +15,11 @@ export class LoginComponent implements OnInit{
   passwordCtrl: FormControl;
 
   userExist = true;
+  requestOptions = {
+	  headers: new HttpHeaders({ 
+		'Access-Control-Allow-Origin':'*'
+	  })
+	};
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router, private _sharedService: SharedService) {
     if(localStorage.getItem('userName') !== null){
