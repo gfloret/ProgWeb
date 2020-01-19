@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,11 +16,6 @@ export class PlayersComponent implements OnInit {
   currentUser: string;
   currentIndex = 0;
   listeningMusic = false;
-  requestOptions = {
-	  headers: new HttpHeaders({ 
-		'Access-Control-Allow-Origin':'*'
-	  })
-	};
 
   constructor(private router: Router, private http:HttpClient) {
     this.currentUser = localStorage.getItem('userName');

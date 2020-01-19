@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { divAnimation } from './search-animations';
 
@@ -22,11 +22,6 @@ export class SearchComponent implements OnInit {
   results = [];
   hostChannels: any;
   successfullyAdded = false;
-  requestOptions = {
-    headers: new HttpHeaders({ 
-      'Access-Control-Allow-Origin':'*'
-    })
-  };
 
   searchForm: FormGroup;
   channelSelection: FormGroup;

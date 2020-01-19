@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { HttpClient } from "@angular/common/http";
 import { Router, NavigationEnd } from '@angular/router';
 import { divAnimation } from './channels-animations';
 
@@ -32,11 +32,6 @@ export class ChannelsComponent implements OnInit {
   passwordForm: FormGroup;
 
   // ===== Variables to stock current data =====
-  requestOptions = {	
-	headers: new HttpHeaders({ 	
-	'Access-Control-Allow-Origin':'*'	
-	})	
-  };
   currentUser: string;
   publicChannels;
   hostChannels;

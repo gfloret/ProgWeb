@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder,FormGroup,FormControl,Validators } from '@angular/forms';
-import {HttpClient} from "@angular/common/http";
-import {Router} from '@angular/router';
+import { HttpClient } from "@angular/common/http";
+import { Router } from '@angular/router';
 import { SharedService } from '../services/shared.service';
 
 @Component({
@@ -15,11 +15,6 @@ export class LoginComponent implements OnInit{
   passwordCtrl: FormControl;
 
   userExist = true;
-  requestOptions = {
-	  headers: new HttpHeaders({ 
-		'Access-Control-Allow-Origin':'*'
-	  })
-	};
 
   constructor(private formBuilder: FormBuilder, private http:HttpClient, private router: Router, private _sharedService: SharedService) {
     if(localStorage.getItem('userName') !== null){
