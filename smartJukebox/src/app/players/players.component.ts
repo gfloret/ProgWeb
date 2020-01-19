@@ -46,8 +46,9 @@ export class PlayersComponent implements OnInit {
         });
       }
     });
-	setInterval(this.changeMusicIfNecessary.bind(this), 1000);
-
+    
+    setInterval(this.changeMusicIfNecessary.bind(this), 1000);
+    
   }
 
   initPlayer() {
@@ -70,7 +71,7 @@ export class PlayersComponent implements OnInit {
   }
 
   sendToPreview(index){
-	this.currentIndex = index;
+	  this.currentIndex = index;
     this.listeningMusic = true;
     let id = this.songs[index].id;
     this.mainPlayer.loadVideoById(id);

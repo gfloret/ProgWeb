@@ -183,7 +183,6 @@ export class ChannelsComponent implements OnInit {
   openIndividualView(channel){
 
     this.songs = [];
-
     this.currentChannel = channel;
     setTimeout(() => this.loadCurrentChannelMessages(), 1000);
     this.initPlayer();
@@ -316,6 +315,7 @@ export class ChannelsComponent implements OnInit {
       this.http.get('/api/v1/playlists/channelplaylist?channelName='+this.currentChannel.name).subscribe((ids: any) => {
         let i;
         let numTitles = 0;
+        this.songs = [];
         for(i=0; i<ids.playlist.length; i++){
           this.http.get('/watch?v='+ids.playlist[i]+'&format=json').subscribe((titles:any) => {
             let num = titles.html.split("embed/")[1].split("?feature")[0];
