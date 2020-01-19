@@ -91,7 +91,7 @@ router.delete('/playlist', function(req, res, next) {
                     mongoose.connection.close();
                     return res.status(500).end();
                 }else if(us){
-					us.playlist.remove(req.query.songID);
+                    us.playlist.splice(us.playlist.indexOf(req.query.songID), 1);
                     us.save(function(err, songID){
                         if(err){
                             res.statusMessage = err;
@@ -126,7 +126,7 @@ router.delete('/channelplaylist', function(req, res, next) {
                     return res.status(500).end();
                 }
                 else if(channel){
-					channel.playlist.remove(req.query.songID);
+                    channel.playlist.splice(channel.playlist.indexOf(req.query.songID), 1);
                     channel.save(function(err, songID){
                         if(err){
                             res.statusMessage = err;
