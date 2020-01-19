@@ -166,6 +166,9 @@ export class ChannelsComponent implements OnInit {
   backToMainView(){
     this.individualView = false;
     this.loadChannelView();
+    this.currentChannel = null;
+    this.songs = [];
+    this.listeningMusic = false;
   }
 
   loadCurrentChannelMessages(){
@@ -223,7 +226,7 @@ export class ChannelsComponent implements OnInit {
 
   // ===== Buttons and forms controllers =====
 
-  onSubmit(channelData: any){
+  onSubmit(channelData: any){ // Channel creation
     let toSearch = channelData.name + " " + channelData.description + " " + this.currentUser;
     toSearch = toSearch.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const dataToSend = {channelData: channelData, currentUser: this.currentUser, toSearch: toSearch}
