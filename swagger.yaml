@@ -438,6 +438,46 @@ paths:
               type: string
         500:
           description: "Echec de la requete"
+    put:
+      tags:
+      - "Playlists"
+      summary: "Ajoute une vidéo à la playlist"
+      parameters:
+        - name : host
+          in: body
+          type: string
+          required: true
+          description: "Pseudo du propriétaire de la playlist"
+        - name: songID
+          in : body
+          type: string
+          required: true
+          description : "ID de la vidéo à ajouter"
+      responses:
+        200:
+          description: "La vidéo a bien été ajoutée"
+        500:
+          description: "Echec de la requete"
+    delete:
+      tags:
+      - "Playlists"
+      summary: "Supprime une vidéo de la playlist d'un utilisateur"
+      parameters:
+        - name : channelName
+          in: body
+          type: string
+          required: true
+          description: "Pseudo du propriétaire de la playlist"
+        - name: songID
+          in : body
+          type: string
+          required: true
+          description : "ID de la vidéo à supprimer"
+      responses:
+        200:
+          description: "La vidéo a bien été supprimée"
+        500:
+          description: "Echec de la requete"
   /playlists/channelplaylist:
     get:
       tags:
@@ -460,49 +500,6 @@ paths:
           description: "Nom du salon inconnue"
         500:
           description: "Echec de la requete"
-  /playlists/putplaylist:
-    put:
-      tags:
-      - "Playlists"
-      summary: "Ajoute une vidéo à la playlist"
-      parameters:
-        - name : host
-          in: body
-          type: string
-          required: true
-          description: "Pseudo du propriétaire de la playlist"
-        - name: songID
-          in : body
-          type: string
-          required: true
-          description : "ID de la vidéo à ajouter"
-      responses:
-        200:
-          description: "La vidéo a bien été ajoutée"
-        500:
-          description: "Echec de la requete"
-  /playlists/deleteplaylist:
-    delete:
-      tags:
-      - "Playlists"
-      summary: "Supprime une vidéo de la playlist d'un utilisateur"
-      parameters:
-        - name : channelName
-          in: body
-          type: string
-          required: true
-          description: "Pseudo du propriétaire de la playlist"
-        - name: songID
-          in : body
-          type: string
-          required: true
-          description : "ID de la vidéo à supprimer"
-      responses:
-        200:
-          description: "La vidéo a bien été supprimée"
-        500:
-          description: "Echec de la requete"
-  /playlists/deletechannelplaylist:
     delete:
       tags:
       - "Playlists"
