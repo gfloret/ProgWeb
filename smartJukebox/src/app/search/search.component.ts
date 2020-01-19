@@ -111,12 +111,14 @@ export class SearchComponent implements OnInit {
   sendToChannel(channel: any, songID: any){
     this.http.put('/api/v1/channel/addSong', {songID: songID, channel: channel.channel, host: this.currentUser}).subscribe((data : any) => {
       this.successfullyAdded = true;
+      setTimeout(() => this.successfullyAdded = false, 3000);
     });
   }
 
   saveForUser(songID){
     this.http.put('/api/v1/playlists/playlist', {host: this.currentUser, songID: songID}).subscribe((data : any) => {
       this.successfullyAdded = true;
+      setTimeout(() => this.successfullyAdded = false, 3000);
     });
   }
 
