@@ -36,6 +36,9 @@
         <a *ngIf="!userName" class="nav-item nav-link" routerLink="/auth/login" routerLinkActive="active">Connexion</a>
       </li>
       <li class="nav-item">
+        <a *ngIf="userName" class="nav-item nav-link" routerLink="/home">{{userName}}</a>
+      </li>
+      <li class="nav-item">
         <a *ngIf="userName" class="nav-item nav-link" (click)="disconnect();">Déconnexion</a>
       </li>
     </ul>
